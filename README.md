@@ -4,10 +4,8 @@ Command-line tool that interacts with Palo Alto firewalls and Panorama.
 For a detailed explanation of commands, and how they are used, click on any one of the
 command names below.
 
-[`panco help`](https://github.com/scottdware/panco#usage)
-[`panco example`][example-doc]
-[`panco import`][import-doc]
-[`panco logs`][logs-doc]
+`panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc],
+[`import`][import-doc], [`logs`][logs-doc]
 
 ### Usage
 
@@ -42,6 +40,12 @@ This command will create two sample, reference CSV files for use with the
 the command from, and are named as such:
 
 `example-create.csv` and `example-modify.csv`
+
+Here is what the files look like, respectively:
+
+![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-create.png "example-create.csv")
+
+![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-modify.png "example-modify.csv")
 
 #### panco import [flags]
 
