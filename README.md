@@ -48,9 +48,9 @@ the command from, and are named as such:
 
 `example-create.csv` and `example-modify.csv`
 
-#### Create CSV
+### Create CSV
 
-The CSV file should be organized with the following columns:
+The CSV file for object creation should be organized with the following columns:
 
 `name,type,value,description (optional),tag (optional),device-group`.
 
@@ -117,9 +117,13 @@ Column | Description
 
 * `value` must contain a list of service objects to add to the group, separated by a space, i.e.: `tcp_8080 udp_666 tcp_range`.
 
-#### Modify CSV
+Example:
 
-The CSV file should be organized with the following columns:
+![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-create.png "example-create.csv")
+
+### Modify CSV
+
+The CSV file for modifying groups should be organized with the following columns:
 
 `grouptype,action,object-name,group-name,device-group`.
 
@@ -131,9 +135,7 @@ Column | Description
 `group-name` | Name of the group to modify.
 `device-group` | Name of the device-group, or **shared** if creating a shared object.
 
-Here is what the files look like, respectively:
-
-![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-create.png "example-create.csv")
+Example:
 
 ![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-modify.png "example-modify.csv")
 
