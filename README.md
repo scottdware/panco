@@ -1,6 +1,13 @@
 # panco
 Command-line tool that interacts with Palo Alto firewalls and Panorama.
 
+Primarily, this tool is used for creating a mass amount of objects and/or groups using a
+CSV file. You can also modify existing groups (add, remove) using a CSV file as well. Log exporting
+is another primary function, wheras you can query any log type just like you would in the GUI,
+and export them to a CSV file locally on your machine.
+
+More features will continue to be added.
+
 For a detailed explanation of commands, and how they are used, click on any one of the
 command names below.
 
@@ -25,7 +32,7 @@ Flags:
 Use "panco [command] --help" for more information about a command.
 ```
 
-#### panco example
+### panco example
 
 ```
 Usage:
@@ -41,13 +48,96 @@ the command from, and are named as such:
 
 `example-create.csv` and `example-modify.csv`
 
+#### Create CSV
+
+The CSV file should be organized with the following columns:
+
+`name,type,value,description (optional),tag (optional),device-group`.
+
+> **_<span style="color:red">NOTE</span>_**: Here are a few things to keep in mind when creating objects:
+> * For the name of the object, it cannot be longer than 63 characters, and must only include letters, numbers, spaces, hyphens, and underscores.
+> * If you are tagging an object upon creation, please make sure that the tags exist prior to creating the objects.
+> * When creating service groups, you DO NOT need to specify a description, as they do not have that capability.
+> * When you create address or service groups, I would place them at the bottom of the CSV file, that way you don't risk adding a member that doesn't exist.
+> * When creating objects on a local firewall, and not Panorama, you can leave the device-group column blank.
+
+**Creating Address Objects**
+
+Column | Description
+:--- | :---
+`name` | Name of the object you wish to create.
+`type` | **ip**, **range**, or **fqdn**
+`value` | Must contain the IP address, FQDN, or IP range of the object.
+`description` | (Optional) A description of the object.
+`tag` | (Optional) Name of a pre-existing tag on the device to apply.
+`device-group` | Name of the device-group, or **shared** if creating a shared object.
+
+When creating address groups:
+
+Column | Description
+:--- | :---
+`name` | Name of the address group you wish to create.
+`type` | **static** or **dynamic**
+`value` | * See below explanation
+`description` | (Optional) A description of the object.
+`tag` | (Optional) Name of a pre-existing tag on the device to apply.
+`device-group` | Name of the device-group, or **shared** if creating a shared object.
+
+For a **_static_** address group, `value` must contain a list of members to add to the group, separated by a space, i.e.:
+
+`ip-host1 ip-net1 fqdn-example.com`
+
+For a **_dynamic_** address group, `value` must contain the criteria (tags) to match on, i.e.:
+
+`web-servers or db-servers and linux`
+
+**Creating Service Objects**
+
+Column | Description
+:--- | :---
+`name` | Name of the object you wish to create.
+`type` | **tcp** or **udp**
+`value` | * See below
+`description` | (Optional) A description of the object.
+`tag` | (Optional) Name of a pre-existing tag on the device to apply.
+`device-group` | Name of the device-group, or **shared** if creating a shared object.
+
+* `value` must contain a single port number, range (1023-3000), or comma-separated list of ports, i.e.: `80, 443, 2000`.
+
+When creating service groups:
+
+Column | Description
+:--- | :---
+`name` | Name of the object you wish to create.
+`type` | **service**
+`value` | * See below
+`description` | Not available on service groups.
+`tag` | (Optional) Name of a pre-existing tag on the device to apply.
+`device-group` | Name of the device-group, or **shared** if creating a shared object.
+
+* `value` must contain a list of service objects to add to the group, separated by a space, i.e.: `tcp_8080 udp_666 tcp_range`.
+
+#### Modify CSV
+
+The CSV file should be organized with the following columns:
+
+`grouptype,action,object-name,group-name,device-group`.
+
+Column | Description
+:--- | :---
+`grouptype` | **address** or **service**
+`action` | **add** or **remove**
+`object-name` | Name of the object to add or remove from group.
+`group-name` | Name of the group to modify.
+`device-group` | Name of the device-group, or **shared** if creating a shared object.
+
 Here is what the files look like, respectively:
 
 ![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-create.png "example-create.csv")
 
 ![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-modify.png "example-modify.csv")
 
-#### panco import [flags]
+### panco import [flags]
 
 ```
 Usage:
@@ -64,7 +154,9 @@ Flags:
 The `import` command, given the spcific flag, will create or modify address and/or
 service objects based on the information you have provided in your CSV file(s).
 
-#### panco logs [flags]
+Please see the [`example`][example-doc] command documentation above on how the CSV files should be structured.
+
+### panco logs [flags]
 
 ```
 Usage:
