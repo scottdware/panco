@@ -6,6 +6,8 @@ CSV file. You can also modify existing groups (add, remove) using a CSV file as 
 is another primary function, wheras you can query any log type just like you would in the GUI,
 and export them to a CSV file locally on your machine.
 
+All of the backend functions are from the [go-panos](https://github.com/scottdware/go-panos) package.
+
 More features will continue to be added.
 
 For a detailed explanation of commands, and how they are used, click on any one of the
