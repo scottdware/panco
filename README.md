@@ -1,7 +1,13 @@
 # panco
 Command-line tool that interacts with Palo Alto firewalls and Panorama.
 
+For a detailed explanation of commands, and how they are used, click on any one of the
+command names below.
 
+[`panco help`](https://github.com/scottdware/panco#usage)
+[`panco example`][example-doc]
+[`panco import`][import-doc]
+[`panco logs`][logs-doc]
 
 ### Usage
 
@@ -82,3 +88,7 @@ When using the `--query` flag, be sure to enclose your search criteria in quotes
 
 The default search type is `traffic`. Based on your query, and the device,
 log retrieval and export could take a while.
+
+[example-doc]: https://github.com/scottdware/panco#panco-example
+[import-doc]: https://github.com/scottdware/panco#panco-import-flags
+[logs-doc]: https://github.com/scottdware/panco#panco-logs-flags
