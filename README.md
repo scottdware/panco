@@ -14,7 +14,7 @@ For a detailed explanation of commands, and how they are used, click on any one 
 command names below.
 
 `panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc],
-[`import`][import-doc], [`logs`][logs-doc]
+[`import`][import-doc], [`logs`][logs-doc], [`version`][version-doc]
 
 ### Usage
 
@@ -27,6 +27,7 @@ Available Commands:
   help        Help about any command
   import      Import CSV files that will create and/or modify objects
   logs        Retrieve logs from the device and export them to a CSV file
+  version     Prints the version number of panco
 
 Flags:
   -h, --help   help for panco
@@ -189,6 +190,19 @@ When using the `--query` flag, be sure to enclose your search criteria in quotes
 The default search type is `traffic`. Based on your query, and the device,
 log retrieval and export could take a while.
 
+### panco version
+
+```
+Usage:
+  panco version [flags]
+
+Flags:
+  -h, --help   help for version
+```
+
+Version information for panco.
+
 [example-doc]: https://github.com/scottdware/panco#panco-example
 [import-doc]: https://github.com/scottdware/panco#panco-import-flags
 [logs-doc]: https://github.com/scottdware/panco#panco-logs-flags
+[version-doc]: https://github.com/scottdware/panco#panco-version
