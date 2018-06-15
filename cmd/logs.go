@@ -23,6 +23,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/scottdware/go-easycsv"
@@ -74,6 +75,10 @@ and export could take a while.`,
 		logs, err := pan.RetrieveLogs(jobID)
 		if err != nil {
 			fmt.Println(err)
+		}
+
+		if !strings.Contains(outfile, ".csv") {
+			outfile = fmt.Sprintf("%s.csv", outfile)
 		}
 
 		csv, err := easycsv.NewCSV(outfile)
