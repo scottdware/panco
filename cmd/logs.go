@@ -117,7 +117,7 @@ and export could take a while.`,
 			csv.Write(fmt.Sprintf(",%d,%d,%d,%d,%d,%d,%d,%s,%d,%d,%s,%d",
 				l.NATDestinationPort, l.Packets, l.PacketsSent, l.PacketsReceived, l.Bytes,
 				l.BytesSent, l.BytesReceived, l.Protocol, l.SessionID, l.ParentSessionID, l.SessionEndReason, l.RepeatCount))
-			csv.Write(fmt.Sprintf(",%s,%s,%s,%s,%s,%d,%s,%s,%s,%s,%s",
+			csv.Write(fmt.Sprintf(",%s,%s,%s,%s,\"%s\",%d,\"%s\",%s,%s,%s,%s",
 				l.Start, l.Elapsed, l.Category, l.ThreatCategory, l.ThreatName, l.ThreatID, l.Misc,
 				l.Severity, l.Direction, l.InboundInterface, l.OutboundInterface))
 			csv.Write(fmt.Sprintf(",%d,%d,%s,%s,%s,%d,%s,%s,%s,%s",
