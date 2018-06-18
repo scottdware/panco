@@ -16,8 +16,7 @@ command names below.
 `panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc],
 [`import`][import-doc], [`logs`][logs-doc], [`version`][version-doc]
 
-### Usage
----
+## Usage
 
 ```
 Usage:
@@ -36,8 +35,7 @@ Flags:
 Use "panco [command] --help" for more information about a command.
 ```
 
-### panco example
----
+## panco example
 
 ```
 Usage:
@@ -146,8 +144,7 @@ Example:
 
 ![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-modify.png "example-modify.csv")
 
-### panco import [flags]
----
+## panco import [flags]
 
 ```
 Usage:
@@ -166,8 +163,7 @@ service objects based on the information you have provided in your CSV file(s).
 
 Please see the [`example`][example-doc] command documentation above on how the CSV files should be structured.
 
-### panco logs [flags]
----
+## panco logs [flags]
 
 ```
 Usage:
@@ -196,8 +192,7 @@ When using the `--query` flag, be sure to enclose your search criteria in quotes
 The default search type is `traffic`. Based on your query, and the device,
 log retrieval and export could take a while.
 
-### panco version
----
+## panco version
 
 ```
 Usage:
