@@ -52,6 +52,7 @@ Run 'panco example' to create a sample CSV file for each action to use as refere
 			err = pan.CreateObjectsFromCsv(create)
 			if err != nil {
 				fmt.Println(err)
+				os.Exit(1)
 			}
 		}
 
@@ -59,6 +60,7 @@ Run 'panco example' to create a sample CSV file for each action to use as refere
 			err = pan.ModifyGroupsFromCsv(modify)
 			if err != nil {
 				fmt.Println(err)
+				os.Exit(1)
 			}
 		}
 	},

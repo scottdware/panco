@@ -22,6 +22,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
@@ -83,6 +84,7 @@ example-create.csv and example-modify.csv`,
 		modifyFh, err := easycsv.NewCSV("example-modify.csv")
 		if err != nil {
 			fmt.Println(err)
+			os.Exit(1)
 		}
 
 		modifyFh.Write(exampleModify)

@@ -68,6 +68,7 @@ and export could take a while.`,
 		jobID, err := pan.QueryLogs(ltype, params)
 		if err != nil {
 			fmt.Println(err)
+			os.Exit(1)
 		}
 
 		time.Sleep(time.Duration(lwait) * time.Second)
@@ -75,6 +76,7 @@ and export could take a while.`,
 		logs, err := pan.RetrieveLogs(jobID)
 		if err != nil {
 			fmt.Println(err)
+			os.Exit(1)
 		}
 
 		if !strings.Contains(outfile, ".csv") {
@@ -84,6 +86,7 @@ and export could take a while.`,
 		csv, err := easycsv.NewCSV(outfile)
 		if err != nil {
 			fmt.Println(err)
+			os.Exit(1)
 		}
 
 		csv.Write("DeviceName,Serial,Rule,TimeGenerated,TimeReceived,Type,Subtype,From,To,Source,SourceUser")
