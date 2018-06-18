@@ -192,6 +192,8 @@ When using the `--query` flag, be sure to enclose your search criteria in quotes
 The default search type is `traffic`. Based on your query, and the device,
 log retrieval and export could take a while.
 
+[Here](https://github.com/scottdware/panco/traffic_log_example.csv) is an example of an export of traffic logs.
+
 ## panco version
 
 ```
