@@ -51,7 +51,9 @@ the command from, and are named as such:
 
 `example-create.csv` and `example-modify.csv`
 
-### Create CSV
+The sections below describe these files and how to structure them in more detail.
+
+### example-create.csv
 
 The CSV file for object creation should be organized with the following columns:
 
@@ -86,11 +88,11 @@ Column | Description
 `tag` | (Optional) Name of a pre-existing tag on the device to apply.
 `device-group` | Name of the device-group, or **shared** if creating a shared object.
 
-For a **_static_** address group, `value` must contain a list of members to add to the group, separated by a space, i.e.:
+For a **_static_** address group, `value` must contain a list of members to add to the group, separated by a space, e.g.:
 
 `ip-host1 ip-net1 fqdn-example.com`
 
-For a **_dynamic_** address group, `value` must contain the criteria (tags) to match on, i.e.:
+For a **_dynamic_** address group, `value` must contain the criteria (tags) to match on, e.g.:
 
 `web-servers or db-servers and linux`
 
@@ -105,7 +107,7 @@ Column | Description
 `tag` | (Optional) Name of a pre-existing tag on the device to apply.
 `device-group` | Name of the device-group, or **shared** if creating a shared object.
 
-* `value` must contain a single port number, range (1023-3000), or comma-separated list of ports, i.e.: `80, 443, 2000`.
+* `value` must contain a single port number, range (1023-3000), or comma-separated list of ports, e.g.: `80, 443, 2000`.
 
 When creating service groups:
 
@@ -118,13 +120,13 @@ Column | Description
 `tag` | (Optional) Name of a pre-existing tag on the device to apply.
 `device-group` | Name of the device-group, or **shared** if creating a shared object.
 
-* `value` must contain a list of service objects to add to the group, separated by a space, i.e.: `tcp_8080 udp_666 tcp_range`.
+* `value` must contain a list of service objects to add to the group, separated by a space, e.g.: `tcp_8080 udp_666 tcp_range`.
 
 Example:
 
 ![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-create.png "example-create.csv")
 
-### Modify CSV
+### example-modify.csv
 
 The CSV file for modifying groups should be organized with the following columns:
 
