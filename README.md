@@ -2,9 +2,12 @@
 Command-line tool that interacts with Palo Alto firewalls and Panorama.
 
 Primarily, this tool is used for creating a mass amount of objects and/or groups using a
-CSV file. You can also modify existing groups (add, remove) using a CSV file as well. Log exporting
-is another primary function, wheras you can query any log type just like you would in the GUI,
-and export them to a CSV file locally on your machine.
+CSV file. You can also modify existing groups (add, remove) using a CSV file as well. Exporting
+of certain types of information is another primary function, and include:
+
+* Log exporting: Query any log type just like you would in the GUI, and export them to a CSV file locally on your machine.
+* Session table dump: Query the entire session table on a firewall, and export it to a CSV file.
+  * You can also use filters just as you would on the command line.
 
 All of the backend functions are from the [go-panos](https://github.com/scottdware/go-panos) package.
 
@@ -14,7 +17,7 @@ For a detailed explanation of commands, and how they are used, click on any one 
 command names below.
 
 `panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc],
-[`import`][import-doc], [`logs`][logs-doc], [`version`][version-doc]
+[`import`][import-doc], [`logs`][logs-doc], [`sessions`][sessions-doc], [`version`][version-doc]
 
 ## Usage
 
@@ -27,6 +30,7 @@ Available Commands:
   help        Help about any command
   import      Import CSV files that will create and/or modify objects
   logs        Retrieve logs from the device and export them to a CSV file
+  sessions    Query the session table on a firewall, and export it to a CSV file
   version     Prints the version number of panco
 
 Flags:
@@ -196,6 +200,32 @@ log retrieval and export could take a while.
 
 [Here](https://github.com/scottdware/panco/blob/master/traffic_log_example.csv) is an example of an export of traffic logs.
 
+## panco sessions [flags]
+
+```
+Usage:
+  panco sessions [flags]
+
+Flags:
+  -d, --device string   Firewall or Panorama device to connect to
+  -e, --export string   Name of the CSV file to export the session table to
+  -f, --filter string   Filter string to include sessions only matching the criteria
+  -h, --help            help for sessions
+  -u, --user string     User to connect to the device as
+```
+
+This command will dump the entire session table on a firewall to the CSV file
+that you specify. You can optionally define a filter, and use the same criteria as you would
+on the command line. The filter query must be enclosed in quotes "", and the format is:
+
+option=value (e.g. `--filter "application=ssl"`)
+
+Your filter can include multiple items, and each group must be separated by a comma, e.g.:
+
+`--filter "application=ssl, ssl-decrypt=yes, protocol=tcp"`
+
+Depending on the number of sessions, the export could take some time.
+
 ## panco version
 
 ```
@@ -211,4 +241,5 @@ Version information for panco.
 [example-doc]: https://github.com/scottdware/panco#panco-example
 [import-doc]: https://github.com/scottdware/panco#panco-import-flags
 [logs-doc]: https://github.com/scottdware/panco#panco-logs-flags
+[sessions-doc]: https://github.com/scottdware/panco#panco-sessions-flags
 [version-doc]: https://github.com/scottdware/panco#panco-version
