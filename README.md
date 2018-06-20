@@ -19,6 +19,16 @@ command names below.
 `panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc],
 [`import`][import-doc], [`logs`][logs-doc], [`sessions`][sessions-doc], [`version`][version-doc]
 
+## Installation
+
+Installation of extremely easy, and just involves downloading the correct binary for your OS. You can download them by clicking on the [release](https://github.com/scottdware/panco/releases) tab above.
+
+Current support OS's:
+
+* Windows
+* Mac OS
+* Linux
+
 ## Usage
 
 ```
