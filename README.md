@@ -1,9 +1,8 @@
 # panco
 Command-line tool that interacts with Palo Alto firewalls and Panorama.
 
-Primarily, this tool is used for creating a mass amount of objects and/or groups using a
-CSV file. You can also modify existing groups (add, remove) using a CSV file as well. Exporting
-of certain types of information is another primary function, and include:
+Primarily, this tool is used for creating objects and security rules via CSV files, as
+well as exporting the above information, as well as:
 
 * Log exporting: Query any log type just like you would in the GUI, and export them to a CSV file locally on your machine.
 * Session table dump: Query the entire session table on a firewall, and export it to a CSV file.
@@ -11,13 +10,12 @@ of certain types of information is another primary function, and include:
 
 All of the backend functions are from the [go-panos](https://github.com/scottdware/go-panos) package.
 
-More features will continue to be added.
+More features will continue to be added on a regular basis.
 
 For a detailed explanation of commands, and how they are used, click on any one of the
 command names below.
 
-`panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc],
-[`import`][import-doc], [`logs`][logs-doc], [`sessions`][sessions-doc], [`version`][version-doc]
+`panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc], [`logs`][logs-doc], [`objects`][objects-doc], [`policy`][policy-doc], [`sessions`][sessions-doc], [`version`][version-doc]
 
 ## Installation
 
@@ -158,25 +156,6 @@ Example:
 
 ![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-modify.png "example-modify.csv")
 
-## panco import [flags]
-
-```
-Usage:
-  panco import [flags]
-
-Flags:
-  -c, --create string   Name of the CSV file to create objects with
-  -d, --device string   Firewall or Panorama device to connect to
-  -h, --help            help for import
-  -m, --modify string   Name of the CSV file to modify groups with
-  -u, --user string     User to connect to the device as
-```
-
-The `import` command, given the spcific flag, will create or modify address and/or
-service objects based on the information you have provided in your CSV file(s).
-
-Please see the [`example`][example-doc] command documentation above on how the CSV files should be structured.
-
 ## panco logs [flags]
 
 ```
@@ -209,6 +188,50 @@ log retrieval and export could take a while.
 > **NOTE:** If you do not get any results, you might want to try using the `--wait` flag and increasing the delay time.
 
 [Here](https://github.com/scottdware/panco/blob/master/traffic_log_example.csv) is an example of an export of traffic logs.
+
+## panco objects [flags]
+
+```
+Usage:
+  panco objects [flags]
+
+Flags:
+  -a, --action string        Action to perform - export, import, or modify
+  -d, --device string        Firewall or Panorama device to connect to
+  -g, --devicegroup string   Device group - only needed when ran against Panorama
+  -f, --file string          Name of the CSV file to export/import or modify
+  -h, --help                 help for objects
+  -u, --user string          User to connect to the device as
+```
+
+This command allows you to perform the following actions on address and service objects:
+export, import, and modify groups. When you select the export option (`--action export`), there are
+two files that will be created. One will old all of the address objects, and the other will hold all of the service objects.
+
+Using the modify action, allows you to add or remove objects from groups, based on the data you have within your CSV file.
+
+Please see the [`example`][example-doc] command documentation above on how the CSV files should be structured.
+
+## panco policy [flags]
+
+```
+Usage:
+  panco policy [flags]
+
+Flags:
+  -a, --action string        Action to perform - export or import
+  -d, --device string        Firewall or Panorama device to connect to
+  -g, --devicegroup string   Device group - only needed when ran against Panorama
+  -f, --file string          Name of the CSV file to export/import
+  -h, --help                 help for policy
+  -u, --user string          User to connect to the device as
+```
+
+This command will allow you to export and import an entire security policy. If you are running this
+against a Panorama device, it can be really helpful if you want to clone an entire policy,
+as you can export it from one device-group, modify it if needed, then import the poilcy into a different device-group.
+
+You must always specify the action you want to take via the --action flag. Actions are either export or import.
 
 ## panco sessions [flags]
 
@@ -252,4 +275,6 @@ Version information for panco.
 [import-doc]: https://github.com/scottdware/panco#panco-import-flags
 [logs-doc]: https://github.com/scottdware/panco#panco-logs-flags
 [sessions-doc]: https://github.com/scottdware/panco#panco-sessions-flags
+[policy-doc]: https://github.com/scottdware/panco#panco-policy-flags
+[objects-doc]: https://github.com/scottdware/panco#panco-objects-flags
 [version-doc]: https://github.com/scottdware/panco#panco-version
