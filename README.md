@@ -208,6 +208,8 @@ This command allows you to perform the following actions on address and service 
 export, import, and modify groups. When you select the export option (`--action export`), there are
 two files that will be created. One will old all of the address objects, and the other will hold all of the service objects.
 
+When ran against a Panorama device without specifying the `--devicegroup` flag, all objects will be exported, including shared ones.
+
 Using the modify action, allows you to add or remove objects from groups, based on the data you have within your CSV file.
 
 Please see the [`example`][example-doc] command documentation above on how the CSV files should be structured.
