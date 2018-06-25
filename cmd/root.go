@@ -33,7 +33,7 @@ import (
 )
 
 var cfgFile string
-var create, modify, user, device, query, ltype, outfile string
+var action, dg, user, device, query, ltype, fh string
 var all, pending, processed bool
 var jid, nlogs, lwait int
 
@@ -105,4 +105,26 @@ func passwd() string {
 	fmt.Println()
 
 	return strings.TrimSpace(password)
+}
+
+func sliceToString(slice []string) string {
+	var str string
+
+	for _, item := range slice {
+		str += fmt.Sprintf("%s, ", item)
+	}
+
+	// return strings.Replace(str, ",\"", "\"", -1)
+	return strings.TrimRight(str, ", ")
+}
+
+func stringToSlice(str string) []string {
+	var slice []string
+
+	list := strings.Split(str, ",")
+	for _, item := range list {
+		slice = append(slice, strings.TrimLeft(item, " "))
+	}
+
+	return slice
 }
