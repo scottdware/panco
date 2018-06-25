@@ -40,6 +40,9 @@ objects: export, import, and modify groups. When you select the export option (-
 there are two files that will be created. One will old all of the address objects, and the other
 will hold all of the service objects.
 
+When ran against a Panorama device without specifying the --devicegroup flag, all objects will be
+exported, including shared ones.
+
 Using the modify action, allows you to add or remove objects from groups, based on the data you have
 within your CSV file.
 
