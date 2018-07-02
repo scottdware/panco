@@ -193,15 +193,21 @@ log retrieval and export could take a while.
 
 ```
 Usage:
-  panco objects [flags]
+  panco [command]
+
+Available Commands:
+  example     Create example CSV files for import reference
+  help        Help about any command
+  logs        Retrieve logs from the device and export them to a CSV file
+  objects     Import/export address and service objects, modify groups
+  policy      Export/import a security policy
+  sessions    Query the session table on a firewall, and export it to a CSV file
+  version     Prints the version number of panco
 
 Flags:
-  -a, --action string        Action to perform - export, import, or modify
-  -d, --device string        Firewall or Panorama device to connect to
-  -g, --devicegroup string   Device group - only needed when ran against Panorama
-  -f, --file string          Name of the CSV file to export/import or modify
-  -h, --help                 help for objects
-  -u, --user string          User to connect to the device as
+  -h, --help   help for panco
+
+Use "panco [command] --help" for more information about a command.
 ```
 
 This command allows you to perform the following actions on address and service objects:
