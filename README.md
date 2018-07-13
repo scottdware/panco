@@ -103,9 +103,9 @@ Column | Description
 `tag` | (Optional) Name of a pre-existing tag on the device to apply.
 `device-group` | Name of the device-group, or **shared** if creating a shared object.
 
-For a **_static_** address group, `value` must contain a list of members to add to the group, separated by a space, e.g.:
+For a **_static_** address group, `value` must contain a comma-separated list of members to add to the group, enclosed in quotes `""`, e.g.:
 
-`ip-host1 ip-net1 fqdn-example.com`
+`"ip-host1, ip-net1, fqdn-example.com"`
 
 For a **_dynamic_** address group, `value` must contain the criteria (tags) to match on, e.g.:
 
@@ -122,7 +122,7 @@ Column | Description
 `tag` | (Optional) Name of a pre-existing tag on the device to apply.
 `device-group` | Name of the device-group, or **shared** if creating a shared object.
 
-* `value` must contain a single port number, range (1023-3000), or comma-separated list of ports, e.g.: `80, 443, 2000`.
+* `value` must contain a single port number, range (1023-3000), or comma-separated list of ports, enclosed in quotes, e.g.: `"80, 443, 2000"`.
 
 When creating service groups:
 
@@ -135,7 +135,7 @@ Column | Description
 `tag` | (Optional) Name of a pre-existing tag on the device to apply.
 `device-group` | Name of the device-group, or **shared** if creating a shared object.
 
-* `value` must contain a list of service objects to add to the group, separated by a space, e.g.: `tcp_8080 udp_666 tcp_range`.
+* `value` must contain a comma-separated list of service objects to add to the group, enclosed in quotes `""`, e.g.: `"tcp_8080, udp_666, tcp_range"`.
 
 Example:
 
