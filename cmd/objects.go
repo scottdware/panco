@@ -34,14 +34,16 @@ import (
 // objectsCmd represents the objects command
 var objectsCmd = &cobra.Command{
 	Use:   "objects",
-	Short: "Import/export address and service objects, modify groups",
+	Short: "Import/export address and service objects, rename objects, and modify groups",
 	Long: `This command allows you to perform the following actions on address and service
-objects: export, import, and modify groups. When you select the export option (--action export),
-there are two files that will be created. One will old all of the address objects, and the other
+objects: export, import, rename, and modify groups. When you select the export option (--action export),
+there are two files that will be created. One will hold all of the address objects, and the other
 will hold all of the service objects.
 
 When ran against a Panorama device without specifying the --devicegroup flag, all objects will be
 exported, including shared ones.
+
+The rename action allows you to rename address, service and tag objects.
 
 Using the modify action, allows you to add or remove objects from groups, based on the data you have
 within your CSV file.
@@ -60,12 +62,10 @@ Please see "panco example" for sample CSV files to use as a reference.`,
 		}
 
 		if action == "export" {
-			if !strings.Contains(fh, ".csv") {
-				fh = fmt.Sprintf("%s.csv", fh)
-			}
+			fh = strings.TrimSuffix(fh, ".csv")
 
-			addressCSV, _ := easycsv.NewCSV(fmt.Sprintf("addresses_%s", fh))
-			serviceCSV, _ := easycsv.NewCSV(fmt.Sprintf("services_%s", fh))
+			addressCSV, _ := easycsv.NewCSV(fmt.Sprintf("%s_addr.csv", fh))
+			serviceCSV, _ := easycsv.NewCSV(fmt.Sprintf("%s_svcs.csv", fh))
 
 			addressCSV.Write("# Address Objects\n")
 			addressCSV.Write("#Name,Type,Value,Description,Tag,DeviceGroup\n")
@@ -291,13 +291,39 @@ Please see "panco example" for sample CSV files to use as a reference.`,
 				os.Exit(1)
 			}
 		}
+
+		if action == "rename" {
+			objs, err := easycsv.Open(fh)
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+
+			for _, line := range objs {
+				var devicegroup string
+				linelen := len(line)
+				oldname := line[0]
+				newname := line[1]
+
+				if linelen > 2 && len(line[2]) > 0 {
+					devicegroup = line[2]
+				}
+
+				if err = pan.RenameObject(oldname, newname, devicegroup); err != nil {
+					fmt.Println(err)
+					os.Exit(1)
+				}
+
+				time.Sleep(20 * time.Millisecond)
+			}
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(objectsCmd)
 
-	objectsCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform - export, import, or modify")
+	objectsCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform - export, import, rename, or modify")
 	objectsCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to export/import or modify")
 	objectsCmd.Flags().StringVarP(&dg, "devicegroup", "g", "", "Device group - only needed when ran against Panorama")
 	objectsCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
