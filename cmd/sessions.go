@@ -39,11 +39,11 @@ var sessionsCmd = &cobra.Command{
 that you specify. You can optionally define a filter, and use the same criteria as you would
 on the command line. The filter query must be enclosed in quotes "", and the format is:
 
-option=value (e.g. --filter "application=ssl")
+option=value (e.g. --query "application=ssl")
 
 Your filter can include multiple items, and each group must be separated by a comma, e.g.:
 
---filter "application=ssl, ssl-decrypt=yes, protocol=tcp"
+--query "application=ssl, ssl-decrypt=yes, protocol=tcp"
 
 Depending on the number of sessions, the export could take some time.`,
 	Run: func(cmd *cobra.Command, args []string) {
