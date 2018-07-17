@@ -103,8 +103,8 @@ func init() {
 
 	sessionsCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
 	sessionsCmd.Flags().StringVarP(&device, "device", "d", "", "Firewall or Panorama device to connect to")
-	sessionsCmd.Flags().StringVarP(&fh, "file", "o", "", "Name of the CSV file to export the session table to")
-	sessionsCmd.Flags().StringVarP(&query, "filter", "f", "", "Filter string to include sessions only matching the criteria")
+	sessionsCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to export the session table to")
+	sessionsCmd.Flags().StringVarP(&query, "query", "q", "", "Filter string to include sessions that only matching the criteria")
 	sessionsCmd.MarkFlagRequired("user")
 	sessionsCmd.MarkFlagRequired("device")
 	sessionsCmd.MarkFlagRequired("export")

@@ -155,7 +155,7 @@ func init() {
 	logsCmd.Flags().IntVarP(&lwait, "wait", "w", 5, "Wait time in seconds to delay retrieving logs - helpful for large queries")
 	logsCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
 	logsCmd.Flags().StringVarP(&device, "device", "d", "", "Firewall or Panorama device to connect to")
-	logsCmd.Flags().StringVarP(&fh, "file", "o", "", "Name of the CSV file to export the logs to")
+	logsCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to export the logs to")
 	logsCmd.MarkFlagRequired("user")
 	logsCmd.MarkFlagRequired("device")
 	logsCmd.MarkFlagRequired("export")
