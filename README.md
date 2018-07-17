@@ -39,7 +39,7 @@ Available Commands:
   example     Create example CSV files for import reference
   help        Help about any command
   logs        Retrieve logs from the device and export them to a CSV file
-  objects     Import/export address and service objects, modify groups
+  objects     Import/export address and service objects, rename objects, and modify groups
   policy      Export/import a security policy
   sessions    Query the session table on a firewall, and export it to a CSV file
   version     Prints the version number of panco
@@ -159,6 +159,22 @@ Example:
 
 ![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-modify.png "example-modify.csv")
 
+### example-rename.csv
+
+The CSV file for renaming objects should be organized with the following columns:
+
+`old-name,new-name,device-group`.
+
+Column | Description
+:--- | :---
+`old-name` | Name of the existing object.
+`new-name` | Name of the object that you want to rename to.
+`device-group` | Name of the device-group, or **shared** if creating a shared object.
+
+Example:
+
+![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-rename.png "example-rename.csv")
+
 ## panco logs [flags]
 
 ```
@@ -167,7 +183,7 @@ Usage:
 
 Flags:
   -d, --device string   Firewall or Panorama device to connect to
-  -e, --export string   Name of the CSV file to export the logs to
+  -f, --file string     Name of the CSV file to export the logs to
   -h, --help            help for logs
   -n, --nlogs int       Number of logs to retrieve (default 20)
   -q, --query string    Critera to search the logs on
@@ -199,7 +215,7 @@ Usage:
   panco objects [flags]
 
 Flags:
-  -a, --action string        Action to perform - export, import, or modify
+  -a, --action string        Action to perform - export, import, rename, or modify
   -d, --device string        Firewall or Panorama device to connect to
   -g, --devicegroup string   Device group - only needed when ran against Panorama
   -f, --file string          Name of the CSV file to export/import or modify
@@ -209,9 +225,11 @@ Flags:
 
 This command allows you to perform the following actions on address and service objects:
 export, import, and modify groups. When you select the export option (`--action export`), there are
-two files that will be created. One will old all of the address objects, and the other will hold all of the service objects.
+two files that will be created. One will hold all of the address objects, and the other will hold all of the service objects.
 
 When ran against a Panorama device without specifying the `--devicegroup` flag, all objects will be exported, including shared ones.
+
+The rename action allows you to rename address, service, and tag objects.
 
 Using the modify action, allows you to add or remove objects from groups, based on the data you have within your CSV file.
 
@@ -246,9 +264,9 @@ Usage:
 
 Flags:
   -d, --device string   Firewall or Panorama device to connect to
-  -e, --export string   Name of the CSV file to export the session table to
-  -f, --filter string   Filter string to include sessions only matching the criteria
+  -f, --file string     Name of the CSV file to export the session table to
   -h, --help            help for sessions
+  -q, --query string    Filter string to include sessions that only matching the criteria
   -u, --user string     User to connect to the device as
 ```
 
@@ -256,11 +274,11 @@ This command will dump the entire session table on a firewall to the CSV file
 that you specify. You can optionally define a filter, and use the same criteria as you would
 on the command line. The filter query must be enclosed in quotes "", and the format is:
 
-option=value (e.g. `--filter "application=ssl"`)
+option=value (e.g. `--query "application=ssl"`)
 
 Your filter can include multiple items, and each group must be separated by a comma, e.g.:
 
-`--filter "application=ssl, ssl-decrypt=yes, protocol=tcp"`
+`--query "application=ssl, ssl-decrypt=yes, protocol=tcp"`
 
 Depending on the number of sessions, the export could take some time.
 
