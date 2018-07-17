@@ -31,47 +31,61 @@ import (
 var exampleCreate = `# Lines starting with a hashtag will be ignored,,,,,
 ,,,,,
 # Creating address objects,,,,,
-host_10.1.1.1,ip,10.1.1.1,,,shared
-net_10.0.0.0_8,ip,10.0.0.0/8,,,shared
-host_172.16.1.1-172.16.1.10,range,172.16.1.1-172.16.1.10,,,shared
-host_microsoft.com,fqdn,microsoft.com,,,Some_Device_Group
+Stormtrooper,ip,10.0.0.50,,,shared
+Boba_Fett,fqdn,mandalorianmercs.org,,,shared
+Greedo,ip,10.0.0.53,,,shared
+net_10.0.0.0_24,ip,10.0.0.0/24,,,shared
+DHCP_Range,range,10.0.0.200-10.0.0.250,,,shared
+fqdn_starwars.com,fqdn,starwars.com,,,shared
 ,,,,,
 # Creating service objects,,,,,
 tcp_port_9999,tcp,9999,,,shared
-udp_ports_30000-39999,udp,30000-39999,,,Some_Device_Group
+udp_ports_30000-39999,udp,30000-39999,,,shared
 web_ports,tcp,"80, 8080, 443",,,shared
 udp_port_7777,udp,7777,,,shared
 ,,,,,
-# Creating objects with tags - tags must be pre-existing!,,,,,
-host_192.168.1.0_24,ip,192.168.1.0/24,,Server-Network,shared
-host_192.168.1.20,ip,192.168.1.20,,Server,shared
+# Creating objects with tags - tags must be pre-existing! Multiple tags separated with a comma (enclosed in quotes),,,,,
+Millenium_Falcon,ip,10.0.0.51,,"Han, Chewy",shared
+Death Trooper,ip,10.0.0.52,,Death Star,shared
 ,,,,,
 # Creating address and service groups,,,,,
 # When creating address or service groups the members must already exist. The best way to do this,,,,,
 # is to create the address or service objects first (earlier in the spreadsheet) then reference them in the group.,,,,,
-Inside_Sources,static,host_10.1.1.1 net_10.0.0.0_8,,,shared
-server_networks_dynamic,dynamic,Server-Network or Servers,,,shared
-tcp_port_group,service,tcp_port_9999,,,shared`
+Cantina,static,"Millenium_Falcon, net_10.0.0.0_24, DHCP_Range",,,shared
+The_Dark_Side,dynamic,Death Star or Sith,,,shared
+tcp_port_group,service,"tcp_port_9999, udp_port_7777",,,shared`
 var exampleModify = `# Lines starting with a hashtag will be ignored,,,
 ,,,
 # Adding objects to groups,,,
-address,add,host_172.16.1.1-172.16.1.10,Inside_Sources
-service,add,udp_port_7777,tcp_port_group
+address,add,Greedo,Cantina
 service,add,web_ports,tcp_port_group
 ,,,
 # Removing objects from groups,,,
 service,remove,udp_port_7777,tcp_port_group
-address,remove,host_172.16.1.1-172.16.1.10,Inside_Sources`
+address,remove,Boba_Fett,Cantina`
+var exampleRename = `# Lines starting with a hashtag will be ignored,,
+,,
+# Renaming objects,,
+#Old name,New name,device-group
+Boba_Fett,Bounty-Hunter,
+Stormtrooper,Cannon_Fodder,
+Boba Fett,Mandalorian,
+,,
+# If renaming non-shared objects on Panorama - specify the device-group in the 3rd column,,
+Apprentice,Sith-Lord,Star_Wars
+Padawan,Jedi_Master,Star_Wars`
 
 // exampleCmd represents the example command
 var exampleCmd = &cobra.Command{
 	Use:   "example",
 	Short: "Create example CSV files for import reference",
-	Long: `This command will create two sample, reference CSV files for use with the
+	Long: `This command will create three sample, reference CSV files for use with the
 import command. The files will be placed in the location where you are running
 the command from, and are named as such:
 	
-example-create.csv and example-modify.csv`,
+example-create.csv
+example-modify.csv
+example-rename.csv`,
 	Run: func(cmd *cobra.Command, args []string) {
 		createFh, err := easycsv.NewCSV("example-create.csv")
 		if err != nil {
@@ -89,6 +103,14 @@ example-create.csv and example-modify.csv`,
 
 		modifyFh.Write(exampleModify)
 		modifyFh.End()
+
+		renameFh, err := easycsv.NewCSV("example-rename.csv")
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		renameFh.Write(exampleRename)
+		renameFh.End()
 	},
 }
 
