@@ -52,7 +52,7 @@ Death Trooper,ip,10.0.0.52,,Death Star,shared
 # When creating address or service groups the members must already exist. The best way to do this,,,,,
 # is to create the address or service objects first (earlier in the spreadsheet) then reference them in the group.,,,,,
 Cantina,static,"Millenium_Falcon, net_10.0.0.0_24, DHCP_Range",,,shared
-The_Dark_Side,dynamic,Death Star or Sith,,,shared
+The_Dark_Side,dynamic,"'Death Star' or 'Sith'",,,shared
 tcp_port_group,service,"tcp_port_9999, udp_port_7777",,,shared`
 var exampleModify = `# Lines starting with a hashtag will be ignored,,,
 ,,,
@@ -69,7 +69,7 @@ var exampleRename = `# Lines starting with a hashtag will be ignored,,
 #Old name,New name,device-group
 Boba_Fett,Bounty-Hunter,
 Stormtrooper,Cannon_Fodder,
-Boba Fett,Mandalorian,
+Greedo,Han_Shot_Me_First,
 ,,
 # If renaming non-shared objects on Panorama - specify the device-group in the 3rd column,,
 Apprentice,Sith-Lord,Star_Wars
