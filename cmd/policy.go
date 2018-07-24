@@ -40,6 +40,12 @@ you are running this against a Panorama device, it can be really helpful if you 
 an entire policy, as you can export it from one device-group, modify it if needed, then import
 the poilcy into a different device-group.
 
+For an example CSV format of how a policy import should look, use the --action export flag to
+export a policy. The following columns in the CSV file must not be blank, and at the very minimum
+have the value of "any" if you wish to allow that:
+
+From, To, Source, Destination, SourceUser, Application, Service, HIPProfiles, Category
+
 You must always specify the action you want to take via the --action flag. Actions are either
 export or import.`,
 	Run: func(cmd *cobra.Command, args []string) {
