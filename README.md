@@ -218,7 +218,7 @@ Usage:
 Flags:
   -a, --action string        Action to perform - export, import, rename, or modify
   -d, --device string        Firewall or Panorama device to connect to
-  -g, --devicegroup string   Device group - only needed when ran against Panorama
+  -g, --devicegroup string   Device group - only needed when exporting and run against a Panorama device
   -f, --file string          Name of the CSV file to export/import or modify
   -h, --help                 help for objects
   -u, --user string          User to connect to the device as
@@ -228,7 +228,9 @@ This command allows you to perform the following actions on address and service 
 export, import, and modify groups. When you select the export option (`--action export`), there are
 two files that will be created. One will hold all of the address objects, and the other will hold all of the service objects.
 
-When ran against a Panorama device without specifying the `--devicegroup` flag, all objects will be exported, including shared ones.
+When exporting and run against a Panorama device without specifying the `--devicegroup` flag, all objects will be
+exported, including shared ones. Importing objects into Panorama without specifying the `--devicegroup` flag does
+not matter.
 
 The rename action allows you to rename address, service, and tag objects.
 

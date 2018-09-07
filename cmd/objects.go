@@ -40,8 +40,9 @@ objects: export, import, rename, and modify groups. When you select the export o
 there are two files that will be created. One will hold all of the address objects, and the other
 will hold all of the service objects.
 
-When ran against a Panorama device without specifying the --devicegroup flag, all objects will be
-exported, including shared ones.
+When exporting and run against a Panorama device without specifying the --devicegroup flag, all objects will be
+exported, including shared ones. Importing objects into Panorama without specifying the --devicegroup flag does
+not matter.
 
 The rename action allows you to rename address, service and tag objects.
 
@@ -325,7 +326,7 @@ func init() {
 
 	objectsCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform - export, import, rename, or modify")
 	objectsCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to export/import or modify")
-	objectsCmd.Flags().StringVarP(&dg, "devicegroup", "g", "", "Device group - only needed when ran against Panorama")
+	objectsCmd.Flags().StringVarP(&dg, "devicegroup", "g", "", "Device group - only needed when exporting and run against a Panorama device")
 	objectsCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
 	objectsCmd.Flags().StringVarP(&device, "device", "d", "", "Firewall or Panorama device to connect to")
 	objectsCmd.MarkFlagRequired("user")
