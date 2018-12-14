@@ -25,7 +25,6 @@ Current support OS's:
 
 * Windows
 * Mac OS
-* Linux
 
 Just download the .zip file, extract the binary and place it somewhere in your PATH environment variable.
 
