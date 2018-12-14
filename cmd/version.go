@@ -32,7 +32,7 @@ var versionCmd = &cobra.Command{
 	Short: "Prints the version number of panco",
 	Long:  `Version information for panco`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("panco version 0.1 - pre-release")
+		fmt.Println("panco version 0.2 - pre-release")
 	},
 }
 
