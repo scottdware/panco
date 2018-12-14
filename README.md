@@ -15,7 +15,7 @@ More features will continue to be added on a regular basis.
 For a detailed explanation of commands, and how they are used, click on any one of the
 command names below.
 
-`panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc], [`logs`][logs-doc], [`objects`][objects-doc], [`policy`][policy-doc], [`sessions`][sessions-doc], [`version`][version-doc]
+`panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc], ['devices'][devices-doc], [`logs`][logs-doc], [`objects`][objects-doc], [`policy`][policy-doc], [`sessions`][sessions-doc], [`version`][version-doc]
 
 ## Installation
 
@@ -36,6 +36,7 @@ Usage:
   panco [command]
 
 Available Commands:
+  devices     Device specific functions such as exporting data from Panorama or local firewalls
   example     Create example CSV files for import reference
   help        Help about any command
   logs        Retrieve logs from the device and export them to a CSV file
@@ -176,6 +177,32 @@ Example:
 
 ![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-rename.png "example-rename.csv")
 
+## panco devices [flags]
+
+```
+Usage:
+  panco devices [flags]
+
+Flags:
+  -a, --action string   Action to perform - e.g. export
+  -d, --device string   Firewall or Panorama device to connect to
+  -f, --file string     Name of the CSV file to export to
+  -h, --help            help for devices
+  -t, --type string     Type of information to export - e.g. applications or interfaces
+  -u, --user string     User to connect to the device as
+```
+
+The devices command will provide information about devices connected/managed by Panorama, as well as other 
+device (firewall) specific information. Currently, the only action is to "export"
+
+When ran against a Panorama device, the following "types" are available: applications, devices. Using "devices" 
+will export a list of all managed firewalls, with data from the "Panorama > Managed Devices" tab. 
+When using "applications" it will export a list of every predefined application and all of it's characteristics, 
+such as category, subcategory, etc.
+
+Using the "interfaces" type will export a list of all of the logical and physical (hardware) interfaces on the 
+device, with all of their information, such as IP address, MAC address, zone, etc.
+
 ## panco logs [flags]
 
 ```
@@ -303,6 +330,7 @@ Flags:
 
 Version information for panco.
 
+[devices-doc]: https://github.com/scottdware/panco#panco-devices-flags
 [example-doc]: https://github.com/scottdware/panco#panco-example
 [import-doc]: https://github.com/scottdware/panco#panco-import-flags
 [logs-doc]: https://github.com/scottdware/panco#panco-logs-flags
