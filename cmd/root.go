@@ -33,8 +33,8 @@ import (
 )
 
 var cfgFile string
-var action, dg, user, device, query, ltype, fh string
-var all, pending, processed bool
+var action, dg, user, device, query, ltype, fh, t string
+var all, pending, processed, ints bool
 var jid, nlogs, lwait int
 
 // rootCmd represents the base command when called without any subcommands
