@@ -38,7 +38,7 @@ var devicesCmd = &cobra.Command{
 by Panorama, as well as other device (firewall) specific information. Currently, the only action
 is to "export"
 
-When ran against a Panorama device, the following "types" are available: applications, devices.
+When ran against a Panorama device, the following "types" are available: applications and devices.
 Using "devices" will export a list of all managed firewalls, with data from the "Panorama > Managed Devices"
 tab. When using "applications" it will export a list of every predefined application and all of
 it's characteristics, such as category, subcategory, etc.
