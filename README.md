@@ -15,7 +15,7 @@ More features will continue to be added on a regular basis.
 For a detailed explanation of commands, and how they are used, click on any one of the
 command names below.
 
-`panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc], ['devices'][devices-doc], [`logs`][logs-doc], [`objects`][objects-doc], [`policy`][policy-doc], [`sessions`][sessions-doc], [`version`][version-doc]
+`panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc], [`devices`][devices-doc], [`logs`][logs-doc], [`objects`][objects-doc], [`policy`][policy-doc], [`sessions`][sessions-doc], [`version`][version-doc]
 
 ## Installation
 
@@ -193,14 +193,14 @@ Flags:
 ```
 
 The devices command will provide information about devices connected/managed by Panorama, as well as other 
-device (firewall) specific information. Currently, the only action is to "export"
+device (firewall) specific information. Currently, the only action is to `export`.
 
-When ran against a Panorama device, the following "types" are available: applications, devices. Using "devices" 
-will export a list of all managed firewalls, with data from the "Panorama > Managed Devices" tab. 
-When using "applications" it will export a list of every predefined application and all of it's characteristics, 
+When ran against a Panorama device, the following "types" are available: `applications` and `devices`. Using `devices` 
+will export a list of all managed firewalls, with data from the "**Panorama > Managed Devices**" tab. 
+When using `applications` it will export a list of every predefined application and all of it's characteristics, 
 such as category, subcategory, etc.
 
-Using the "interfaces" type will export a list of all of the logical and physical (hardware) interfaces on the 
+Using the `interfaces` type will export a list of all of the logical and physical (hardware) interfaces on the 
 device, with all of their information, such as IP address, MAC address, zone, etc.
 
 ## panco logs [flags]
