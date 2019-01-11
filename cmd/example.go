@@ -30,7 +30,8 @@ import (
 
 var exampleCreate = `# Lines starting with a hashtag will be ignored,,,,,
 ,,,,,
-# Creating address objects,,,,,
+# CREATE ADDRESS OBJECTS,,,,,
+#Name,Type,Value,Description,Tag,Device-group
 Stormtrooper,ip,10.0.0.50,,,shared
 Boba_Fett,fqdn,mandalorianmercs.org,,,shared
 Greedo,ip,10.0.0.53,,,shared
@@ -38,34 +39,39 @@ net_10.0.0.0_24,ip,10.0.0.0/24,,,shared
 DHCP_Range,range,10.0.0.200-10.0.0.250,,,shared
 fqdn_starwars.com,fqdn,starwars.com,,,shared
 ,,,,,
-# Creating service objects,,,,,
+# CREATE SERVICE OBJECTS,,,,,
+#Name,Type,Value,Description,Tag,Device-group
 tcp_port_9999,tcp,9999,,,shared
 udp_ports_30000-39999,udp,30000-39999,,,shared
 web_ports,tcp,"80, 8080, 443",,,shared
 udp_port_7777,udp,7777,,,shared
 ,,,,,
-# Creating objects with tags - tags must be pre-existing! Multiple tags separated with a comma (enclosed in quotes),,,,,
+# CREATE OBJECTS WITH TAGS - tags must be pre-existing! Multiple tags separated with a comma (enclosed in quotes),,,,,
+#Name,Type,Value,Description,Tag,Device-group
 Millenium_Falcon,ip,10.0.0.51,,"Han, Chewy",shared
 Death Trooper,ip,10.0.0.52,,Death Star,shared
 ,,,,,
-# Creating address and service groups,,,,,
+# CREATE ADDRESS AND SERVICE GROUPS,,,,,
 # When creating address or service groups the members must already exist. The best way to do this,,,,,
 # is to create the address or service objects first (earlier in the spreadsheet) then reference them in the group.,,,,,
+#Name,Type,Value,Description,Tag,Device-group
 Cantina,static,"Millenium_Falcon, net_10.0.0.0_24, DHCP_Range",,,shared
 The_Dark_Side,dynamic,"'Death Star' or 'Sith'",,,shared
 tcp_port_group,service,"tcp_port_9999, udp_port_7777",,,shared`
 var exampleModify = `# Lines starting with a hashtag will be ignored,,,
 ,,,
-# Adding objects to groups,,,
+# ADDING OBJECTS TO GROUPS,,,
+#Group Type,Action,Object,Group,Device-group
 address,add,Greedo,Cantina
 service,add,web_ports,tcp_port_group
 ,,,
-# Removing objects from groups,,,
+# REMOVING OBJECTS FROM GROUPS,,,
+#Group Type,Action,Object,Group,Device-group
 service,remove,udp_port_7777,tcp_port_group
 address,remove,Boba_Fett,Cantina`
 var exampleRename = `# Lines starting with a hashtag will be ignored,,
 ,,
-# Renaming objects,,
+# RENAMING OBJECTS,,
 #Old name,New name,device-group
 Boba_Fett,Bounty-Hunter,
 Stormtrooper,Cannon_Fodder,
