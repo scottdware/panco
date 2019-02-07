@@ -47,6 +47,7 @@ Your filter can include multiple items, and each group must be separated by a co
 
 Depending on the number of sessions, the export could take some time.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		var sessions *panos.SessionTable
 		pass := passwd()
 		creds := &panos.AuthMethod{
 			Credentials: []string{user, pass},
@@ -58,10 +59,18 @@ Depending on the number of sessions, the export could take some time.`,
 			os.Exit(1)
 		}
 
-		sessions, err := pan.Sessions(query)
+		sessions, err = pan.Sessions()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
+		}
+
+		if len(query) > 0 {
+			sessions, err = pan.Sessions(query)
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
 		}
 
 		if !strings.Contains(fh, ".csv") {
