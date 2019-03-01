@@ -77,14 +77,13 @@ The CSV file for object creation should be organized with the following columns:
 
 `name,type,value,description (optional),tag (optional),device-group`
 
-_<span style="color:red">Even though the `description` and `tag` columns/fields
-are optional, you **MUST** still have the columns reserved, even if they are blank!</span>_
+**_IMPORTANT_**: Even though the `description` and `tag` columns/fields are optional, you **MUST** still have the columns reserved, even if they are blank!
 
-> **_<span style="color:red">NOTE</span>_**: Here are a few things to keep in mind when creating objects:
+> **_NOTE_**: Here are a few things to keep in mind when creating objects:
 > * For the name of the object, it cannot be longer than 63 characters, and must only include letters, numbers, spaces, hyphens, and underscores.
 > * If you are tagging an object upon creation, please make sure that the tags exist prior to creating the objects.
 > * When creating service groups, you DO NOT need to specify a description, as they do not have that capability.
-> * _<span style="color:red">When you create address or service groups, you should place them at the bottom of the CSV file, that way you don't risk adding a member that doesn't exist.</span>_
+> * **_IMPORTANT_**: _When you create address or service groups, you should place them at the bottom of the CSV file, that way you don't risk adding a member that doesn't exist._
 > * When creating objects on a local firewall, and not Panorama, you can leave the device-group column blank.
 
 **Creating Address Objects**
