@@ -68,7 +68,7 @@ Please see "panco example" for sample CSV files to use as a reference.`,
 			addressCSV, _ := easycsv.NewCSV(fmt.Sprintf("%s_addr.csv", fh))
 			serviceCSV, _ := easycsv.NewCSV(fmt.Sprintf("%s_svcs.csv", fh))
 
-			addressCSV.Write("# Address Objects\n")
+			addressCSV.Write("# ADDRESS OBJECTS\n")
 			addressCSV.Write("#Name,Type,Value,Description,Tag,DeviceGroup\n")
 
 			addrs, err := pan.Addresses(dg)
@@ -138,7 +138,7 @@ Please see "panco example" for sample CSV files to use as a reference.`,
 			}
 
 			addressCSV.Write("#\n")
-			addressCSV.Write("# Address Groups\n")
+			addressCSV.Write("# ADDRESS GROUPS\n")
 			addressCSV.Write("#Name,Type,Value,Description,Tag,DeviceGroup\n")
 
 			groups, err := pan.AddressGroups(dg)
@@ -193,7 +193,7 @@ Please see "panco example" for sample CSV files to use as a reference.`,
 
 			time.Sleep(1 * time.Second)
 
-			serviceCSV.Write("# Service Objects\n")
+			serviceCSV.Write("# SERVICE OBJECTS\n")
 			serviceCSV.Write("#Name,Type,Value,Description,Tag,DeviceGroup\n")
 
 			svcs, err := pan.Services(dg)
@@ -244,7 +244,7 @@ Please see "panco example" for sample CSV files to use as a reference.`,
 			}
 
 			serviceCSV.Write("#\n")
-			serviceCSV.Write("# Service Groups\n")
+			serviceCSV.Write("# SERVICE GROUPS\n")
 			serviceCSV.Write("#Name,Type,Value,Description,Tag,DeviceGroup\n")
 
 			svcg, err := pan.ServiceGroups(dg)
