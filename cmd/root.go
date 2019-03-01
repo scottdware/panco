@@ -33,8 +33,8 @@ import (
 )
 
 var cfgFile string
-var action, dg, user, device, query, ltype, fh, t string
-var all, pending, processed, ints bool
+var action, dg, user, device, query, ltype, fh, t, cname string
+var all, pending, processed, ints, n bool
 var jid, nlogs, lwait int
 
 // rootCmd represents the base command when called without any subcommands
@@ -120,9 +120,9 @@ func sliceToString(slice []string) string {
 func stringToSlice(str string) []string {
 	var slice []string
 
-	list := strings.Split(str, ", ")
+	list := strings.Split(str, ",")
 	for _, item := range list {
-		slice = append(slice, strings.Trim(item, " "))
+		slice = append(slice, strings.TrimSpace(item))
 	}
 
 	return slice
