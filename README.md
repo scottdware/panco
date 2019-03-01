@@ -1,16 +1,19 @@
 # panco
 Command-line tool that interacts with Palo Alto firewalls and Panorama.
 
-Primarily, this tool is used for creating objects and security rules via CSV files, as
-well as exporting the above information, as well as:
+Primarily, this tool is used for creating and modifying objects via CSV files, as well as exporting various types of information from Panorama or firewalls. Some of the additional information that can be exported are as follows:
 
+* Device information (e.g. managed device information on Panorama), such as software version, HA state, app/threat/Wildfire versions, etc..
+* Ability to export (and import) an entire firewall policy.
 * Log exporting: Query any log type just like you would in the GUI, and export them to a CSV file locally on your machine.
 * Session table dump: Query the entire session table on a firewall, and export it to a CSV file.
   * You can also use filters just as you would on the command line.
+* Entire list of supported applications.
+* Interface (hardware and physical) information on firewalls.
 
 All of the backend functions are from the [go-panos](https://github.com/scottdware/go-panos) package.
 
-More features will continue to be added on a regular basis.
+More features will continue to be added in the future.
 
 For a detailed explanation of commands, and how they are used, click on any one of the
 command names below.
@@ -72,13 +75,16 @@ The sections below describe these files and how to structure them in more detail
 
 The CSV file for object creation should be organized with the following columns:
 
-`name,type,value,description (optional),tag (optional),device-group`.
+`name,type,value,description (optional),tag (optional),device-group`
+
+_<span style="color:red">Even though the `description` and `tag` columns/fields
+are optional, you **MUST** still have the columns reserved, even if they are blank!</span>_
 
 > **_<span style="color:red">NOTE</span>_**: Here are a few things to keep in mind when creating objects:
 > * For the name of the object, it cannot be longer than 63 characters, and must only include letters, numbers, spaces, hyphens, and underscores.
 > * If you are tagging an object upon creation, please make sure that the tags exist prior to creating the objects.
 > * When creating service groups, you DO NOT need to specify a description, as they do not have that capability.
-> * When you create address or service groups, I would place them at the bottom of the CSV file, that way you don't risk adding a member that doesn't exist.
+> * _<span style="color:red">When you create address or service groups, you should place them at the bottom of the CSV file, that way you don't risk adding a member that doesn't exist.</span>_
 > * When creating objects on a local firewall, and not Panorama, you can leave the device-group column blank.
 
 **Creating Address Objects**
