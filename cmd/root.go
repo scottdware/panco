@@ -33,7 +33,7 @@ import (
 )
 
 var cfgFile string
-var action, dg, user, device, query, ltype, fh, t, cname string
+var action, dg, user, device, query, ltype, fh, t string
 var all, pending, processed, ints, n bool
 var jid, nlogs, lwait int
 
