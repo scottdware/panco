@@ -22,215 +22,255 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
-	"time"
 
+	"github.com/PaloAltoNetworks/pango"
+	"github.com/PaloAltoNetworks/pango/poli/security"
+	"github.com/PaloAltoNetworks/pango/util"
 	easycsv "github.com/scottdware/go-easycsv"
-	panos "github.com/scottdware/go-panos"
 	"github.com/spf13/cobra"
 )
 
 // policyCmd represents the policy command
 var policyCmd = &cobra.Command{
 	Use:   "policy",
-	Short: "Export/import a security policy",
-	Long: `This command will allow you to export and import an entire security policy. If
+	Short: "Import and export a security policy",
+	Long: `This command will allow you to import and export an entire security policy. If
 you are running this against a Panorama device, it can be really helpful if you want to clone
 an entire policy, as you can export it from one device-group, modify it if needed, then import
-the poilcy into a different device-group.
-
-For an example CSV format of how a policy import should look, use the --action export flag to
-export a policy. The following columns in the CSV file must not be blank, and at the very minimum
-have the value of "any" if you wish to allow that:
-
-From, To, Source, Destination, SourceUser, Application, Service, HIPProfiles, Category
-
-You must always specify the action you want to take via the --action flag. Actions are either
-export or import.`,
+the poilcy into a different device-group (or firewall).`,
 	Run: func(cmd *cobra.Command, args []string) {
+		var err error
 		pass := passwd()
-		creds := &panos.AuthMethod{
-			Credentials: []string{user, pass},
+
+		cl := pango.Client{
+			Hostname: device,
+			Username: user,
+			Password: pass,
+			Logging:  pango.LogQuiet,
 		}
 
-		pan, err := panos.NewSession(device, creds)
+		con, err := pango.Connect(cl)
 		if err != nil {
-			fmt.Println(err)
+			log.Printf("Failed to connect: %s", err)
 			os.Exit(1)
 		}
 
-		if action == "export" {
-			policies, err := pan.Policy(dg)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-
-			if !strings.Contains(fh, ".csv") {
-				fh = fmt.Sprintf("%s.csv", fh)
-			}
-
-			csv, err := easycsv.NewCSV(fh)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-
-			csv.Write("#DeviceGroup,Type,Name,Tag,From,To,Source,Destination,SourceUser,Application,Service,HIPProfiles,Category")
-			csv.Write(",Action,LogStart,LogEnd,LogSetting,Disabled,URLFilteringProfile,FileBlockingProfile")
-			csv.Write(",AntiVirusProfile,AntiSpywareProfile,VulnerabilityProfile,WildfireProfile,SecurityProfileGroup,Description\n")
-
-			time.Sleep(50 * time.Millisecond)
-
-			if len(policies.Local) > 0 {
-				for _, p := range policies.Local {
-					var tag string
-
-					if len(p.Tag) > 0 {
-						tag = sliceToString(p.Tag)
-					}
-
-					from := sliceToString(p.From)
-					to := sliceToString(p.To)
-					source := sliceToString(p.Source)
-					dest := sliceToString(p.Destination)
-					srcuser := sliceToString(p.SourceUser)
-					app := sliceToString(p.Application)
-					service := sliceToString(p.Service)
-					hip := sliceToString(p.HIPProfiles)
-					category := sliceToString(p.Category)
-
-					csv.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"",
-						"", "local", p.Name, tag, from, to, source, dest, srcuser, app, service, hip, category))
-					csv.Write(fmt.Sprintf(",%s,%s,%s,%s,%s,%s,%s",
-						p.Action, p.LogStart, p.LogEnd, p.LogSetting, p.Disabled, p.URLFilteringProfile, p.FileBlockingProfile))
-					csv.Write(fmt.Sprintf(",%s,%s,%s,%s,%s,\"%s\"\n",
-						p.AntiVirusProfile, p.AntiSpywareProfile, p.VulnerabilityProfile, p.WildfireProfile, p.SecurityProfileGroup, p.Description))
-
-					time.Sleep(10 * time.Millisecond)
-				}
-			}
-
-			if len(policies.Pre) > 0 {
-				for _, p := range policies.Pre {
-					var tag string
-
-					if len(p.Tag) > 0 {
-						tag = sliceToString(p.Tag)
-					}
-
-					from := sliceToString(p.From)
-					to := sliceToString(p.To)
-					source := sliceToString(p.Source)
-					dest := sliceToString(p.Destination)
-					srcuser := sliceToString(p.SourceUser)
-					app := sliceToString(p.Application)
-					service := sliceToString(p.Service)
-					hip := sliceToString(p.HIPProfiles)
-					category := sliceToString(p.Category)
-
-					csv.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"",
-						dg, "pre", p.Name, tag, from, to, source, dest, srcuser, app, service, hip, category))
-					csv.Write(fmt.Sprintf(",%s,%s,%s,%s,%s,%s,%s",
-						p.Action, p.LogStart, p.LogEnd, p.LogSetting, p.Disabled, p.URLFilteringProfile, p.FileBlockingProfile))
-					csv.Write(fmt.Sprintf(",%s,%s,%s,%s,%s,\"%s\"\n",
-						p.AntiVirusProfile, p.AntiSpywareProfile, p.VulnerabilityProfile, p.WildfireProfile, p.SecurityProfileGroup, p.Description))
-
-					time.Sleep(10 * time.Millisecond)
-				}
-			}
-
-			if len(policies.Post) > 0 {
-				for _, p := range policies.Post {
-					var tag string
-
-					if len(p.Tag) > 0 {
-						tag = sliceToString(p.Tag)
-					}
-
-					from := sliceToString(p.From)
-					to := sliceToString(p.To)
-					source := sliceToString(p.Source)
-					dest := sliceToString(p.Destination)
-					srcuser := sliceToString(p.SourceUser)
-					app := sliceToString(p.Application)
-					service := sliceToString(p.Service)
-					hip := sliceToString(p.HIPProfiles)
-					category := sliceToString(p.Category)
-
-					csv.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"",
-						dg, "post", p.Name, tag, from, to, source, dest, srcuser, app, service, hip, category))
-					csv.Write(fmt.Sprintf(",%s,%s,%s,%s,%s,%s,%s",
-						p.Action, p.LogStart, p.LogEnd, p.LogSetting, p.Disabled, p.URLFilteringProfile, p.FileBlockingProfile))
-					csv.Write(fmt.Sprintf(",%s,%s,%s,%s,%s,\"%s\"\n",
-						p.AntiVirusProfile, p.AntiSpywareProfile, p.VulnerabilityProfile, p.WildfireProfile, p.SecurityProfileGroup, p.Description))
-
-					time.Sleep(10 * time.Millisecond)
-				}
-			}
-
-			csv.End()
-		}
-
-		if action == "import" {
-			rules, err := easycsv.Open(fh)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-
-			for _, rule := range rules {
-				var tag []string
-
-				if len(rule[3]) > 0 {
-					tag = stringToSlice(rule[3])
+		switch c := con.(type) {
+		case *pango.Firewall:
+			if action == "export" {
+				if !strings.Contains(fh, ".csv") {
+					fh = fmt.Sprintf("%s.csv", fh)
 				}
 
-				from := stringToSlice(rule[4])
-				to := stringToSlice(rule[5])
-				source := stringToSlice(rule[6])
-				dest := stringToSlice(rule[7])
-				srcuser := stringToSlice(rule[8])
-				app := stringToSlice(rule[9])
-				service := stringToSlice(rule[10])
-				hip := stringToSlice(rule[11])
-				category := stringToSlice(rule[12])
-
-				content := &panos.RuleContent{
-					Name:                 rule[2],
-					Tag:                  tag,
-					From:                 from,
-					To:                   to,
-					Source:               source,
-					Destination:          dest,
-					SourceUser:           srcuser,
-					Application:          app,
-					Service:              service,
-					HIPProfiles:          hip,
-					Category:             category,
-					Action:               rule[13],
-					LogStart:             rule[14],
-					LogEnd:               rule[15],
-					LogSetting:           rule[16],
-					Disabled:             rule[17],
-					URLFilteringProfile:  rule[18],
-					FileBlockingProfile:  rule[19],
-					AntiVirusProfile:     rule[20],
-					AntiSpywareProfile:   rule[21],
-					VulnerabilityProfile: rule[22],
-					WildfireProfile:      rule[23],
-					SecurityProfileGroup: rule[24],
-					Description:          rule[25],
-				}
-
-				err = pan.CreateRule(rule[2], rule[1], content)
+				cfh, err := easycsv.NewCSV(fh)
 				if err != nil {
-					fmt.Println(err)
+					log.Printf("Failed to create CSV file %s: %s", fh, err)
 					os.Exit(1)
 				}
 
-				time.Sleep(100 * time.Millisecond)
+				rules, err := c.Policies.Security.GetList(v)
+				if err != nil {
+					log.Printf("Failed to retrieve the list of rules: %s", err)
+				}
+
+				rc := len(rules)
+				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
+
+				cfh.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
+				cfh.Write("DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,")
+				cfh.Write("Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,")
+				cfh.Write("Group,Targets,NegateTarget,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
+				for _, rule := range rules {
+					r, err := c.Policies.Security.Get(v, rule)
+					if err != nil {
+						log.Printf("Failed to retrieve rule data for '%s': %s", rule, err)
+					}
+
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",\n", r.Name, r.Type, r.Description, sliceToString(r.Tags), sliceToString(r.SourceZones),
+						sliceToString(r.SourceAddresses), r.NegateSource, sliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
+					cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
+						sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
+					cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
+						r.IcmpUnreachable, r.DisableServerResponseInspection))
+					cfh.Write(fmt.Sprintf("%s,\"%s\",%t,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Targets, r.NegateTarget, r.Virus, r.Spyware,
+						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+				}
+
+				cfh.End()
+			}
+
+			if action == "import" {
+				rules, err := easycsv.Open(fh)
+				if err != nil {
+					log.Printf("Failed to open CSV file: %s", err)
+					os.Exit(1)
+				}
+
+				rc := len(rules)
+				log.Printf("Importing %d rules - this might take a few of minutes if you have a lot of rules", rc)
+
+				for i, rule := range rules {
+					boolopt := map[string]bool{
+						"TRUE":  true,
+						"true":  true,
+						"FALSE": false,
+						"false": false,
+					}
+
+					e := security.Entry{
+						Name:                            rule[0],
+						Type:                            rule[1],
+						Description:                     rule[2],
+						Tags:                            stringToSlice(rule[3]),
+						SourceZones:                     stringToSlice(rule[4]),
+						SourceAddresses:                 stringToSlice(rule[5]),
+						NegateSource:                    boolopt[rule[6]],
+						SourceUsers:                     stringToSlice(rule[7]),
+						HipProfiles:                     stringToSlice(rule[8]),
+						DestinationZones:                stringToSlice(rule[9]),
+						DestinationAddresses:            stringToSlice(rule[10]),
+						NegateDestination:               boolopt[rule[11]],
+						Applications:                    stringToSlice(rule[12]),
+						Services:                        stringToSlice(rule[13]),
+						Categories:                      stringToSlice(rule[14]),
+						Action:                          rule[15],
+						LogSetting:                      rule[16],
+						LogStart:                        boolopt[rule[17]],
+						LogEnd:                          boolopt[rule[18]],
+						Disabled:                        boolopt[rule[19]],
+						Schedule:                        rule[20],
+						IcmpUnreachable:                 boolopt[rule[21]],
+						DisableServerResponseInspection: boolopt[rule[22]],
+						Group:                           rule[23],
+						NegateTarget:                    boolopt[rule[25]],
+						Virus:                           rule[26],
+						Spyware:                         rule[27],
+						Vulnerability:                   rule[28],
+						UrlFiltering:                    rule[29],
+						FileBlocking:                    rule[30],
+						WildFireAnalysis:                rule[31],
+						DataFiltering:                   rule[32],
+					}
+
+					err = c.Policies.Security.Set(v, e)
+					if err != nil {
+						log.Printf("Line %d - failed to create rule '%s': %s", i+1, rule[0], err)
+					}
+				}
+			}
+		case *pango.Panorama:
+			switch l {
+			case "pre":
+				l = util.PreRulebase
+			case "post":
+				l = util.PostRulebase
+			default:
+				l = util.PostRulebase
+			}
+
+			if action == "export" {
+				if !strings.Contains(fh, ".csv") {
+					fh = fmt.Sprintf("%s.csv", fh)
+				}
+
+				cfh, err := easycsv.NewCSV(fh)
+				if err != nil {
+					log.Printf("Failed to create CSV file %s: %s", fh, err)
+					os.Exit(1)
+				}
+
+				rules, err := c.Policies.Security.GetList(dg, l)
+				if err != nil {
+					log.Printf("Failed to retrieve the list of rules: %s", err)
+				}
+
+				rc := len(rules)
+				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
+
+				cfh.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
+				cfh.Write("DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,")
+				cfh.Write("Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,")
+				cfh.Write("Group,Targets,NegateTarget,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
+				for _, rule := range rules {
+					r, err := c.Policies.Security.Get(dg, l, rule)
+					if err != nil {
+						log.Printf("Failed to retrieve rule data for '%s': %s", rule, err)
+					}
+
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, r.Type, r.Description, sliceToString(r.Tags), sliceToString(r.SourceZones),
+						sliceToString(r.SourceAddresses), r.NegateSource, sliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
+					cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
+						sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
+					cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
+						r.IcmpUnreachable, r.DisableServerResponseInspection))
+					cfh.Write(fmt.Sprintf("%s,\"%s\",%t,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Targets, r.NegateTarget, r.Virus, r.Spyware,
+						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+				}
+
+				cfh.End()
+			}
+
+			if action == "import" {
+				rules, err := easycsv.Open(fh)
+				if err != nil {
+					log.Printf("Failed to open CSV file: %s", err)
+					os.Exit(1)
+				}
+
+				rc := len(rules)
+				log.Printf("Importing %d rules - this might take a few of minutes if you have a lot of rules", rc)
+
+				for i, rule := range rules {
+					boolopt := map[string]bool{
+						"TRUE":  true,
+						"true":  true,
+						"FALSE": false,
+						"false": false,
+					}
+
+					e := security.Entry{
+						Name:                            rule[0],
+						Type:                            rule[1],
+						Description:                     rule[2],
+						Tags:                            stringToSlice(rule[3]),
+						SourceZones:                     stringToSlice(rule[4]),
+						SourceAddresses:                 stringToSlice(rule[5]),
+						NegateSource:                    boolopt[rule[6]],
+						SourceUsers:                     stringToSlice(rule[7]),
+						HipProfiles:                     stringToSlice(rule[8]),
+						DestinationZones:                stringToSlice(rule[9]),
+						DestinationAddresses:            stringToSlice(rule[10]),
+						NegateDestination:               boolopt[rule[11]],
+						Applications:                    stringToSlice(rule[12]),
+						Services:                        stringToSlice(rule[13]),
+						Categories:                      stringToSlice(rule[14]),
+						Action:                          rule[15],
+						LogSetting:                      rule[16],
+						LogStart:                        boolopt[rule[17]],
+						LogEnd:                          boolopt[rule[18]],
+						Disabled:                        boolopt[rule[19]],
+						Schedule:                        rule[20],
+						IcmpUnreachable:                 boolopt[rule[21]],
+						DisableServerResponseInspection: boolopt[rule[22]],
+						Group:                           rule[23],
+						NegateTarget:                    boolopt[rule[25]],
+						Virus:                           rule[26],
+						Spyware:                         rule[27],
+						Vulnerability:                   rule[28],
+						UrlFiltering:                    rule[29],
+						FileBlocking:                    rule[30],
+						WildFireAnalysis:                rule[31],
+						DataFiltering:                   rule[32],
+					}
+
+					err = c.Policies.Security.Set(dg, l, e)
+					if err != nil {
+						log.Printf("Line %d - failed to create rule '%s': %s", i+1, rule[0], err)
+					}
+				}
 			}
 		}
 	},
@@ -239,11 +279,13 @@ export or import.`,
 func init() {
 	rootCmd.AddCommand(policyCmd)
 
-	policyCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform - export or import")
-	policyCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to export/import")
-	policyCmd.Flags().StringVarP(&dg, "devicegroup", "g", "", "Device group - only needed when ran against Panorama")
+	policyCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform; import or export")
+	policyCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to import/export to")
+	policyCmd.Flags().StringVarP(&dg, "devicegroup", "g", "", "Device Group name; only needed when ran against Panorama")
 	policyCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
 	policyCmd.Flags().StringVarP(&device, "device", "d", "", "Firewall or Panorama device to connect to")
+	policyCmd.Flags().StringVarP(&l, "location", "l", "post", "Rule location; pre or post when ran against Panorama")
+	policyCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when ran against a firewall")
 	policyCmd.MarkFlagRequired("user")
 	policyCmd.MarkFlagRequired("device")
 	policyCmd.MarkFlagRequired("action")

@@ -22,300 +22,513 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
-	"time"
 
+	"github.com/PaloAltoNetworks/pango"
+	"github.com/PaloAltoNetworks/pango/objs/addr"
+	"github.com/PaloAltoNetworks/pango/objs/addrgrp"
+	"github.com/PaloAltoNetworks/pango/objs/srvc"
+	"github.com/PaloAltoNetworks/pango/objs/srvcgrp"
 	easycsv "github.com/scottdware/go-easycsv"
-	panos "github.com/scottdware/go-panos"
 	"github.com/spf13/cobra"
 )
 
 // objectsCmd represents the objects command
 var objectsCmd = &cobra.Command{
 	Use:   "objects",
-	Short: "Import/export address and service objects, rename objects, and modify groups",
-	Long: `This command allows you to perform the following actions on address and service
-objects: export, import, rename, and modify groups. When you select the export option (--action export),
-there are two files that will be created. One will hold all of the address objects, and the other
-will hold all of the service objects.
+	Short: "Import and export address and service objects",
+	Long: `This command allows you to import and export address and service objects.
 
-When exporting and run against a Panorama device without specifying the --devicegroup flag, all objects will be
-exported, including shared ones. Importing objects into Panorama without specifying the --devicegroup flag does
-not matter.
-
-The rename action allows you to rename address, service and tag objects.
-
-Using the modify action, allows you to add or remove objects from groups, based on the data you have
-within your CSV file.
-
-Please see "panco example" for sample CSV files to use as a reference.`,
+Please run "panco example" for sample CSV file to use as a reference when importing.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		var err error
 		pass := passwd()
-		creds := &panos.AuthMethod{
-			Credentials: []string{user, pass},
+
+		cl := pango.Client{
+			Hostname: device,
+			Username: user,
+			Password: pass,
+			Logging:  pango.LogQuiet,
 		}
 
-		pan, err := panos.NewSession(device, creds)
+		con, err := pango.Connect(cl)
 		if err != nil {
-			fmt.Println(err)
+			log.Printf("Failed to connect: %s", err)
 			os.Exit(1)
 		}
 
-		if action == "export" {
-			fh = strings.TrimSuffix(fh, ".csv")
-
-			addressCSV, _ := easycsv.NewCSV(fmt.Sprintf("%s_addr.csv", fh))
-			serviceCSV, _ := easycsv.NewCSV(fmt.Sprintf("%s_svcs.csv", fh))
-
-			addressCSV.Write("# ADDRESS OBJECTS\n")
-			addressCSV.Write("#Name,Type,Value,Description,Tag,DeviceGroup\n")
-
-			addrs, err := pan.Addresses(dg)
-			if err != nil {
-				fmt.Println(err)
-			}
-
-			for _, a := range addrs.Addresses {
-				addrObjTag := sliceToString(a.Tag)
-
-				if len(a.IPAddress) != 0 {
-					if pan.DeviceType == "panorama" && len(dg) > 0 {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,%s,\"%s\",\"%s\",%s\n",
-							a.Name, "ip", a.IPAddress, a.Description, addrObjTag, dg))
-					}
-
-					if pan.DeviceType == "panorama" && len(dg) == 0 {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,%s,\"%s\",\"%s\",%s\n",
-							a.Name, "ip", a.IPAddress, a.Description, addrObjTag, "shared"))
-					}
-
-					if pan.DeviceType == "panos" {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,%s,\"%s\",\"%s\",%s\n",
-							a.Name, "ip", a.IPAddress, a.Description, addrObjTag, ""))
-					}
-
-					time.Sleep(5 * time.Millisecond)
+		switch c := con.(type) {
+		case *pango.Firewall:
+			if action == "export" {
+				if v == "" {
+					v = "vsys1"
 				}
 
-				if len(a.IPRange) != 0 {
-					if pan.DeviceType == "panorama" && len(dg) > 0 {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,%s,\"%s\",\"%s\",%s\n",
-							a.Name, "range", a.IPRange, a.Description, addrObjTag, dg))
-					}
+				fh = strings.TrimSuffix(fh, ".csv")
+				afh := fmt.Sprintf("%s_addr.csv", fh)
+				agfh := fmt.Sprintf("%s_addrgrp.csv", fh)
+				sfh := fmt.Sprintf("%s_srvc.csv", fh)
+				sgfh := fmt.Sprintf("%s_srvcgrp.csv", fh)
 
-					if pan.DeviceType == "panorama" && len(dg) == 0 {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,%s,\"%s\",\"%s\",%s\n",
-							a.Name, "range", a.IPRange, a.Description, addrObjTag, "shared"))
-					}
+				log.Printf("Exporting objects - this might take a few of minutes if you have a lot of objects")
 
-					if pan.DeviceType == "panos" {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,%s,\"%s\",\"%s\",%s\n",
-							a.Name, "range", a.IPRange, a.Description, addrObjTag, ""))
-					}
-
-					time.Sleep(5 * time.Millisecond)
-				}
-
-				if len(a.FQDN) != 0 {
-					if pan.DeviceType == "panorama" && len(dg) > 0 {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,%s,\"%s\",\"%s\",%s\n",
-							a.Name, "fqdn", a.FQDN, a.Description, addrObjTag, dg))
-					}
-
-					if pan.DeviceType == "panorama" && len(dg) == 0 {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,%s,\"%s\",\"%s\",%s\n",
-							a.Name, "fqdn", a.FQDN, a.Description, addrObjTag, "shared"))
-					}
-
-					if pan.DeviceType == "panos" {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,%s,\"%s\",\"%s\",%s\n",
-							a.Name, "fqdn", a.FQDN, a.Description, addrObjTag, ""))
-					}
-
-					time.Sleep(5 * time.Millisecond)
-				}
-			}
-
-			addressCSV.Write("#\n")
-			addressCSV.Write("# ADDRESS GROUPS\n")
-			addressCSV.Write("#Name,Type,Value,Description,Tag,DeviceGroup\n")
-
-			groups, err := pan.AddressGroups(dg)
-			if err != nil {
-				fmt.Println(err)
-			}
-
-			for _, g := range groups.Groups {
-				addrGrpMembers := sliceToString(g.Members)
-				addrGrpTag := sliceToString(g.Tag)
-
-				if g.Type == "Static" {
-					if pan.DeviceType == "panorama" && len(dg) > 0 {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							g.Name, strings.ToLower(g.Type), addrGrpMembers, g.Description, addrGrpTag, dg))
-					}
-
-					if pan.DeviceType == "panorama" && len(dg) == 0 {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							g.Name, strings.ToLower(g.Type), addrGrpMembers, g.Description, addrGrpTag, "shared"))
-					}
-
-					if pan.DeviceType == "panos" {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							g.Name, strings.ToLower(g.Type), addrGrpMembers, g.Description, addrGrpTag, ""))
-					}
-
-					time.Sleep(5 * time.Millisecond)
-				}
-
-				if g.Type == "Dynamic" {
-					if pan.DeviceType == "panorama" && len(dg) > 0 {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							g.Name, strings.ToLower(g.Type), g.DynamicFilter, g.Description, addrGrpTag, dg))
-					}
-
-					if pan.DeviceType == "panorama" && len(dg) == 0 {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							g.Name, strings.ToLower(g.Type), g.DynamicFilter, g.Description, addrGrpTag, "shared"))
-					}
-
-					if pan.DeviceType == "panos" {
-						addressCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							g.Name, strings.ToLower(g.Type), g.DynamicFilter, g.Description, addrGrpTag, ""))
-					}
-
-					time.Sleep(5 * time.Millisecond)
-				}
-			}
-
-			addressCSV.End()
-
-			time.Sleep(1 * time.Second)
-
-			serviceCSV.Write("# SERVICE OBJECTS\n")
-			serviceCSV.Write("#Name,Type,Value,Description,Tag,DeviceGroup\n")
-
-			svcs, err := pan.Services(dg)
-			if err != nil {
-				fmt.Println(err)
-			}
-
-			for _, s := range svcs.Services {
-				svcObjTag := sliceToString(s.Tag)
-
-				if len(s.TCPPort) != 0 {
-					if pan.DeviceType == "panorama" && len(dg) > 0 {
-						serviceCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							s.Name, "tcp", s.TCPPort, s.Description, svcObjTag, dg))
-					}
-
-					if pan.DeviceType == "panorama" && len(dg) == 0 {
-						serviceCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							s.Name, "tcp", s.TCPPort, s.Description, svcObjTag, "shared"))
-					}
-
-					if pan.DeviceType == "panos" {
-						serviceCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							s.Name, "tcp", s.TCPPort, s.Description, svcObjTag, ""))
-					}
-
-					time.Sleep(5 * time.Millisecond)
-				}
-
-				if len(s.UDPPort) != 0 {
-					if pan.DeviceType == "panorama" && len(dg) > 0 {
-						serviceCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							s.Name, "udp", s.UDPPort, s.Description, svcObjTag, dg))
-					}
-
-					if pan.DeviceType == "panorama" && len(dg) == 0 {
-						serviceCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							s.Name, "udp", s.UDPPort, s.Description, svcObjTag, "shared"))
-					}
-
-					if pan.DeviceType == "panos" {
-						serviceCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-							s.Name, "udp", s.UDPPort, s.Description, svcObjTag, ""))
-					}
-
-					time.Sleep(5 * time.Millisecond)
-				}
-			}
-
-			serviceCSV.Write("#\n")
-			serviceCSV.Write("# SERVICE GROUPS\n")
-			serviceCSV.Write("#Name,Type,Value,Description,Tag,DeviceGroup\n")
-
-			svcg, err := pan.ServiceGroups(dg)
-			if err != nil {
-				fmt.Println(err)
-			}
-
-			for _, sg := range svcg.Groups {
-				svcGrpMembers := sliceToString(sg.Members)
-				svcGrpTag := sliceToString(sg.Tag)
-
-				if pan.DeviceType == "panorama" && len(dg) > 0 {
-					serviceCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-						sg.Name, "service", svcGrpMembers, sg.Description, svcGrpTag, dg))
-				}
-
-				if pan.DeviceType == "panorama" && len(dg) == 0 {
-					serviceCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-						sg.Name, "service", svcGrpMembers, sg.Description, svcGrpTag, "shared"))
-				}
-
-				if pan.DeviceType == "panos" {
-					serviceCSV.Write(fmt.Sprintf("\"%s\",%s,\"%s\",\"%s\",\"%s\",%s\n",
-						sg.Name, "service", svcGrpMembers, sg.Description, svcGrpTag, ""))
-				}
-
-				time.Sleep(5 * time.Millisecond)
-			}
-
-			serviceCSV.End()
-		}
-
-		if action == "import" {
-			err = pan.CreateObjectsFromCsv(fh)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-		}
-
-		if action == "modify" {
-			err = pan.ModifyGroupsFromCsv(fh)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-		}
-
-		if action == "rename" {
-			objs, err := easycsv.Open(fh)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-
-			for _, line := range objs {
-				var devicegroup string
-				linelen := len(line)
-				oldname := line[0]
-				newname := line[1]
-
-				if linelen > 2 && len(line[2]) > 0 {
-					devicegroup = line[2]
-				}
-
-				if err = pan.RenameObject(oldname, newname, devicegroup); err != nil {
-					fmt.Println(err)
+				// Address objects
+				ac, err := easycsv.NewCSV(afh)
+				if err != nil {
+					log.Printf("Failed to create CSV file %s: %s", afh, err)
 					os.Exit(1)
 				}
 
-				time.Sleep(20 * time.Millisecond)
+				addrs, err := c.Objects.Address.GetList(v)
+				if err != nil {
+					log.Printf("Failed to get the list of address objects: %s", err)
+				}
+
+				ac.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
+				for _, aentry := range addrs {
+					a, err := c.Objects.Address.Get(v, aentry)
+					if err != nil {
+						log.Printf("Failed to retrieve object data for '%s': %s", aentry, err)
+					}
+
+					ac.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", a.Name, a.Type, a.Value, a.Description, sliceToString(a.Tags), v))
+				}
+
+				ac.End()
+
+				// Address groups
+				agc, err := easycsv.NewCSV(agfh)
+				if err != nil {
+					log.Printf("Failed to create CSV file %s: %s", agfh, err)
+					os.Exit(1)
+				}
+
+				addrgrps, err := c.Objects.AddressGroup.GetList(v)
+				if err != nil {
+					log.Printf("Failed to get the list of address groups: %s", err)
+				}
+
+				agc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
+				for _, agentry := range addrgrps {
+					var gtype, val string
+					a, err := c.Objects.AddressGroup.Get(v, agentry)
+					if err != nil {
+						log.Printf("Failed to retrieve object data for '%s': %s", agentry, err)
+					}
+
+					if len(a.StaticAddresses) <= 0 && len(a.DynamicMatch) > 0 {
+						gtype = "dynamic"
+						val = a.DynamicMatch
+					}
+
+					if len(a.DynamicMatch) <= 0 && len(a.StaticAddresses) > 0 {
+						gtype = "static"
+						val = sliceToString(a.StaticAddresses)
+					}
+
+					agc.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", a.Name, gtype, val, a.Description, sliceToString(a.Tags), v))
+				}
+
+				agc.End()
+
+				// Service objects
+				sc, err := easycsv.NewCSV(sfh)
+				if err != nil {
+					log.Printf("Failed to create CSV file %s: %s", sfh, err)
+					os.Exit(1)
+				}
+
+				srvcs, err := c.Objects.Services.GetList(v)
+				if err != nil {
+					log.Printf("Failed to get the list of service objects: %s", err)
+				}
+
+				sc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
+				for _, sentry := range srvcs {
+					s, err := c.Objects.Services.Get(v, sentry)
+					if err != nil {
+						log.Printf("Failed to retrieve object data for '%s': %s", sentry, err)
+					}
+
+					sc.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", s.Name, s.Protocol, s.DestinationPort, s.Description, sliceToString(s.Tags), v))
+				}
+
+				sc.End()
+
+				// Service groups
+				sgc, err := easycsv.NewCSV(sgfh)
+				if err != nil {
+					log.Printf("Failed to create CSV file %s: %s", sgfh, err)
+					os.Exit(1)
+				}
+
+				srvcgrps, err := c.Objects.ServiceGroup.GetList(v)
+				if err != nil {
+					log.Printf("Failed to get the list of service groups: %s", err)
+				}
+
+				sgc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
+				for _, sgentry := range srvcgrps {
+					sg, err := c.Objects.ServiceGroup.Get(v, sgentry)
+					if err != nil {
+						log.Printf("Failed to retrieve object data for '%s': %s", sgentry, err)
+					}
+
+					sgc.Write(fmt.Sprintf("%s,service,\"%s\",,\"%s\",%s\n", sg.Name, sliceToString(sg.Services), sliceToString(sg.Tags), v))
+				}
+
+				sgc.End()
+			}
+
+			if action == "import" {
+				lines, err := easycsv.Open(fh)
+				if err != nil {
+					log.Printf("Failed to open CSV file %s: %s", fh, err)
+					os.Exit(1)
+				}
+
+				lc := len(lines)
+				log.Printf("Importing %d objects - this might take a few of minutes if you have a lot of objects", lc)
+
+				for i, line := range lines {
+					name := line[0]
+					otype := line[1]
+					value := line[2]
+					desc := line[3]
+					tg := line[4]
+					vsys := line[5]
+
+					if len(vsys) <= 0 {
+						vsys = "vsys1"
+					}
+
+					switch otype {
+					case "ip", "IP Netmask", "ip-netmask":
+						e := addr.Entry{
+							Name:        name,
+							Value:       value,
+							Type:        addr.IpNetmask,
+							Description: desc,
+							Tags:        stringToSlice(tg),
+						}
+
+						err = c.Objects.Address.Set(vsys, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
+					case "range", "IP Range", "ip-range":
+						e := addr.Entry{
+							Name:        name,
+							Value:       value,
+							Type:        addr.IpRange,
+							Description: desc,
+							Tags:        stringToSlice(tg),
+						}
+
+						err = c.Objects.Address.Set(vsys, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
+					case "fqdn", "FQDN", "Fqdn":
+						e := addr.Entry{
+							Name:        name,
+							Value:       value,
+							Type:        addr.Fqdn,
+							Description: desc,
+							Tags:        stringToSlice(tg),
+						}
+
+						err = c.Objects.Address.Set(vsys, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
+					case "tcp", "udp":
+						e := srvc.Entry{
+							Name:            name,
+							Description:     desc,
+							Protocol:        otype,
+							DestinationPort: value,
+							Tags:            stringToSlice(tg),
+						}
+
+						err = c.Objects.Services.Set(vsys, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
+					case "service":
+						e := srvcgrp.Entry{
+							Name:     name,
+							Services: stringToSlice(value),
+							Tags:     stringToSlice(tg),
+						}
+
+						err = c.Objects.ServiceGroup.Set(vsys, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+						}
+					case "static":
+						e := addrgrp.Entry{
+							Name:            name,
+							Description:     desc,
+							StaticAddresses: stringToSlice(value),
+							Tags:            stringToSlice(tg),
+						}
+
+						err = c.Objects.AddressGroup.Set(vsys, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+						}
+					case "dynamic":
+						e := addrgrp.Entry{
+							Name:         name,
+							Description:  desc,
+							DynamicMatch: value,
+							Tags:         stringToSlice(tg),
+						}
+
+						err = c.Objects.AddressGroup.Set(vsys, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
+					}
+				}
+			}
+		case *pango.Panorama:
+			if action == "export" {
+				if dg == "" {
+					dg = "shared"
+				}
+
+				fh = strings.TrimSuffix(fh, ".csv")
+				afh := fmt.Sprintf("%s_addr.csv", fh)
+				agfh := fmt.Sprintf("%s_addrgrp.csv", fh)
+				sfh := fmt.Sprintf("%s_srvc.csv", fh)
+				sgfh := fmt.Sprintf("%s_srvcgrp.csv", fh)
+
+				log.Printf("Exporting objects - this might take a few of minutes if you have a lot of objects")
+
+				// Address objects
+				ac, err := easycsv.NewCSV(afh)
+				if err != nil {
+					log.Printf("Failed to create CSV file %s: %s", afh, err)
+					os.Exit(1)
+				}
+
+				addrs, err := c.Objects.Address.GetList(dg)
+				if err != nil {
+					log.Printf("Failed to get the list of address objects: %s", err)
+				}
+
+				ac.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
+				for _, aentry := range addrs {
+					a, err := c.Objects.Address.Get(dg, aentry)
+					if err != nil {
+						log.Printf("Failed to retrieve object data for '%s': %s", aentry, err)
+					}
+
+					ac.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", a.Name, a.Type, a.Value, a.Description, sliceToString(a.Tags), dg))
+				}
+
+				ac.End()
+
+				// Address groups
+				agc, err := easycsv.NewCSV(agfh)
+				if err != nil {
+					log.Printf("Failed to create CSV file %s: %s", agfh, err)
+					os.Exit(1)
+				}
+
+				addrgrps, err := c.Objects.AddressGroup.GetList(dg)
+				if err != nil {
+					log.Printf("Failed to get the list of address groups: %s", err)
+				}
+
+				agc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
+				for _, agentry := range addrgrps {
+					var gtype, val string
+					a, err := c.Objects.AddressGroup.Get(dg, agentry)
+					if err != nil {
+						log.Printf("Failed to retrieve object data for '%s': %s", agentry, err)
+					}
+
+					if len(a.StaticAddresses) <= 0 && len(a.DynamicMatch) > 0 {
+						gtype = "dynamic"
+						val = a.DynamicMatch
+					}
+
+					if len(a.DynamicMatch) <= 0 && len(a.StaticAddresses) > 0 {
+						gtype = "static"
+						val = sliceToString(a.StaticAddresses)
+					}
+
+					agc.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", a.Name, gtype, val, a.Description, sliceToString(a.Tags), dg))
+				}
+
+				agc.End()
+
+				// Service objects
+				sc, err := easycsv.NewCSV(sfh)
+				if err != nil {
+					log.Printf("Failed to create CSV file %s: %s", sfh, err)
+					os.Exit(1)
+				}
+
+				srvcs, err := c.Objects.Services.GetList(dg)
+				if err != nil {
+					log.Printf("Failed to get the list of service objects: %s", err)
+				}
+
+				sc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
+				for _, sentry := range srvcs {
+					s, err := c.Objects.Services.Get(dg, sentry)
+					if err != nil {
+						log.Printf("Failed to retrieve object data for '%s': %s", sentry, err)
+					}
+
+					sc.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", s.Name, s.Protocol, s.DestinationPort, s.Description, sliceToString(s.Tags), dg))
+				}
+
+				sc.End()
+
+				// Service groups
+				sgc, err := easycsv.NewCSV(sgfh)
+				if err != nil {
+					log.Printf("Failed to create CSV file %s: %s", sgfh, err)
+					os.Exit(1)
+				}
+
+				srvcgrps, err := c.Objects.ServiceGroup.GetList(dg)
+				if err != nil {
+					log.Printf("Failed to get the list of service groups: %s", err)
+				}
+
+				sgc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
+				for _, sgentry := range srvcgrps {
+					sg, err := c.Objects.ServiceGroup.Get(dg, sgentry)
+					if err != nil {
+						log.Printf("Failed to retrieve object data for '%s': %s", sgentry, err)
+					}
+
+					sgc.Write(fmt.Sprintf("%s,service,\"%s\",,\"%s\",%s\n", sg.Name, sliceToString(sg.Services), sliceToString(sg.Tags), dg))
+				}
+
+				sgc.End()
+			}
+
+			if action == "import" {
+				lines, err := easycsv.Open(fh)
+				if err != nil {
+					log.Printf("Failed to open CSV file %s: %s", fh, err)
+					os.Exit(1)
+				}
+
+				lc := len(lines)
+				log.Printf("Importing %d objects - this might take a few of minutes if you have a lot of objects", lc)
+
+				for i, line := range lines {
+					name := line[0]
+					otype := line[1]
+					value := line[2]
+					desc := line[3]
+					tg := line[4]
+					dgroup := line[5]
+
+					if len(dgroup) <= 0 {
+						dgroup = "shared"
+					}
+
+					switch otype {
+					case "ip", "IP Netmask", "ip-netmask":
+						e := addr.Entry{
+							Name:        name,
+							Value:       value,
+							Type:        addr.IpNetmask,
+							Description: desc,
+							Tags:        stringToSlice(tg),
+						}
+
+						err = c.Objects.Address.Set(dgroup, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
+					case "range", "IP Range", "ip-range":
+						e := addr.Entry{
+							Name:        name,
+							Value:       value,
+							Type:        addr.IpRange,
+							Description: desc,
+							Tags:        stringToSlice(tg),
+						}
+
+						err = c.Objects.Address.Set(dgroup, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
+					case "fqdn", "FQDN", "Fqdn":
+						e := addr.Entry{
+							Name:        name,
+							Value:       value,
+							Type:        addr.Fqdn,
+							Description: desc,
+							Tags:        stringToSlice(tg),
+						}
+
+						err = c.Objects.Address.Set(dgroup, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
+					case "tcp", "udp":
+						e := srvc.Entry{
+							Name:            name,
+							Description:     desc,
+							Protocol:        otype,
+							DestinationPort: value,
+							Tags:            stringToSlice(tg),
+						}
+
+						err = c.Objects.Services.Set(dgroup, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
+					case "service":
+						e := srvcgrp.Entry{
+							Name:     name,
+							Services: stringToSlice(value),
+							Tags:     stringToSlice(tg),
+						}
+
+						err = c.Objects.ServiceGroup.Set(dgroup, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+						}
+					case "static":
+						e := addrgrp.Entry{
+							Name:            name,
+							Description:     desc,
+							StaticAddresses: stringToSlice(value),
+							Tags:            stringToSlice(tg),
+						}
+
+						err = c.Objects.AddressGroup.Set(dgroup, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+						}
+					case "dynamic":
+						e := addrgrp.Entry{
+							Name:         name,
+							Description:  desc,
+							DynamicMatch: value,
+							Tags:         stringToSlice(tg),
+						}
+
+						err = c.Objects.AddressGroup.Set(dgroup, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
+					}
+				}
 			}
 		}
 	},
@@ -324,11 +537,12 @@ Please see "panco example" for sample CSV files to use as a reference.`,
 func init() {
 	rootCmd.AddCommand(objectsCmd)
 
-	objectsCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform - export, import, rename, or modify")
-	objectsCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to export/import or modify")
-	objectsCmd.Flags().StringVarP(&dg, "devicegroup", "g", "", "Device group - only needed when exporting and run against a Panorama device")
+	objectsCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform; import or export")
+	objectsCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to import/export to")
 	objectsCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	objectsCmd.Flags().StringVarP(&device, "device", "d", "", "Firewall or Panorama device to connect to")
+	objectsCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
+	objectsCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
+	objectsCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when ran against a firewall")
 	objectsCmd.MarkFlagRequired("user")
 	objectsCmd.MarkFlagRequired("device")
 	objectsCmd.MarkFlagRequired("action")

@@ -1,24 +1,19 @@
 # panco
 Command-line tool that interacts with Palo Alto firewalls and Panorama.
 
-Primarily, this tool is used for creating and modifying objects via CSV files, as well as exporting various types of information from Panorama or firewalls. Some of the additional information that can be exported are as follows:
+Primarily, this tool is used for importing and exporting objects via CSV filess. Current abilities include:
 
-* Device information (e.g. managed device information on Panorama), such as software version, HA state, app/threat/Wildfire versions, etc..
-* Ability to export (and import) an entire firewall policy.
-* Log exporting: Query any log type just like you would in the GUI, and export them to a CSV file locally on your machine.
-* Session table dump: Query the entire session table on a firewall, and export it to a CSV file.
-  * You can also use filters just as you would on the command line.
-* Entire list of supported applications.
-* Interface (hardware and physical) information on firewalls.
+* Import or export address, service objects and groups. You can also add existing objects to existing groups as well!
+* Import or export an entire security policy.
 
-All of the backend functions are from the [go-panos](https://github.com/scottdware/go-panos) package.
+All of the backend/underlying functions are from Palo Alto's [pango](https://github.com/PaloAltoNetworks/pango) package.
 
 More features will continue to be added in the future.
 
 For a detailed explanation of commands, and how they are used, click on any one of the
 command names below.
 
-`panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc], [`devices`][devices-doc], [`logs`][logs-doc], [`objects`][objects-doc], [`policy`][policy-doc], [`sessions`][sessions-doc], [`version`][version-doc]
+`panco` [`help`](https://github.com/scottdware/panco#usage), [`example`][example-doc], [`objects`][objects-doc], [`policy`][policy-doc], [`version`][version-doc]
 
 ## Installation
 
@@ -29,7 +24,7 @@ Current support OS's:
 * Windows
 * Mac OS
 
-Just download the .zip file, extract the binary and place it somewhere in your PATH environment variable.
+Just download the .zip file, extract the binary and place it somewhere in your PATH.
 
 ## Usage
 
@@ -38,13 +33,10 @@ Usage:
   panco [command]
 
 Available Commands:
-  devices     Device specific functions such as exporting data from Panorama or local firewalls
   example     Create example CSV files for import reference
   help        Help about any command
-  logs        Retrieve logs from the device and export them to a CSV file
-  objects     Import/export address and service objects, rename objects, and modify groups
-  policy      Export/import a security policy
-  sessions    Query the session table on a firewall, and export it to a CSV file
+  objects     Import and export address and service objects
+  policy      Import and export a security policy
   version     Prints the version number of panco
 
 Flags:
@@ -53,7 +45,7 @@ Flags:
 Use "panco [command] --help" for more information about a command.
 ```
 
-## panco example
+### panco example
 
 ```
 Usage:
@@ -63,182 +55,81 @@ Flags:
   -h, --help   help for example
 ```
 
-This command will create two sample, reference CSV files for use with the
-`import` command. The files will be placed in the location where you are running
-the command from, and are named as such:
+This command will create a sample CSV file for use with the import command. The 
+files will be placed in the location where you are running the command from, and are named as such:
+	
+`panco-example-import.csv`
 
-`example-create.csv` and `example-modify.csv`
+## Structuring Your CSV File
 
-The sections below describe these files and how to structure them in more detail.
+The CSV file for object creation (import) should be organized with the following columns:
 
-### example-create.csv
+`Name,Type,Value,Description,Tags,Device Group/Vsys`
 
-The CSV file for object creation should be organized with the following columns:
-
-`name,type,value,description (optional),tag (optional),device-group`
-
-**_IMPORTANT_**: Even though the `description` and `tag` columns/fields are optional, you **MUST** still have the columns reserved, even if they are blank!
+The `Description` and `Tags` fields are optional, however you **MUST** still include them even if they are blank in your file!
 
 > **_NOTE_**: Here are a few things to keep in mind when creating objects:
-> * For the name of the object, it cannot be longer than 63 characters, and must only include letters, numbers, spaces, hyphens, and underscores.
+> * For the name of the object, it cannot be longer than 32 characters, and must only include letters, numbers, spaces, hyphens, and underscores.
 > * If you are tagging an object upon creation, please make sure that the tags exist prior to creating the objects.
 > * When creating service groups, you DO NOT need to specify a description, as they do not have that capability.
-> * **_IMPORTANT_**: _When you create address or service groups, you should place them at the bottom of the CSV file, that way you don't risk adding a member that doesn't exist._
-> * When creating objects on a local firewall, and not Panorama, you can leave the device-group column blank.
+> * When ran against a local firewall, the default value for `Vsys` is "vsys1" if you do not specify one. When ran against Panorama, the default value for `Device Group` is "shared."
 
-**Creating Address Objects**
-
-Column | Description
-:--- | :---
-`name` | Name of the object you wish to create.
-`type` | **ip**, **range**, or **fqdn**
-`value` | Must contain the IP address, FQDN, or IP range of the object.
-`description` | (Optional) A description of the object.
-`tag` | (Optional) Name of a pre-existing tag on the device to apply.
-`device-group` | Name of the device-group, or **shared** if creating a shared object.
-
-When creating address groups:
+### Address Objects
 
 Column | Description
 :--- | :---
-`name` | Name of the address group you wish to create.
-`type` | **static** or **dynamic**
-`value` | * See below explanation
-`description` | (Optional) A description of the object.
-`tag` | (Optional) Name of a pre-existing tag on the device to apply.
-`device-group` | Name of the device-group, or **shared** if creating a shared object.
+`Name` | Name of the object you wish to create.
+`Type` | **ip**, **range**, or **fqdn**
+`Value` | Must contain the IP address, FQDN, or IP range of the object.
+`Description` | (Optional) A description of the object.
+`Tags` | (Optional) Name of a pre-existing tag on the device to apply.
+`Device Group/Vsys` | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
-For a **_static_** address group, `value` must contain a comma-separated list of members to add to the group, enclosed in quotes `""`, e.g.:
+### Address Groups
 
-`"ip-host1, ip-net1, fqdn-example.com"`
+Column | Description
+:--- | :---
+`Name` | Name of the address group you wish to create.
+`Type` | `static` or `dynamic`
+`Value` | ** See below explanation
+`Description` | (Optional) A description of the object.
+`Tags` | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
+`Device Group/Vsys` | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
-For a **_dynamic_** address group, `value` must contain the criteria (tags) to match on. This **_MUST_** be enclosed in quotes `""`, and
+For a `static` address group, `Value` must contain a comma, or semicolon separated list of members to add to the group, enclosed in quotes `""`, e.g.:
+
+`"ip-host1, ip-net1; fqdn-example.com"`
+
+For a `dynamic` address group, `Value` must contain the criteria (tags) to match on. This **_MUST_** be enclosed in quotes `""`, and
 each criteria (tag) must be surrounded by single-quotes `'`, e.g.:
 
-`"'web-servers' or 'db-servers' and 'linux'"`
+`"'Servers' or 'Web-Servers' and 'DMZ'"`
 
-**Creating Service Objects**
-
-Column | Description
-:--- | :---
-`name` | Name of the object you wish to create.
-`type` | **tcp** or **udp**
-`value` | * See below
-`description` | (Optional) A description of the object.
-`tag` | (Optional) Name of a pre-existing tag on the device to apply.
-`device-group` | Name of the device-group, or **shared** if creating a shared object.
-
-* `value` must contain a single port number, range (1023-3000), or comma-separated list of ports, enclosed in quotes, e.g.: `"80, 443, 2000"`.
-
-When creating service groups:
+### Service Objects
 
 Column | Description
 :--- | :---
-`name` | Name of the object you wish to create.
-`type` | **service**
-`value` | * See below
-`description` | Not available on service groups.
-`tag` | (Optional) Name of a pre-existing tag on the device to apply.
-`device-group` | Name of the device-group, or **shared** if creating a shared object.
+`Name` | Name of the object you wish to create.
+`Type` | `tcp` or `udp`
+`Value` | ** See below
+`Description` | (Optional) A description of the object.
+`Tags` | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
+`Device Group/Vsys` | Name of the device-group, or **shared** if creating a shared object.
 
-* `value` must contain a comma-separated list of service objects to add to the group, enclosed in quotes `""`, e.g.: `"tcp_8080, udp_666, tcp_range"`.
+`Value` must contain a single port number (443), range (1023-3000), or comma-separated list of ports, enclosed in quotes, e.g.: `"80, 443, 8080"`.
 
-Example:
-
-![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-create.png "example-create.csv")
-
-### example-modify.csv
-
-The CSV file for modifying groups should be organized with the following columns:
-
-`grouptype,action,object-name,group-name,device-group`.
+### Service Groups
 
 Column | Description
 :--- | :---
-`grouptype` | **address** or **service**
-`action` | **add** or **remove**
-`object-name` | Name of the object to add or remove from group.
-`group-name` | Name of the group to modify.
-`device-group` | Name of the device-group, or **shared** if creating a shared object.
+`Name` | Name of the object you wish to create.
+`Type` | `service`
+`Value` | ** See below
+`Description` | Not available on service groups.
+`Tags` | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
+`Device Group/Vsys` | Name of the device-group, or **shared** if creating a shared object.
 
-Example:
-
-![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-modify.png "example-modify.csv")
-
-### example-rename.csv
-
-The CSV file for renaming objects should be organized with the following columns:
-
-`old-name,new-name,device-group`.
-
-Column | Description
-:--- | :---
-`old-name` | Name of the existing object.
-`new-name` | Name of the object that you want to rename to.
-`device-group` | Name of the device-group, or **shared** if creating a shared object.
-
-Example:
-
-![alt-text](https://raw.githubusercontent.com/scottdware/images/master/example-rename.png "example-rename.csv")
-
-## panco devices [flags]
-
-```
-Usage:
-  panco devices [flags]
-
-Flags:
-  -a, --action string   Action to perform - e.g. export
-  -d, --device string   Firewall or Panorama device to connect to
-  -f, --file string     Name of the CSV file to export to
-  -h, --help            help for devices
-  -t, --type string     Type of information to export - e.g. applications or interfaces
-  -u, --user string     User to connect to the device as
-```
-
-The devices command will provide information about devices connected/managed by Panorama, as well as other 
-device (firewall) specific information. Currently, the only action is to `export`.
-
-When ran against a Panorama device, the following "types" are available: `applications` and `devices`. Using `devices` 
-will export a list of all managed firewalls, with data from the "**Panorama > Managed Devices**" tab. 
-When using `applications` it will export a list of every predefined application and all of it's characteristics, 
-such as category, subcategory, etc.
-
-Using the `interfaces` type will export a list of all of the logical and physical (hardware) interfaces on the 
-device, with all of their information, such as IP address, MAC address, zone, etc.
-
-## panco logs [flags]
-
-```
-Usage:
-  panco logs [flags]
-
-Flags:
-  -d, --device string   Firewall or Panorama device to connect to
-  -f, --file string     Name of the CSV file to export the logs to
-  -h, --help            help for logs
-  -n, --nlogs int       Number of logs to retrieve (default 20)
-  -q, --query string    Critera to search the logs on
-  -t, --type string     Log type to search under (default "traffic")
-  -u, --user string     User to connect to the device as
-  -w, --wait int        Wait time in seconds to delay retrieving logs - helpful for large queries (default 5)
-```
-
-You can query the device logs via this tool the same way you would on the GUI.
-The different log types you can retrieve are:
-
-`config`, `system`, `traffic`, `threat`, `wildfire`, `url`, `data`
-
-When using the `--query` flag, be sure to enclose your search criteria in quotes `""` like so:
-
-`--query "(addr.src in 10.0.0.0/8)"`
-
-The default search type is `traffic`. Based on your query, and the device,
-log retrieval and export could take a while.
-
-> **NOTE:** If you do not get any results, you might want to try using the `--wait` flag and increasing the delay time.
-
-[Here](https://github.com/scottdware/panco/blob/master/traffic_log_example.csv) is an example of an export of traffic logs.
+** `Value` must contain a comma-separated list of service objects to add to the group, enclosed in quotes `""`, e.g.: `"tcp_8080, udp_666, tcp_range"`.
 
 ## panco objects [flags]
 
@@ -247,27 +138,18 @@ Usage:
   panco objects [flags]
 
 Flags:
-  -a, --action string        Action to perform - export, import, rename, or modify
-  -d, --device string        Firewall or Panorama device to connect to
-  -g, --devicegroup string   Device group - only needed when exporting and run against a Panorama device
-  -f, --file string          Name of the CSV file to export/import or modify
+  -a, --action string        Action to perform; import or export
+  -d, --device string        Device to connect to
+  -g, --devicegroup string   Device Group name when exporting from Panorama (default "shared")
+  -f, --file string          Name of the CSV file to import/export to
   -h, --help                 help for objects
   -u, --user string          User to connect to the device as
+  -v, --vsys string          Vsys name when ran against a firewall (default "vsys1")
 ```
 
-This command allows you to perform the following actions on address and service objects:
-export, import, and modify groups. When you select the export option (`--action export`), there are
-two files that will be created. One will hold all of the address objects, and the other will hold all of the service objects.
+This command allows you to import and export address and service objects.
 
-When exporting and run against a Panorama device without specifying the `--devicegroup` flag, all objects will be
-exported, including shared ones. Importing objects into Panorama without specifying the `--devicegroup` flag does
-not matter.
-
-The rename action allows you to rename address, service, and tag objects.
-
-Using the modify action, allows you to add or remove objects from groups, based on the data you have within your CSV file.
-
-Please see the [`example`][example-doc] command documentation above on how the CSV files should be structured.
+Please run `panco example` for sample CSV file to use as a reference when importing.
 
 ## panco policy [flags]
 
@@ -276,51 +158,20 @@ Usage:
   panco policy [flags]
 
 Flags:
-  -a, --action string        Action to perform - export or import
+  -a, --action string        Action to perform; import or export
   -d, --device string        Firewall or Panorama device to connect to
-  -g, --devicegroup string   Device group - only needed when ran against Panorama
-  -f, --file string          Name of the CSV file to export/import
+  -g, --devicegroup string   Device Group name; only needed when ran against Panorama
+  -f, --file string          Name of the CSV file to import/export to
   -h, --help                 help for policy
+  -l, --location string      Rule location; pre or post when ran against Panorama (default "post")
   -u, --user string          User to connect to the device as
+  -v, --vsys string          Vsys name when ran against a firewall (default "vsys1")
 ```
 
-This command will allow you to export and import an entire security policy. If you are running this
-against a Panorama device, it can be really helpful if you want to clone an entire policy,
-as you can export it from one device-group, modify it if needed, then import the poilcy into a different device-group.
-
-For an example CSV format of how a policy import should look, use the `--action export` flag to
-export a policy. The following columns in the CSV file must not be blank, and at the very minimum
-have the value of "any" if you wish to allow that:
-
-`From`, `To`, `Source`, `Destination`, `SourceUser`, `Application`, `Service`, `HIPProfiles`, `Category`
-
-You must always specify the action you want to take via the --action flag. Actions are either export or import.
-
-## panco sessions [flags]
-
-```
-Usage:
-  panco sessions [flags]
-
-Flags:
-  -d, --device string   Firewall or Panorama device to connect to
-  -f, --file string     Name of the CSV file to export the session table to
-  -h, --help            help for sessions
-  -q, --query string    Filter string to include sessions that only matching the criteria
-  -u, --user string     User to connect to the device as
-```
-
-This command will dump the entire session table on a firewall to the CSV file
-that you specify. You can optionally define a filter, and use the same criteria as you would
-on the command line. The filter query must be enclosed in quotes "", and the format is:
-
-option=value (e.g. `--query "application=ssl"`)
-
-Your filter can include multiple items, and each group must be separated by a comma, e.g.:
-
-`--query "application=ssl, ssl-decrypt=yes, protocol=tcp"`
-
-Depending on the number of sessions, the export could take some time.
+This command will allow you to import and export an entire security policy. If
+you are running this against a Panorama device, it can be really helpful if you want to clone
+an entire policy, as you can export it from one device-group, modify it if needed, then import
+the poilcy into a different device-group (or firewall).
 
 ## panco version
 
@@ -334,11 +185,7 @@ Flags:
 
 Version information for panco.
 
-[devices-doc]: https://github.com/scottdware/panco#panco-devices-flags
 [example-doc]: https://github.com/scottdware/panco#panco-example
-[import-doc]: https://github.com/scottdware/panco#panco-import-flags
-[logs-doc]: https://github.com/scottdware/panco#panco-logs-flags
-[sessions-doc]: https://github.com/scottdware/panco#panco-sessions-flags
 [policy-doc]: https://github.com/scottdware/panco#panco-policy-flags
 [objects-doc]: https://github.com/scottdware/panco#panco-objects-flags
 [version-doc]: https://github.com/scottdware/panco#panco-version

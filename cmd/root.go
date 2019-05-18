@@ -33,9 +33,8 @@ import (
 )
 
 var cfgFile string
-var action, dg, user, device, query, ltype, fh, t string
-var all, pending, processed, ints, n bool
-var jid, nlogs, lwait int
+var action, dg, user, device, fh, t, query, l, v string
+var p bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -120,7 +119,7 @@ func sliceToString(slice []string) string {
 func stringToSlice(str string) []string {
 	var slice []string
 
-	list := strings.Split(str, ",")
+	list := strings.FieldsFunc(str, func(r rune) bool { return strings.ContainsRune(",;", r) })
 	for _, item := range list {
 		slice = append(slice, strings.TrimSpace(item))
 	}
