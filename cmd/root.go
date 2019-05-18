@@ -126,3 +126,24 @@ func stringToSlice(str string) []string {
 
 	return slice
 }
+
+func userSliceToString(slice []string) string {
+	var str string
+
+	for _, item := range slice {
+		str += fmt.Sprintf("%s; ", item)
+	}
+
+	return strings.TrimRight(str, "; ")
+}
+
+func userStringToSlice(str string) []string {
+	var slice []string
+
+	list := strings.FieldsFunc(str, func(r rune) bool { return strings.ContainsRune(";", r) })
+	for _, item := range list {
+		slice = append(slice, item)
+	}
+
+	return slice
+}

@@ -84,13 +84,25 @@ the poilcy into a different device-group (or firewall).`,
 				cfh.Write("Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,")
 				cfh.Write("Group,Targets,NegateTarget,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
 				for _, rule := range rules {
+					var rtype string
 					r, err := c.Policies.Security.Get(v, rule)
 					if err != nil {
 						log.Printf("Failed to retrieve rule data for '%s': %s", rule, err)
 					}
 
-					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, r.Type, r.Description, sliceToString(r.Tags), sliceToString(r.SourceZones),
-						sliceToString(r.SourceAddresses), r.NegateSource, sliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
+					switch r.Type {
+					case "universal":
+						rtype = "universal"
+					case "intrazone":
+						rtype = "intrazone"
+					case "interzone":
+						rtype = "interzone"
+					default:
+						rtype = "universal"
+					}
+
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, rtype, r.Description, sliceToString(r.Tags), sliceToString(r.SourceZones),
+						sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
 					cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
 						sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
 					cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
@@ -128,7 +140,7 @@ the poilcy into a different device-group (or firewall).`,
 						SourceZones:                     stringToSlice(rule[4]),
 						SourceAddresses:                 stringToSlice(rule[5]),
 						NegateSource:                    boolopt[rule[6]],
-						SourceUsers:                     stringToSlice(rule[7]),
+						SourceUsers:                     userStringToSlice(rule[7]),
 						HipProfiles:                     stringToSlice(rule[8]),
 						DestinationZones:                stringToSlice(rule[9]),
 						DestinationAddresses:            stringToSlice(rule[10]),
@@ -157,7 +169,7 @@ the poilcy into a different device-group (or firewall).`,
 
 					err = c.Policies.Security.Set(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create rule '%s': %s", i+1, rule[0], err)
+						log.Printf("Line %d - failed to create rule: %s", i+1, err)
 					}
 				}
 			}
@@ -195,13 +207,25 @@ the poilcy into a different device-group (or firewall).`,
 				cfh.Write("Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,")
 				cfh.Write("Group,Targets,NegateTarget,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
 				for _, rule := range rules {
+					var rtype string
 					r, err := c.Policies.Security.Get(dg, l, rule)
 					if err != nil {
 						log.Printf("Failed to retrieve rule data for '%s': %s", rule, err)
 					}
 
-					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, r.Type, r.Description, sliceToString(r.Tags), sliceToString(r.SourceZones),
-						sliceToString(r.SourceAddresses), r.NegateSource, sliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
+					switch r.Type {
+					case "universal":
+						rtype = "universal"
+					case "intrazone":
+						rtype = "intrazone"
+					case "interzone":
+						rtype = "interzone"
+					default:
+						rtype = "universal"
+					}
+
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, rtype, r.Description, sliceToString(r.Tags), sliceToString(r.SourceZones),
+						sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
 					cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
 						sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
 					cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
@@ -239,7 +263,7 @@ the poilcy into a different device-group (or firewall).`,
 						SourceZones:                     stringToSlice(rule[4]),
 						SourceAddresses:                 stringToSlice(rule[5]),
 						NegateSource:                    boolopt[rule[6]],
-						SourceUsers:                     stringToSlice(rule[7]),
+						SourceUsers:                     userStringToSlice(rule[7]),
 						HipProfiles:                     stringToSlice(rule[8]),
 						DestinationZones:                stringToSlice(rule[9]),
 						DestinationAddresses:            stringToSlice(rule[10]),
@@ -268,7 +292,7 @@ the poilcy into a different device-group (or firewall).`,
 
 					err = c.Policies.Security.Set(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create rule '%s': %s", i+1, rule[0], err)
+						log.Printf("Line %d - failed to create rule: %s", i+1, err)
 					}
 				}
 			}
