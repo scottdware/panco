@@ -193,16 +193,19 @@ Please run "panco example" for sample CSV file to use as a reference when import
 				log.Printf("Importing %d objects - this might take a few of minutes if you have a lot of objects", lc)
 
 				for i, line := range lines {
+					var vsys string
+					llen := len(line)
+
+					if llen <= 6 && len(line[5]) <= 0 {
+						vsys = "vsys1"
+					}
+
 					name := line[0]
 					otype := line[1]
 					value := line[2]
 					desc := line[3]
 					tg := line[4]
-					vsys := line[5]
-
-					if len(vsys) <= 0 {
-						vsys = "vsys1"
-					}
+					vsys = line[5]
 
 					switch otype {
 					case "ip", "IP Netmask", "ip-netmask":
@@ -428,16 +431,19 @@ Please run "panco example" for sample CSV file to use as a reference when import
 				log.Printf("Importing %d objects - this might take a few of minutes if you have a lot of objects", lc)
 
 				for i, line := range lines {
+					var dgroup string
+					llen := len(line)
+
+					if llen <= 6 && len(line[5]) <= 0 {
+						dgroup = "shared"
+					}
+
 					name := line[0]
 					otype := line[1]
 					value := line[2]
 					desc := line[3]
 					tg := line[4]
-					dgroup := line[5]
-
-					if len(dgroup) <= 0 {
-						dgroup = "shared"
-					}
+					dgroup = line[5]
 
 					switch otype {
 					case "ip", "IP Netmask", "ip-netmask":
