@@ -89,7 +89,7 @@ the poilcy into a different device-group (or firewall).`,
 						log.Printf("Failed to retrieve rule data for '%s': %s", rule, err)
 					}
 
-					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",\n", r.Name, r.Type, r.Description, sliceToString(r.Tags), sliceToString(r.SourceZones),
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, r.Type, r.Description, sliceToString(r.Tags), sliceToString(r.SourceZones),
 						sliceToString(r.SourceAddresses), r.NegateSource, sliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
 					cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
 						sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
