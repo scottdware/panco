@@ -548,7 +548,7 @@ func init() {
 	objectsCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
 	objectsCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	objectsCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
-	objectsCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when ran against a firewall")
+	objectsCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when exporting from a firewall")
 	objectsCmd.MarkFlagRequired("user")
 	objectsCmd.MarkFlagRequired("device")
 	objectsCmd.MarkFlagRequired("action")
