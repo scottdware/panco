@@ -144,7 +144,7 @@ Flags:
   -f, --file string          Name of the CSV file to import/export to
   -h, --help                 help for objects
   -u, --user string          User to connect to the device as
-  -v, --vsys string          Vsys name when ran against a firewall (default "vsys1")
+  -v, --vsys string          Vsys name when exporting from a firewall (default "vsys1")
 ```
 
 This command allows you to import and export address and service objects.
