@@ -60,7 +60,12 @@ Allowed_Services,service,"TCP_9999, Web-Ports, UDP_7777",,,Corporate_HQ
 # ADD OBJECTS TO A GROUP,,,,,
 # If you have pre-existing groups and just want to add objects to them (similar to creating groups above),,,,,
 #Name,Type,Value,Description,Tag,Device Group/Vsys
-Group_to_AddTo,static,"IP-10.2.2.2, IP-192.168.0.1",,,shared`
+Group_to_AddTo,static,"IP-10.2.2.2, IP-192.168.0.1",,,shared
+,,,,,
+# REMOVE OBJECTS FROM AN ADDRESS GROUP,,,,,
+# If you have a pre-existing address group and just want to remove objects from it,,,,,
+#Name,Type,Value,Description,Tag,Device Group/Vsys
+Group_to_RemoveFrom,remove-address,"IP-10.2.2.2, IP-192.168.0.1",,,shared`
 
 // exampleCmd represents the example command
 var exampleCmd = &cobra.Command{
