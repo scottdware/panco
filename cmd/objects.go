@@ -77,7 +77,7 @@ Please run "panco example" for sample CSV file to use as a reference when import
 				// Address objects
 				ac, err := easycsv.NewCSV(afh)
 				if err != nil {
-					log.Printf("Failed to create CSV file %s: %s", afh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
@@ -101,7 +101,7 @@ Please run "panco example" for sample CSV file to use as a reference when import
 				// Address groups
 				agc, err := easycsv.NewCSV(agfh)
 				if err != nil {
-					log.Printf("Failed to create CSV file %s: %s", agfh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
@@ -136,7 +136,7 @@ Please run "panco example" for sample CSV file to use as a reference when import
 				// Service objects
 				sc, err := easycsv.NewCSV(sfh)
 				if err != nil {
-					log.Printf("Failed to create CSV file %s: %s", sfh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
@@ -160,7 +160,7 @@ Please run "panco example" for sample CSV file to use as a reference when import
 				// Service groups
 				sgc, err := easycsv.NewCSV(sgfh)
 				if err != nil {
-					log.Printf("Failed to create CSV file %s: %s", sgfh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
@@ -185,12 +185,12 @@ Please run "panco example" for sample CSV file to use as a reference when import
 			if action == "import" {
 				lines, err := easycsv.Open(fh)
 				if err != nil {
-					log.Printf("Failed to open CSV file %s: %s", fh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
 				lc := len(lines)
-				log.Printf("Importing %d objects - this might take a few of minutes if you have a lot of objects", lc)
+				log.Printf("Importing %d lines - this might take a few of minutes if you have a lot of objects", lc)
 
 				for i, line := range lines {
 					var vsys string
@@ -295,6 +295,37 @@ Please run "panco example" for sample CSV file to use as a reference when import
 						if err != nil {
 							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 						}
+					case "remove-address":
+						if len(value) <= 0 {
+							log.Printf("Line %d - you must specify a value to remove from group: %s", i+1, name)
+						}
+
+						remove := stringToSlice(value)
+						cur, err := c.Objects.AddressGroup.Get(vsys, name)
+						if err != nil {
+							log.Printf("Line %d - could not retrieve object: %s", i+1, err)
+						}
+
+						newaddrs := cur.StaticAddresses
+
+						for idx, ev := range cur.StaticAddresses {
+							for _, rv := range remove {
+								if ev == rv {
+									newaddrs = append(newaddrs[:idx], newaddrs[idx+1:]...)
+									break
+								}
+							}
+						}
+
+						e := addrgrp.Entry{
+							Name:            name,
+							StaticAddresses: newaddrs,
+						}
+
+						err = c.Objects.AddressGroup.Edit(vsys, e)
+						if err != nil {
+							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+						}
 					}
 				}
 			}
@@ -315,7 +346,7 @@ Please run "panco example" for sample CSV file to use as a reference when import
 				// Address objects
 				ac, err := easycsv.NewCSV(afh)
 				if err != nil {
-					log.Printf("Failed to create CSV file %s: %s", afh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
@@ -339,7 +370,7 @@ Please run "panco example" for sample CSV file to use as a reference when import
 				// Address groups
 				agc, err := easycsv.NewCSV(agfh)
 				if err != nil {
-					log.Printf("Failed to create CSV file %s: %s", agfh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
@@ -374,7 +405,7 @@ Please run "panco example" for sample CSV file to use as a reference when import
 				// Service objects
 				sc, err := easycsv.NewCSV(sfh)
 				if err != nil {
-					log.Printf("Failed to create CSV file %s: %s", sfh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
@@ -398,7 +429,7 @@ Please run "panco example" for sample CSV file to use as a reference when import
 				// Service groups
 				sgc, err := easycsv.NewCSV(sgfh)
 				if err != nil {
-					log.Printf("Failed to create CSV file %s: %s", sgfh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
@@ -423,12 +454,12 @@ Please run "panco example" for sample CSV file to use as a reference when import
 			if action == "import" {
 				lines, err := easycsv.Open(fh)
 				if err != nil {
-					log.Printf("Failed to open CSV file %s: %s", fh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
 				lc := len(lines)
-				log.Printf("Importing %d objects - this might take a few of minutes if you have a lot of objects", lc)
+				log.Printf("Importing %d lines - this might take a few of minutes if you have a lot of objects", lc)
 
 				for i, line := range lines {
 					var dgroup string
@@ -532,6 +563,37 @@ Please run "panco example" for sample CSV file to use as a reference when import
 						err = c.Objects.AddressGroup.Set(dgroup, e)
 						if err != nil {
 							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
+					case "remove-address":
+						if len(value) <= 0 {
+							log.Printf("Line %d - you must specify a value to remove from group: %s", i+1, name)
+						}
+
+						remove := stringToSlice(value)
+						cur, err := c.Objects.AddressGroup.Get(dgroup, name)
+						if err != nil {
+							log.Printf("Line %d - could not retrieve object: %s", i+1, err)
+						}
+
+						newaddrs := cur.StaticAddresses
+
+						for idx, ev := range cur.StaticAddresses {
+							for _, rv := range remove {
+								if ev == rv {
+									newaddrs = append(newaddrs[:idx], newaddrs[idx+1:]...)
+									break
+								}
+							}
+						}
+
+						e := addrgrp.Entry{
+							Name:            name,
+							StaticAddresses: newaddrs,
+						}
+
+						err = c.Objects.AddressGroup.Edit(dgroup, e)
+						if err != nil {
+							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
 						}
 					}
 				}
