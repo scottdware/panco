@@ -67,7 +67,7 @@ the poilcy into a different device-group (or firewall).`,
 
 				cfh, err := easycsv.NewCSV(fh)
 				if err != nil {
-					log.Printf("Failed to create CSV file %s: %s", fh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
@@ -77,6 +77,11 @@ the poilcy into a different device-group (or firewall).`,
 				}
 
 				rc := len(rules)
+				if rc <= 0 {
+					log.Printf("There are 0 rules for '%s' - no policy was exported.", v)
+					os.Exit(1)
+				}
+
 				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
 
 				cfh.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
@@ -87,7 +92,7 @@ the poilcy into a different device-group (or firewall).`,
 					var rtype string
 					r, err := c.Policies.Security.Get(v, rule)
 					if err != nil {
-						log.Printf("Failed to retrieve rule data for '%s': %s", rule, err)
+						log.Printf("Failed to retrieve rule data: %s", err)
 					}
 
 					switch r.Type {
@@ -117,7 +122,7 @@ the poilcy into a different device-group (or firewall).`,
 			if action == "import" {
 				rules, err := easycsv.Open(fh)
 				if err != nil {
-					log.Printf("Failed to open CSV file: %s", err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
@@ -190,16 +195,22 @@ the poilcy into a different device-group (or firewall).`,
 
 				cfh, err := easycsv.NewCSV(fh)
 				if err != nil {
-					log.Printf("Failed to create CSV file %s: %s", fh, err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
 				rules, err := c.Policies.Security.GetList(dg, l)
 				if err != nil {
 					log.Printf("Failed to retrieve the list of rules: %s", err)
+					os.Exit(1)
 				}
 
 				rc := len(rules)
+				if rc <= 0 {
+					log.Printf("There are 0 rules for the '%s' device group - no policy was exported.", dg)
+					os.Exit(1)
+				}
+
 				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
 
 				cfh.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
@@ -210,7 +221,7 @@ the poilcy into a different device-group (or firewall).`,
 					var rtype string
 					r, err := c.Policies.Security.Get(dg, l, rule)
 					if err != nil {
-						log.Printf("Failed to retrieve rule data for '%s': %s", rule, err)
+						log.Printf("Failed to retrieve rule data: %s", err)
 					}
 
 					switch r.Type {
@@ -240,7 +251,7 @@ the poilcy into a different device-group (or firewall).`,
 			if action == "import" {
 				rules, err := easycsv.Open(fh)
 				if err != nil {
-					log.Printf("Failed to open CSV file: %s", err)
+					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
 
