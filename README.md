@@ -1,12 +1,12 @@
 # panco
 Command-line tool that interacts with Palo Alto firewalls and Panorama.
 
-Primarily, this tool is used for importing and exporting objects via CSV filess. Current abilities include:
+Primarily, this tool is used for importing and exporting objects using CSV files. Current abilities include:
 
-* Import or export address, service objects and groups. You can also add existing objects to existing groups as well!
+* Import or export address, service objects and groups
+  * You can also add existing objects to existing groups.
+  * You can remove address objects from an existing group.
 * Import or export an entire security policy.
-
-All of the backend/underlying functions are from Palo Alto's [pango](https://github.com/PaloAltoNetworks/pango) package.
 
 More features will continue to be added in the future.
 
@@ -24,7 +24,7 @@ Current support OS's:
 * Windows
 * Mac OS
 
-Just download the .zip file, extract the binary and place it somewhere in your PATH.
+Just download the `panco-<OS>.zip` file, extract the binary and place it somewhere in your PATH.
 
 ## Usage
 
@@ -66,7 +66,8 @@ The CSV file for object creation (import) should be organized with the following
 
 `Name,Type,Value,Description,Tags,Device Group/Vsys`
 
-The `Description` and `Tags` fields are optional, however you **MUST** still include them even if they are blank in your file!
+* The `Description` and `Tags` fields are optional, however you **MUST** still include them even if they are blank in your file!
+* If any line begins with a hashtag `#`, it WILL be ignored!
 
 > **_NOTE_**: Here are a few things to keep in mind when creating objects:
 > * For the name of the object, it cannot be longer than 32 characters, and must only include letters, numbers, spaces, hyphens, and underscores.
@@ -74,7 +75,9 @@ The `Description` and `Tags` fields are optional, however you **MUST** still inc
 > * When creating service groups, you DO NOT need to specify a description, as they do not have that capability.
 > * When ran against a local firewall, the default value for `Vsys` is "vsys1" if you do not specify one. When ran against Panorama, the default value for `Device Group` is "shared."
 
-### Address Objects
+> **_WARNING_**: If an existing address or service object has the same name as one you are creating, it's value will be overwritten with what you specify.
+
+### Creating Address Objects
 
 Column | Description
 :--- | :---
@@ -85,7 +88,7 @@ Column | Description
 `Tags` | (Optional) Name of a pre-existing tag on the device to apply.
 `Device Group/Vsys` | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
-### Address Groups
+### Creating Address Groups - or Add to Existing
 
 Column | Description
 :--- | :---
@@ -105,7 +108,18 @@ each criteria (tag) must be surrounded by single-quotes `'`, e.g.:
 
 `"'Servers' or 'Web-Servers' and 'DMZ'"`
 
-### Service Objects
+### Removing Objects From Address Groups
+
+Column | Description
+:--- | :---
+`Name` | Name of the address group you wish to remove object(s) from.
+`Type` | `remove-address`
+`Value` | Must contain a comma, or semicolon separated list of members to remove from group, enclosed in quotes `""`.
+`Description` | Not used - leave blank.
+`Tags` | Not used - leave blank.
+`Device Group/Vsys` | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
+
+### Creating Service Objects
 
 Column | Description
 :--- | :---
@@ -118,14 +132,14 @@ Column | Description
 
 `Value` must contain a single port number (443), range (1023-3000), or comma-separated list of ports, enclosed in quotes, e.g.: `"80, 443, 8080"`.
 
-### Service Groups
+### Creating Service Groups - or Add to Existing
 
 Column | Description
 :--- | :---
 `Name` | Name of the object you wish to create.
 `Type` | `service`
 `Value` | ** See below
-`Description` | Not available on service groups.
+`Description` | Not used - leave blank (not available on service groups).
 `Tags` | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
 `Device Group/Vsys` | Name of the device-group, or **shared** if creating a shared object.
 
