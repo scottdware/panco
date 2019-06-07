@@ -145,6 +145,11 @@ Column | Description
 
 ** `Value` must contain a comma-separated list of service objects to add to the group, enclosed in quotes `""`, e.g.: `"tcp_8080, udp_666, tcp_range"`.
 
+### Screenshot of an Example CSV File
+
+*_The text in red is just for reference_*
+![alt-text](https://raw.githubusercontent.com/scottdware/images/master/test-csv.png "Example CSV File")
+
 ## panco objects [flags]
 
 ```
