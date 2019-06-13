@@ -39,9 +39,12 @@ import (
 var objectsCmd = &cobra.Command{
 	Use:   "objects",
 	Short: "Import and export address and service objects",
-	Long: `This command allows you to import and export address and service objects.
+	Long: `This command allows you to import and export address and service objects. You
+can also add objects to groups, as well as remove addreses objects from address groups.
 
-Please run "panco example" for sample CSV file to use as a reference when importing.`,
+Please run "panco example" for sample CSV file to use as a reference when importing.
+
+See https://github.com/scottdware/panco/Wiki for more information`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		pass := passwd()
