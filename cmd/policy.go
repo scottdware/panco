@@ -37,10 +37,10 @@ import (
 var policyCmd = &cobra.Command{
 	Use:   "policy",
 	Short: "Import and export a security policy",
-	Long: `This command will allow you to import and export an entire security policy. If
-you are running this against a Panorama device, it can be really helpful if you want to clone
-an entire policy, as you can export it from one device-group, modify it if needed, then import
-the poilcy into a different device-group (or firewall).`,
+	Long: `This command will allow you to import and export an entire security policy. When
+importing, this allows you to create new rules, or modify existing values in rules.
+
+See https://github.com/scottdware/panco/Wiki for more information`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		pass := passwd()
