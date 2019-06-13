@@ -33,14 +33,16 @@ import (
 )
 
 var cfgFile string
-var action, dg, user, device, fh, t, query, l, v string
-var p bool
+var action, dg, user, device, fh, t, query, l, v, source, ostype, config string
+var p, load bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "panco",
 	Short: "Command-line tool that interacts with Palo Alto firewalls and Panorama",
-	Long:  `Command-line tool that interacts with Palo Alto firewalls and Panorama.`,
+	Long: `Command-line tool that interacts with Palo Alto firewalls and Panorama.
+	
+See https://github.com/scottdware/panco/Wiki for more information`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
