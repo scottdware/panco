@@ -9,7 +9,8 @@ Some of the features include:
 * Import or export an entire security policy.
   * Create/add new rules to a policy.
   * Modify existing rules.
-* Provision a device using IronSkillet or from a different configuration file.
+* Provision a device using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) or from a different configuration file.
+  * Can use a local file, or pull one from a remote HTTP location.
 
 More features will continue to be added in the future.
 
