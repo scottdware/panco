@@ -6,9 +6,10 @@ Some of the features include:
 * Import or export address, service objects and groups
   * Add existing objects to existing groups.
   * Remove address objects from an existing address group.
-* Import or export an entire security policy.
+* Import/export an entire security policy, move rules.
   * Create/add new rules to a policy.
   * Modify existing rules.
+  * Move single or multiple rules within a policy.
 * Provision a device using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) or from a different configuration file.
   * Can use a local file, or pull one from a remote HTTP location.
 
@@ -50,7 +51,7 @@ Available Commands:
   example     Create example CSV files for import reference
   help        Help about any command
   objects     Import and export address and service objects
-  policy      Import and export a security policy
+  policy      Import/export a security policy, move rules
   provision   Provision a device using IronSkillet or a local or remote (HTTP) file
   version     Prints the version number of panco
 
