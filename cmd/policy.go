@@ -36,9 +36,14 @@ import (
 // policyCmd represents the policy command
 var policyCmd = &cobra.Command{
 	Use:   "policy",
-	Short: "Import and export a security policy",
-	Long: `This command will allow you to import and export an entire security policy. When
-importing, this allows you to create new rules, or modify existing values in rules.
+	Short: "Import/export a security policy, move rules",
+	Long: `This command will allow you to import and export an entire security policy, along
+with moving rules within the policy. When importing, this allows you to create new rules, 
+or modify existing values in rules.
+
+When moving rules, if you are only doing one at a time, you do not need to specify a CSV file
+or the '--movemultiple' flag. However, if you are wanting to move multiple rules around, then
+you will want to use a CSV file, and it must include the '--movemultiple' flag.
 
 See https://github.com/scottdware/panco/Wiki for more information`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -178,6 +183,53 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					}
 				}
 			}
+
+			if action == "move" {
+				moveOptions := map[string]int{
+					"after":  util.MoveAfter,
+					"before": util.MoveBefore,
+					"bottom": util.MoveBottom,
+					"top":    util.MoveTop,
+				}
+
+				if fh != "" && movemultiple {
+					rules, err := easycsv.Open(fh)
+					if err != nil {
+						log.Printf("CSV file error - %s", err)
+						os.Exit(1)
+					}
+
+					numrules := len(rules)
+					log.Printf("Moving %d rules", numrules)
+
+					for _, rule := range rules {
+						rulename := rule[0]
+						ruledest := rule[1]
+						targetrule := rule[2]
+						loc := rule[5]
+
+						r, err := c.Policies.Security.Get(loc, rulename)
+						if err != nil {
+							log.Printf("Failed to retrieve rule: %s", err)
+						}
+
+						err = c.Policies.Security.MoveGroup(loc, moveOptions[ruledest], targetrule, r)
+						if err != nil {
+							fmt.Println(err)
+						}
+					}
+				} else {
+					rule, err := c.Policies.Security.Get(v, rulename)
+					if err != nil {
+						log.Printf("Failed to retrieve rule: %s", err)
+					}
+
+					err = c.Policies.Security.MoveGroup(v, moveOptions[ruledest], targetrule, rule)
+					if err != nil {
+						fmt.Println(err)
+					}
+				}
+			}
 		case *pango.Panorama:
 			switch l {
 			case "pre":
@@ -307,6 +359,53 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					}
 				}
 			}
+
+			if action == "move" {
+				moveOptions := map[string]int{
+					"after":  util.MoveAfter,
+					"before": util.MoveBefore,
+					"bottom": util.MoveBottom,
+					"top":    util.MoveTop,
+				}
+
+				if fh != "" && movemultiple {
+					rules, err := easycsv.Open(fh)
+					if err != nil {
+						log.Printf("CSV file error - %s", err)
+						os.Exit(1)
+					}
+
+					numrules := len(rules)
+					log.Printf("Moving %d rules", numrules)
+
+					for _, rule := range rules {
+						rulename := rule[0]
+						ruledest := rule[1]
+						targetrule := rule[2]
+						dg := rule[5]
+
+						r, err := c.Policies.Security.Get(dg, l, rulename)
+						if err != nil {
+							log.Printf("Failed to retrieve rule: %s", err)
+						}
+
+						err = c.Policies.Security.MoveGroup(dg, l, moveOptions[ruledest], targetrule, r)
+						if err != nil {
+							fmt.Println(err)
+						}
+					}
+				} else {
+					rule, err := c.Policies.Security.Get(dg, l, rulename)
+					if err != nil {
+						log.Printf("Failed to retrieve rule: %s", err)
+					}
+
+					err = c.Policies.Security.MoveGroup(dg, l, moveOptions[ruledest], targetrule, rule)
+					if err != nil {
+						fmt.Println(err)
+					}
+				}
+			}
 		}
 	},
 }
@@ -321,8 +420,12 @@ func init() {
 	policyCmd.Flags().StringVarP(&device, "device", "d", "", "Firewall or Panorama device to connect to")
 	policyCmd.Flags().StringVarP(&l, "location", "l", "post", "Rule location; pre or post when ran against Panorama")
 	policyCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when ran against a firewall")
+	policyCmd.Flags().StringVarP(&rulename, "rulename", "n", "", "Name of the rule you wish to move")
+	policyCmd.Flags().StringVarP(&ruledest, "ruledest", "w", "", "Where to move the rule - after, before, top, or bottom")
+	policyCmd.Flags().StringVarP(&targetrule, "targetrule", "t", "", "Name of the rule 'ruledest' is referencing")
+	policyCmd.Flags().BoolVarP(&movemultiple, "movemultiple", "m", true, "Specifies you wish to move multiple rules; use only with --file")
 	policyCmd.MarkFlagRequired("user")
 	policyCmd.MarkFlagRequired("device")
 	policyCmd.MarkFlagRequired("action")
-	policyCmd.MarkFlagRequired("file")
+	// policyCmd.MarkFlagRequired("file")
 }
