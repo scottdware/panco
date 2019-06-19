@@ -1,19 +1,25 @@
 # panco
 Command-line tool that interacts with Palo Alto firewalls and Panorama.
 
-Some of the features include:
+Abilities include:
 
-* Import or export address, service objects and groups
-  * Add existing objects to existing groups.
-  * Remove address objects from an existing address group.
-* Import/export an entire security policy, move rules.
-  * Create/add new rules to a policy.
-  * Modify existing rules.
-  * Move single or multiple rules within a policy.
+**Objects**
+
+* Import (create, update) and export the following:
+  * Address objects (IP, Range, FQDN), address groups (static and dynamic), service objects (TCP, UDP, port-ranges, etc.), service groups.
+
+**Policy**
+
+* Import (create, update) and export a security policy:
+  * Add new rules to a policy.
+  * Modify existing rules to update values (e.g. update lots of rules with a Log Profile, or Security Profile group).
+* Move rules in a policy
+  * Move a single rule, or multiple rules (using a CSV file) anywhere within a policy.
+
+**Provision Devices**
+
 * Provision a device using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) or from a different configuration file.
   * Can use a local file, or pull one from a remote HTTP location.
-
-More features will continue to be added in the future.
 
 For a detailed explanation of commands, and how they are used, please visit the [Wiki](https://github.com/scottdware/panco/wiki) page or click on any one of the command names below (takes you to their respective Wiki page).
 
