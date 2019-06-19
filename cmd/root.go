@@ -32,9 +32,9 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 )
 
-var cfgFile string
+var cfgFile, rulename, ruledest, targetrule string
 var action, dg, user, device, fh, t, query, l, v, source, ostype, config string
-var p, load bool
+var p, load, movemultiple bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
