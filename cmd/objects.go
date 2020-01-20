@@ -214,7 +214,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					case "ip", "IP Netmask", "ip-netmask":
 						e := addr.Entry{
 							Name:        name,
-							Value:       value,
+							Value:       strings.TrimSpace(value),
 							Type:        addr.IpNetmask,
 							Description: desc,
 							Tags:        stringToSlice(tg),
@@ -227,7 +227,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					case "range", "IP Range", "ip-range":
 						e := addr.Entry{
 							Name:        name,
-							Value:       value,
+							Value:       strings.TrimSpace(value),
 							Type:        addr.IpRange,
 							Description: desc,
 							Tags:        stringToSlice(tg),
@@ -240,7 +240,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					case "fqdn", "FQDN", "Fqdn":
 						e := addr.Entry{
 							Name:        name,
-							Value:       value,
+							Value:       strings.TrimSpace(value),
 							Type:        addr.Fqdn,
 							Description: desc,
 							Tags:        stringToSlice(tg),
@@ -255,7 +255,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 							Name:            name,
 							Description:     desc,
 							Protocol:        otype,
-							DestinationPort: value,
+							DestinationPort: strings.TrimSpace(value),
 							Tags:            stringToSlice(tg),
 						}
 
@@ -483,7 +483,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					case "ip", "IP Netmask", "ip-netmask":
 						e := addr.Entry{
 							Name:        name,
-							Value:       value,
+							Value:       strings.TrimSpace(value),
 							Type:        addr.IpNetmask,
 							Description: desc,
 							Tags:        stringToSlice(tg),
@@ -496,7 +496,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					case "range", "IP Range", "ip-range":
 						e := addr.Entry{
 							Name:        name,
-							Value:       value,
+							Value:       strings.TrimSpace(value),
 							Type:        addr.IpRange,
 							Description: desc,
 							Tags:        stringToSlice(tg),
@@ -509,7 +509,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					case "fqdn", "FQDN", "Fqdn":
 						e := addr.Entry{
 							Name:        name,
-							Value:       value,
+							Value:       strings.TrimSpace(value),
 							Type:        addr.Fqdn,
 							Description: desc,
 							Tags:        stringToSlice(tg),
@@ -524,7 +524,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 							Name:            name,
 							Description:     desc,
 							Protocol:        otype,
-							DestinationPort: value,
+							DestinationPort: strings.TrimSpace(value),
 							Tags:            stringToSlice(tg),
 						}
 
