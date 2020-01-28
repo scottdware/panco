@@ -20,7 +20,7 @@
 
 package main
 
-import "panco/cmd"
+import "github.com/scottdware/panco/cmd"
 
 func main() {
 	cmd.Execute()
