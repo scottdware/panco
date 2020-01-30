@@ -67,7 +67,7 @@ newer version available.`,
 		download := releases[0].URL
 
 		if curver == latestver {
-			fmt.Println("You are running the latest version of panco - %s\n", curver)
+			fmt.Printf("You are running the latest version of panco - %s\n", curver)
 		} else {
 			fmt.Printf("New version available - %s. Download here: %s\n", latestver, download)
 		}
