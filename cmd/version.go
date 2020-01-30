@@ -53,7 +53,6 @@ newer version available.`,
 		resp, err := resty.R().
 			SetHeader("Content-Type", "application/json").
 			SetHeader("Accept", "application/vnd.github.v3+json").
-			SetHeader("Authorization", "token ba1e858b20e6cf98a26c5f369ebc3f32efd97cf3").
 			Get("https://api.github.com/repos/scottdware/panco/releases")
 
 		if err != nil {
