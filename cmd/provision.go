@@ -65,7 +65,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var tmpl contents
 		var err error
-		pass := passwd()
+		// pass := passwd()
 		configs := map[string]string{
 			"aws":    "https://api.github.com/repos/PaloAltoNetworks/iron-skillet/contents/loadable_configs/sample-cloud-AWS/%s/iron_skillet_%s_full.xml",
 			"azure":  "https://api.github.com/repos/PaloAltoNetworks/iron-skillet/contents/loadable_configs/sample-cloud-Azure/%s/iron_skillet_%s_full.xml",
@@ -300,10 +300,12 @@ func init() {
 	// provisionCmd.Flags().StringVarP(&ver, "version", "v", "", "IronSkillet template version to use - 8.0, 8.1, 9.0")
 	provisionCmd.Flags().StringVarP(&config, "config", "c", "static", "IronSkillet config to use - aws|azure|gcp|dhcp|static")
 	provisionCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
+	provisionCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	provisionCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	provisionCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the XML config file to use - only used when source is local or remote")
 	provisionCmd.Flags().BoolVarP(&load, "load", "l", false, "Load the file into the running-config - use with caution")
 	provisionCmd.MarkFlagRequired("user")
+	provisionCmd.MarkFlagRequired("pass")
 	provisionCmd.MarkFlagRequired("device")
 	provisionCmd.MarkFlagRequired("source")
 }

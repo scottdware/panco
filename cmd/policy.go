@@ -48,7 +48,7 @@ you will want to use a CSV file, and it must include the '--movemultiple' flag.
 See https://github.com/scottdware/panco/Wiki for more information`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
-		pass := passwd()
+		// pass := passwd()
 
 		cl := pango.Client{
 			Hostname: device,
@@ -417,6 +417,7 @@ func init() {
 	policyCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to import/export to")
 	policyCmd.Flags().StringVarP(&dg, "devicegroup", "g", "", "Device Group name; only needed when ran against Panorama")
 	policyCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
+	policyCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyCmd.Flags().StringVarP(&device, "device", "d", "", "Firewall or Panorama device to connect to")
 	policyCmd.Flags().StringVarP(&l, "location", "l", "post", "Rule location; pre or post when ran against Panorama")
 	policyCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when ran against a firewall")
@@ -425,6 +426,7 @@ func init() {
 	policyCmd.Flags().StringVarP(&targetrule, "targetrule", "t", "", "Name of the rule 'ruledest' is referencing")
 	policyCmd.Flags().BoolVarP(&movemultiple, "movemultiple", "m", true, "Specifies you wish to move multiple rules; use only with --file")
 	policyCmd.MarkFlagRequired("user")
+	policyCmd.MarkFlagRequired("pass")
 	policyCmd.MarkFlagRequired("device")
 	policyCmd.MarkFlagRequired("action")
 	// policyCmd.MarkFlagRequired("file")

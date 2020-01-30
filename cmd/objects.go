@@ -47,7 +47,7 @@ Please run "panco example" for sample CSV file to use as a reference when import
 See https://github.com/scottdware/panco/Wiki for more information`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
-		pass := passwd()
+		// pass := passwd()
 
 		cl := pango.Client{
 			Hostname: device,
@@ -611,10 +611,12 @@ func init() {
 	objectsCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform; import or export")
 	objectsCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to import/export to")
 	objectsCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
+	objectsCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	objectsCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	objectsCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
 	objectsCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when exporting from a firewall")
 	objectsCmd.MarkFlagRequired("user")
+	objectsCmd.MarkFlagRequired("pass")
 	objectsCmd.MarkFlagRequired("device")
 	objectsCmd.MarkFlagRequired("action")
 	objectsCmd.MarkFlagRequired("file")
