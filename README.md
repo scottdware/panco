@@ -1,22 +1,17 @@
 # panco
+
 Command-line tool that interacts with Palo Alto firewalls and Panorama.
 
 Abilities include:
 
-**Objects**
-
 * Import (create, update) and export the following:
   * Address objects (IP, Range, FQDN), address groups (static and dynamic), service objects (TCP, UDP, port-ranges, etc.), service groups.
-
-**Policy**
 
 * Import (create, update) and export a security policy:
   * Add new rules to a policy.
   * Modify existing rules to update values (e.g. update lots of rules with a Log Profile, or Security Profile group).
 * Move rules in a policy
   * Move a single rule, or multiple rules (using a CSV file) anywhere within a policy.
-
-**Provision Devices**
 
 * Provision a device using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) or from a different configuration file.
   * Can use a local file, or pull one from a remote HTTP location.
@@ -35,6 +30,10 @@ Current support OS's:
 * Mac OS
 
 Just download the `panco-<OS>.zip` file, extract the binary and place it somewhere in your PATH.
+
+### Build Option
+
+You can also build the binaries yourself by cloning this repo, and running `go build -o <name of binary> panco\main.go`
 
 ## Getting Started
 
