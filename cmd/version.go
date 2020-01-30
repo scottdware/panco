@@ -21,18 +21,57 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"gopkg.in/resty.v1"
 )
+
+type release struct {
+	URL    string  `json:"html_url"`
+	Tag    string  `json:"tag_name"`
+	Assets []asset `json:"assets"`
+}
+
+type asset struct {
+	Name    string `json:"name"`
+	URL     string `json:"browser_download_url"`
+	Created string `json:"created_at"`
+}
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Prints the version number of panco",
-	Long:  `Version information for panco`,
+	Short: "Version information for panco",
+	Long: `Shows the current version of panco you are running, as well as if there is a 
+newer version available.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("panco version v2019.06-1")
+		var releases []release
+		curver := "v2019.06-1"
+
+		resp, err := resty.R().
+			SetHeader("Content-Type", "application/json").
+			SetHeader("Accept", "application/vnd.github.v3+json").
+			SetHeader("Authorization", "token ba1e858b20e6cf98a26c5f369ebc3f32efd97cf3").
+			Get("https://api.github.com/repos/scottdware/panco/releases")
+
+		if err != nil {
+			fmt.Printf("unable to connect to Github - %s", err)
+		}
+
+		if err := json.Unmarshal([]byte(resp.String()), &releases); err != nil {
+			fmt.Printf("JSON parse error on release info - %s", err)
+		}
+
+		latestver := releases[0].Tag
+		download := releases[0].URL
+
+		if curver == latestver {
+			fmt.Println("You are running the latest version of panco - %s\n", curver)
+		} else {
+			fmt.Printf("New version available - %s. Download here: %s\n", latestver, download)
+		}
 	},
 }
 
