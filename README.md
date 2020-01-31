@@ -44,6 +44,11 @@ There you will find in-depth documentation and examples on how to structure the 
 
 ## Usage
 
+>**Note on passwords**: Due to some changes in Go code for certain functions this library uses, there were issues when inputing your
+password on Windows, where it wouldn't respond unless you hit `CTRL-C`, which would exit you out of the program.
+>The fix for this, is the new `--pass (-p)` flag attached to every command. I understand that this allows your password to be viewed
+in plain text on the CLI, but I am working on finding other solutions for this.
+
 ```
 Command-line tool that interacts with Palo Alto firewalls and Panorama.
 
