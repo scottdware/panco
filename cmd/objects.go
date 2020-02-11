@@ -21,6 +21,7 @@
 package cmd
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
 	"os"
@@ -33,6 +34,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/srvcgrp"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
+	"gopkg.in/resty.v1"
 )
 
 // objectsCmd represents the objects command
@@ -48,6 +50,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		// pass := passwd()
+		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 
 		cl := pango.Client{
 			Hostname: device,
@@ -329,6 +332,42 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 						if err != nil {
 							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
 						}
+					case "rename-address":
+						var xpath string
+
+						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/address/entry[@name='%s']", vsys, name)
+
+						_, err := resty.R().Post(fmt.Sprintf("type=config&action=rename&xpath=%s&newname=%s&key=%s", xpath, value, c.ApiKey))
+						if err != nil {
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+						}
+					case "rename-addressgroup":
+						var xpath string
+
+						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/address-group/entry[@name='%s']", vsys, name)
+
+						_, err := resty.R().Post(fmt.Sprintf("type=config&action=rename&xpath=%s&newname=%s&key=%s", xpath, value, c.ApiKey))
+						if err != nil {
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+						}
+					case "rename-service":
+						var xpath string
+
+						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/service/entry[@name='%s']", vsys, name)
+
+						_, err := resty.R().Post(fmt.Sprintf("type=config&action=rename&xpath=%s&newname=%s&key=%s", xpath, value, c.ApiKey))
+						if err != nil {
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+						}
+					case "rename-servicegroup":
+						var xpath string
+
+						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/service-group/entry[@name='%s']", vsys, name)
+
+						_, err := resty.R().Post(fmt.Sprintf("type=config&action=rename&xpath=%s&newname=%s&key=%s", xpath, value, c.ApiKey))
+						if err != nil {
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+						}
 					}
 				}
 			}
@@ -597,6 +636,66 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 						err = c.Objects.AddressGroup.Edit(dgroup, e)
 						if err != nil {
 							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+						}
+					case "rename-address":
+						var xpath string
+
+						if dgroup == "shared" {
+							xpath = fmt.Sprintf("/config/shared/address/entry[@name='%s']", name)
+						}
+
+						if dgroup != "shared" {
+							xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/address/entry[@name='%s']", dgroup, name)
+						}
+
+						_, err := resty.R().Post(fmt.Sprintf("type=config&action=rename&xpath=%s&newname=%s&key=%s", xpath, value, c.ApiKey))
+						if err != nil {
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+						}
+					case "rename-addressgroup":
+						var xpath string
+
+						if dgroup == "shared" {
+							xpath = fmt.Sprintf("/config/shared/address-group/entry[@name='%s']", name)
+						}
+
+						if dgroup != "shared" {
+							xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/address-group/entry[@name='%s']", dgroup, name)
+						}
+
+						_, err := resty.R().Post(fmt.Sprintf("type=config&action=rename&xpath=%s&newname=%s&key=%s", xpath, value, c.ApiKey))
+						if err != nil {
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+						}
+					case "rename-service":
+						var xpath string
+
+						if dgroup == "shared" {
+							xpath = fmt.Sprintf("/config/shared/service/entry[@name='%s']", name)
+						}
+
+						if dgroup != "shared" {
+							xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/service/entry[@name='%s']", dgroup, name)
+						}
+
+						_, err := resty.R().Post(fmt.Sprintf("type=config&action=rename&xpath=%s&newname=%s&key=%s", xpath, value, c.ApiKey))
+						if err != nil {
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+						}
+					case "rename-servicegroup":
+						var xpath string
+
+						if dgroup == "shared" {
+							xpath = fmt.Sprintf("/config/shared/service-group/entry[@name='%s']", name)
+						}
+
+						if dgroup != "shared" {
+							xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/service-group/entry[@name='%s']", dgroup, name)
+						}
+
+						_, err := resty.R().Post(fmt.Sprintf("type=config&action=rename&xpath=%s&newname=%s&key=%s", xpath, value, c.ApiKey))
+						if err != nil {
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
 						}
 					}
 				}
