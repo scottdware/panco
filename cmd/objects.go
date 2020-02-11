@@ -337,7 +337,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/address/entry[@name='%s']", vsys, name)
 
-						_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
+						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
 						}
@@ -346,7 +346,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/address-group/entry[@name='%s']", vsys, name)
 
-						_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
+						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
 						}
@@ -355,7 +355,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/service/entry[@name='%s']", vsys, name)
 
-						_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
+						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
 						}
@@ -364,7 +364,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/service-group/entry[@name='%s']", vsys, name)
 
-						_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
+						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
 						}
@@ -648,7 +648,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 							xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/address/entry[@name='%s']", dgroup, name)
 						}
 
-						_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
+						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
 						}
@@ -663,7 +663,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 							xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/address-group/entry[@name='%s']", dgroup, name)
 						}
 
-						_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
+						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
 						}
@@ -678,7 +678,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 							xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/service/entry[@name='%s']", dgroup, name)
 						}
 
-						_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
+						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
 						}
@@ -693,7 +693,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 							xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/service-group/entry[@name='%s']", dgroup, name)
 						}
 
-						_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
+						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
 						}
