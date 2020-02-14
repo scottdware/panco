@@ -65,7 +65,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 		switch c := con.(type) {
 		case *pango.Firewall:
-			if action == "export" {
+			if action == "export" && !xlate {
 				if !strings.Contains(fh, ".csv") {
 					fh = fmt.Sprintf("%s.csv", fh)
 				}
@@ -296,7 +296,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				l = util.PostRulebase
 			}
 
-			if action == "export" {
+			if action == "export" && !xlate {
 				if !strings.Contains(fh, ".csv") {
 					fh = fmt.Sprintf("%s.csv", fh)
 				}
