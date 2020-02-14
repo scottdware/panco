@@ -124,6 +124,62 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				cfh.End()
 			}
 
+			if xlate && action == "export" {
+				if !strings.Contains(fh, ".csv") {
+					fh = fmt.Sprintf("%s.csv", fh)
+				}
+
+				cfh, err := easycsv.NewCSV(fh)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				rules, err := c.Policies.Nat.GetList(v)
+				if err != nil {
+					log.Printf("Failed to retrieve the list of NAT rules: %s", err)
+				}
+
+				rc := len(rules)
+				if rc <= 0 {
+					log.Printf("There are 0 NAT rules for '%s' - no policy was exported.", v)
+					os.Exit(1)
+				}
+
+				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
+
+				cfh.Write("#Name,Description,Type,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,")
+				cfh.Write("SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,SatFallbackInterface,")
+				cfh.Write("SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,DatAddress,DatPort,DatDynamicDistribution,Disabled,NegateTarget,Tags\n")
+				for _, rule := range rules {
+					// var rtype string
+					r, err := c.Policies.Nat.Get(v, rule)
+					if err != nil {
+						log.Printf("Failed to retrieve rule data: %s", err)
+					}
+
+					// switch r.Type {
+					// case "universal":
+					// 	rtype = "universal"
+					// case "intrazone":
+					// 	rtype = "intrazone"
+					// case "interzone":
+					// 	rtype = "interzone"
+					// default:
+					// 	rtype = "universal"
+					// }
+
+					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,%s,%s,%s,%s,%s,%s,", r.Name, r.Description, r.Type, sliceToString(r.SourceZones),
+						r.DestinationZone, r.ToInterface, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
+						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,%t,%s\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
+						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled, r.NegateTarget, sliceToString(r.Tags)))
+				}
+
+				cfh.End()
+			}
+
 			if action == "import" {
 				rules, err := easycsv.Open(fh)
 				if err != nil {
@@ -300,6 +356,62 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				cfh.End()
 			}
 
+			if xlate && action == "export" {
+				if !strings.Contains(fh, ".csv") {
+					fh = fmt.Sprintf("%s.csv", fh)
+				}
+
+				cfh, err := easycsv.NewCSV(fh)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				rules, err := c.Policies.Nat.GetList(dg, l)
+				if err != nil {
+					log.Printf("Failed to retrieve the list of NAT rules: %s", err)
+				}
+
+				rc := len(rules)
+				if rc <= 0 {
+					log.Printf("There are 0 NAT rules for '%s' - no policy was exported.", v)
+					os.Exit(1)
+				}
+
+				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
+
+				cfh.Write("#Name,Description,Type,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,")
+				cfh.Write("SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,SatFallbackInterface,")
+				cfh.Write("SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,DatAddress,DatPort,DatDynamicDistribution,Disabled,NegateTarget,Tags\n")
+				for _, rule := range rules {
+					// var rtype string
+					r, err := c.Policies.Nat.Get(dg, l, rule)
+					if err != nil {
+						log.Printf("Failed to retrieve rule data: %s", err)
+					}
+
+					// switch r.Type {
+					// case "universal":
+					// 	rtype = "universal"
+					// case "intrazone":
+					// 	rtype = "intrazone"
+					// case "interzone":
+					// 	rtype = "interzone"
+					// default:
+					// 	rtype = "universal"
+					// }
+
+					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,%s,%s,%s,%s,%s,%s,", r.Name, r.Description, r.Type, sliceToString(r.SourceZones),
+						r.DestinationZone, r.ToInterface, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
+						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,%t,%s\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
+						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled, r.NegateTarget, sliceToString(r.Tags)))
+				}
+
+				cfh.End()
+			}
+
 			if action == "import" {
 				rules, err := easycsv.Open(fh)
 				if err != nil {
@@ -420,6 +532,7 @@ func init() {
 	policyCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyCmd.Flags().StringVarP(&device, "device", "d", "", "Firewall or Panorama device to connect to")
 	policyCmd.Flags().StringVarP(&l, "location", "l", "post", "Rule location; pre or post when ran against Panorama")
+	policyCmd.Flags().BoolVarP(&xlate, "nat", "x", true, "Run the given action on the NAT policy")
 	policyCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when ran against a firewall")
 	policyCmd.Flags().StringVarP(&rulename, "rulename", "n", "", "Name of the rule you wish to move")
 	policyCmd.Flags().StringVarP(&ruledest, "ruledest", "w", "", "Where to move the rule - after, before, top, or bottom")
