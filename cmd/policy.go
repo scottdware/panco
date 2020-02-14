@@ -79,11 +79,14 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				rules, err := c.Policies.Security.GetList(v)
 				if err != nil {
 					log.Printf("Failed to retrieve the list of rules: %s", err)
+					os.Remove(fh)
+					os.Exit(1)
 				}
 
 				rc := len(rules)
 				if rc <= 0 {
 					log.Printf("There are 0 rules for '%s' - no policy was exported.", v)
+					os.Remove(fh)
 					os.Exit(1)
 				}
 
@@ -138,42 +141,34 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				rules, err := c.Policies.Nat.GetList(v)
 				if err != nil {
 					log.Printf("Failed to retrieve the list of NAT rules: %s", err)
+					os.Remove(fh)
+					os.Exit(1)
 				}
 
 				rc := len(rules)
 				if rc <= 0 {
 					log.Printf("There are 0 NAT rules for '%s' - no policy was exported.", v)
+					os.Remove(fh)
 					os.Exit(1)
 				}
 
 				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
 
 				cfh.Write("#Name,Description,Type,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,")
-				cfh.Write("SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,SatFallbackInterface,")
-				cfh.Write("SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,DatAddress,DatPort,DatDynamicDistribution,Disabled,NegateTarget,Tags\n")
+				cfh.Write("SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,")
+				cfh.Write("SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,")
+				cfh.Write("DatAddress,DatPort,DatDynamicDistribution,Disabled,NegateTarget,Tags\n")
 				for _, rule := range rules {
-					// var rtype string
 					r, err := c.Policies.Nat.Get(v, rule)
 					if err != nil {
 						log.Printf("Failed to retrieve rule data: %s", err)
 					}
 
-					// switch r.Type {
-					// case "universal":
-					// 	rtype = "universal"
-					// case "intrazone":
-					// 	rtype = "intrazone"
-					// case "interzone":
-					// 	rtype = "interzone"
-					// default:
-					// 	rtype = "universal"
-					// }
-
-					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,%s,%s,%s,%s,%s,%s,", r.Name, r.Description, r.Type, sliceToString(r.SourceZones),
+					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, r.Description, r.Type, sliceToString(r.SourceZones),
 						r.DestinationZone, r.ToInterface, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
-					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
 						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
-					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,%t,%s\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,%t,\"%s\"\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled, r.NegateTarget, sliceToString(r.Tags)))
 				}
 
@@ -310,12 +305,14 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				rules, err := c.Policies.Security.GetList(dg, l)
 				if err != nil {
 					log.Printf("Failed to retrieve the list of rules: %s", err)
+					os.Remove(fh)
 					os.Exit(1)
 				}
 
 				rc := len(rules)
 				if rc <= 0 {
 					log.Printf("There are 0 rules for the '%s' device group - no policy was exported.", dg)
+					os.Remove(fh)
 					os.Exit(1)
 				}
 
@@ -370,42 +367,34 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				rules, err := c.Policies.Nat.GetList(dg, l)
 				if err != nil {
 					log.Printf("Failed to retrieve the list of NAT rules: %s", err)
+					os.Remove(fh)
+					os.Exit(1)
 				}
 
 				rc := len(rules)
 				if rc <= 0 {
-					log.Printf("There are 0 NAT rules for '%s' - no policy was exported.", v)
+					log.Printf("There are 0 NAT rules for the '%s' device group - no policy was exported.", dg)
+					os.Remove(fh)
 					os.Exit(1)
 				}
 
 				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
 
 				cfh.Write("#Name,Description,Type,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,")
-				cfh.Write("SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,SatFallbackInterface,")
-				cfh.Write("SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,DatAddress,DatPort,DatDynamicDistribution,Disabled,NegateTarget,Tags\n")
+				cfh.Write("SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,")
+				cfh.Write("SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,")
+				cfh.Write("DatAddress,DatPort,DatDynamicDistribution,Disabled,NegateTarget,Tags\n")
 				for _, rule := range rules {
-					// var rtype string
 					r, err := c.Policies.Nat.Get(dg, l, rule)
 					if err != nil {
 						log.Printf("Failed to retrieve rule data: %s", err)
 					}
 
-					// switch r.Type {
-					// case "universal":
-					// 	rtype = "universal"
-					// case "intrazone":
-					// 	rtype = "intrazone"
-					// case "interzone":
-					// 	rtype = "interzone"
-					// default:
-					// 	rtype = "universal"
-					// }
-
-					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,%s,%s,%s,%s,%s,%s,", r.Name, r.Description, r.Type, sliceToString(r.SourceZones),
+					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, r.Description, r.Type, sliceToString(r.SourceZones),
 						r.DestinationZone, r.ToInterface, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
-					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
 						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
-					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,%t,%s\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,%t,\"%s\"\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled, r.NegateTarget, sliceToString(r.Tags)))
 				}
 
