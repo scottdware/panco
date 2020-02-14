@@ -90,6 +90,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				addrs, err := c.Objects.Address.GetList(v)
 				if err != nil {
 					log.Printf("Failed to get the list of address objects: %s", err)
+					os.Remove(afh)
 				}
 
 				ac.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
@@ -114,6 +115,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				addrgrps, err := c.Objects.AddressGroup.GetList(v)
 				if err != nil {
 					log.Printf("Failed to get the list of address groups: %s", err)
+					os.Remove(agfh)
 				}
 
 				agc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
@@ -149,6 +151,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				srvcs, err := c.Objects.Services.GetList(v)
 				if err != nil {
 					log.Printf("Failed to get the list of service objects: %s", err)
+					os.Remove(sfh)
 				}
 
 				sc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
@@ -173,6 +176,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				srvcgrps, err := c.Objects.ServiceGroup.GetList(v)
 				if err != nil {
 					log.Printf("Failed to get the list of service groups: %s", err)
+					os.Remove(sgfh)
 				}
 
 				sgc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
@@ -395,6 +399,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				addrs, err := c.Objects.Address.GetList(dg)
 				if err != nil {
 					log.Printf("Failed to get the list of address objects: %s", err)
+					os.Remove(afh)
 				}
 
 				ac.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
@@ -419,6 +424,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				addrgrps, err := c.Objects.AddressGroup.GetList(dg)
 				if err != nil {
 					log.Printf("Failed to get the list of address groups: %s", err)
+					os.Remove(agfh)
 				}
 
 				agc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
@@ -454,6 +460,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				srvcs, err := c.Objects.Services.GetList(dg)
 				if err != nil {
 					log.Printf("Failed to get the list of service objects: %s", err)
+					os.Remove(sfh)
 				}
 
 				sc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
@@ -478,6 +485,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				srvcgrps, err := c.Objects.ServiceGroup.GetList(dg)
 				if err != nil {
 					log.Printf("Failed to get the list of service groups: %s", err)
+					os.Remove(sgfh)
 				}
 
 				sgc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
