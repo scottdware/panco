@@ -521,7 +521,7 @@ func init() {
 	policyCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyCmd.Flags().StringVarP(&device, "device", "d", "", "Firewall or Panorama device to connect to")
 	policyCmd.Flags().StringVarP(&l, "location", "l", "post", "Rule location; pre or post when ran against Panorama")
-	policyCmd.Flags().BoolVarP(&xlate, "nat", "x", true, "Run the given action on the NAT policy")
+	policyCmd.Flags().BoolVarP(&xlate, "nat", "x", false, "Run the given action on the NAT policy")
 	policyCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when ran against a firewall")
 	policyCmd.Flags().StringVarP(&rulename, "rulename", "n", "", "Name of the rule you wish to move")
 	policyCmd.Flags().StringVarP(&ruledest, "ruledest", "w", "", "Where to move the rule - after, before, top, or bottom")
