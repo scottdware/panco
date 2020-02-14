@@ -34,7 +34,7 @@ import (
 
 var cfgFile, rulename, ruledest, targetrule, pass string
 var action, dg, user, device, fh, t, query, l, v, source, ostype, config string
-var load, movemultiple bool
+var load, movemultiple, xlate bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
