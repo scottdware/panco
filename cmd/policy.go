@@ -95,7 +95,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				cfh.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
 				cfh.Write("DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,")
 				cfh.Write("Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,")
-				cfh.Write("Group,Targets,NegateTarget,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
+				cfh.Write("Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
 				for _, rule := range rules {
 					var rtype string
 					r, err := c.Policies.Security.Get(v, rule)
@@ -120,7 +120,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 						sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
 					cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
 						r.IcmpUnreachable, r.DisableServerResponseInspection))
-					cfh.Write(fmt.Sprintf("%s,\"%s\",%t,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Targets, r.NegateTarget, r.Virus, r.Spyware,
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
 				}
 
@@ -218,7 +218,6 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 						IcmpUnreachable:                 boolopt[rule[21]],
 						DisableServerResponseInspection: boolopt[rule[22]],
 						Group:                           rule[23],
-						NegateTarget:                    boolopt[rule[25]],
 						Virus:                           rule[26],
 						Spyware:                         rule[27],
 						Vulnerability:                   rule[28],
@@ -321,7 +320,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				cfh.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
 				cfh.Write("DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,")
 				cfh.Write("Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,")
-				cfh.Write("Group,Targets,NegateTarget,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
+				cfh.Write("Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
 				for _, rule := range rules {
 					var rtype string
 					r, err := c.Policies.Security.Get(dg, l, rule)
@@ -346,7 +345,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 						sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
 					cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
 						r.IcmpUnreachable, r.DisableServerResponseInspection))
-					cfh.Write(fmt.Sprintf("%s,\"%s\",%t,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Targets, r.NegateTarget, r.Virus, r.Spyware,
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
 				}
 
@@ -444,7 +443,6 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 						IcmpUnreachable:                 boolopt[rule[21]],
 						DisableServerResponseInspection: boolopt[rule[22]],
 						Group:                           rule[23],
-						NegateTarget:                    boolopt[rule[25]],
 						Virus:                           rule[26],
 						Spyware:                         rule[27],
 						Vulnerability:                   rule[28],
