@@ -24,9 +24,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/PaloAltoNetworks/pango"
+	"github.com/PaloAltoNetworks/pango/poli/nat"
 	"github.com/PaloAltoNetworks/pango/poli/security"
 	"github.com/PaloAltoNetworks/pango/util"
 	easycsv "github.com/scottdware/go-easycsv"
@@ -78,19 +80,19 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 				rules, err := c.Policies.Security.GetList(v)
 				if err != nil {
-					log.Printf("Failed to retrieve the list of rules: %s", err)
+					log.Printf("Failed to retrieve the list of security rules: %s", err)
 					os.Remove(fh)
 					os.Exit(1)
 				}
 
 				rc := len(rules)
 				if rc <= 0 {
-					log.Printf("There are 0 rules for '%s' - no policy was exported.", v)
+					log.Printf("There are 0 security rules for '%s' - no policy was exported.", v)
 					os.Remove(fh)
 					os.Exit(1)
 				}
 
-				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
+				log.Printf("Exporting %d security rules - this might take a few of minutes if your rule base is large", rc)
 
 				cfh.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
 				cfh.Write("DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,")
@@ -100,7 +102,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					var rtype string
 					r, err := c.Policies.Security.Get(v, rule)
 					if err != nil {
-						log.Printf("Failed to retrieve rule data: %s", err)
+						log.Printf("Failed to retrieve security rule data: %s", err)
 					}
 
 					switch r.Type {
@@ -152,30 +154,30 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					os.Exit(1)
 				}
 
-				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
+				log.Printf("Exporting %d NAT rules - this might take a few of minutes if your rule base is large", rc)
 
 				cfh.Write("#Name,Description,Type,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,")
 				cfh.Write("SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,")
 				cfh.Write("SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,")
-				cfh.Write("DatAddress,DatPort,DatDynamicDistribution,Disabled,NegateTarget,Tags\n")
+				cfh.Write("DatAddress,DatPort,DatDynamicDistribution,Disabled,Tags\n")
 				for _, rule := range rules {
 					r, err := c.Policies.Nat.Get(v, rule)
 					if err != nil {
-						log.Printf("Failed to retrieve rule data: %s", err)
+						log.Printf("Failed to retrieve NAT rule data: %s", err)
 					}
 
 					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, r.Description, r.Type, sliceToString(r.SourceZones),
 						r.DestinationZone, r.ToInterface, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
 					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
 						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
-					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,%t,\"%s\"\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
-						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled, r.NegateTarget, sliceToString(r.Tags)))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,\"%s\"\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
+						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled, sliceToString(r.Tags)))
 				}
 
 				cfh.End()
 			}
 
-			if action == "import" {
+			if action == "import" && !xlate {
 				rules, err := easycsv.Open(fh)
 				if err != nil {
 					log.Printf("CSV file error - %s", err)
@@ -183,7 +185,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				}
 
 				rc := len(rules)
-				log.Printf("Importing %d rules - this might take a few of minutes if you have a lot of rules", rc)
+				log.Printf("Importing %d security rules - this might take a few of minutes if you have a lot of rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -229,7 +231,64 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 					err = c.Policies.Security.Set(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create rule: %s", i+1, err)
+						log.Printf("Line %d - failed to create security rule: %s", i+1, err)
+					}
+				}
+			}
+
+			if action == "import" && xlate {
+				rules, err := easycsv.Open(fh)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				rc := len(rules)
+				log.Printf("Importing %d NAT rules - this might take a few of minutes if you have a lot of rules", rc)
+
+				for i, rule := range rules {
+					boolopt := map[string]bool{
+						"TRUE":  true,
+						"true":  true,
+						"FALSE": false,
+						"false": false,
+					}
+
+					datport, _ := strconv.Atoi(rule[23])
+
+					e := nat.Entry{
+						Name:                           rule[0],
+						Description:                    rule[1],
+						Type:                           rule[2],
+						SourceZones:                    stringToSlice(rule[3]),
+						DestinationZone:                rule[4],
+						ToInterface:                    rule[5],
+						Service:                        rule[6],
+						SourceAddresses:                stringToSlice(rule[7]),
+						DestinationAddresses:           stringToSlice(rule[8]),
+						SatType:                        rule[9],
+						SatAddressType:                 rule[10],
+						SatTranslatedAddresses:         stringToSlice(rule[11]),
+						SatInterface:                   rule[12],
+						SatIpAddress:                   rule[13],
+						SatFallbackType:                rule[14],
+						SatFallbackTranslatedAddresses: stringToSlice(rule[15]),
+						SatFallbackInterface:           rule[16],
+						SatFallbackIpType:              rule[17],
+						SatFallbackIpAddress:           rule[18],
+						SatStaticTranslatedAddress:     rule[19],
+						SatStaticBiDirectional:         boolopt[rule[20]],
+						DatType:                        rule[21],
+						DatAddress:                     rule[22],
+						DatPort:                        datport,
+						DatDynamicDistribution:         rule[24],
+						Disabled:                       boolopt[rule[25]],
+						Tags:                           stringToSlice(rule[26]),
+					}
+
+					err = c.Policies.Nat.Set(v, e)
+					if err != nil {
+						log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
 					}
 				}
 			}
@@ -250,7 +309,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					}
 
 					numrules := len(rules)
-					log.Printf("Moving %d rules", numrules)
+					log.Printf("Moving %d security rules", numrules)
 
 					for _, rule := range rules {
 						rulename := rule[0]
@@ -260,7 +319,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						r, err := c.Policies.Security.Get(loc, rulename)
 						if err != nil {
-							log.Printf("Failed to retrieve rule: %s", err)
+							log.Printf("Failed to retrieve security rule: %s", err)
 						}
 
 						err = c.Policies.Security.MoveGroup(loc, moveOptions[ruledest], targetrule, r)
@@ -271,7 +330,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				} else {
 					rule, err := c.Policies.Security.Get(v, rulename)
 					if err != nil {
-						log.Printf("Failed to retrieve rule: %s", err)
+						log.Printf("Failed to retrieve security rule: %s", err)
 					}
 
 					err = c.Policies.Security.MoveGroup(v, moveOptions[ruledest], targetrule, rule)
@@ -303,19 +362,19 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 				rules, err := c.Policies.Security.GetList(dg, l)
 				if err != nil {
-					log.Printf("Failed to retrieve the list of rules: %s", err)
+					log.Printf("Failed to retrieve the list of security rules: %s", err)
 					os.Remove(fh)
 					os.Exit(1)
 				}
 
 				rc := len(rules)
 				if rc <= 0 {
-					log.Printf("There are 0 rules for the '%s' device group - no policy was exported.", dg)
+					log.Printf("There are 0 security rules for the '%s' device group - no policy was exported.", dg)
 					os.Remove(fh)
 					os.Exit(1)
 				}
 
-				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
+				log.Printf("Exporting %d security rules - this might take a few of minutes if your rule base is large", rc)
 
 				cfh.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
 				cfh.Write("DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,")
@@ -325,7 +384,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					var rtype string
 					r, err := c.Policies.Security.Get(dg, l, rule)
 					if err != nil {
-						log.Printf("Failed to retrieve rule data: %s", err)
+						log.Printf("Failed to retrieve security rule data: %s", err)
 					}
 
 					switch r.Type {
@@ -377,30 +436,30 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					os.Exit(1)
 				}
 
-				log.Printf("Exporting %d rules - this might take a few of minutes if your rule base is large", rc)
+				log.Printf("Exporting %d NAT rules - this might take a few of minutes if your rule base is large", rc)
 
 				cfh.Write("#Name,Description,Type,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,")
 				cfh.Write("SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,")
 				cfh.Write("SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,")
-				cfh.Write("DatAddress,DatPort,DatDynamicDistribution,Disabled,NegateTarget,Tags\n")
+				cfh.Write("DatAddress,DatPort,DatDynamicDistribution,Disabled,Tags\n")
 				for _, rule := range rules {
 					r, err := c.Policies.Nat.Get(dg, l, rule)
 					if err != nil {
-						log.Printf("Failed to retrieve rule data: %s", err)
+						log.Printf("Failed to retrieve NAT rule data: %s", err)
 					}
 
 					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, r.Description, r.Type, sliceToString(r.SourceZones),
 						r.DestinationZone, r.ToInterface, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
 					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
 						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
-					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,%t,\"%s\"\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
-						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled, r.NegateTarget, sliceToString(r.Tags)))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,\"%s\"\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
+						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled, sliceToString(r.Tags)))
 				}
 
 				cfh.End()
 			}
 
-			if action == "import" {
+			if action == "import" && !xlate {
 				rules, err := easycsv.Open(fh)
 				if err != nil {
 					log.Printf("CSV file error - %s", err)
@@ -408,7 +467,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				}
 
 				rc := len(rules)
-				log.Printf("Importing %d rules - this might take a few of minutes if you have a lot of rules", rc)
+				log.Printf("Importing %d security rules - this might take a few of minutes if you have a lot of rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -454,7 +513,64 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 					err = c.Policies.Security.Set(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create rule: %s", i+1, err)
+						log.Printf("Line %d - failed to create security rule: %s", i+1, err)
+					}
+				}
+			}
+
+			if action == "import" && xlate {
+				rules, err := easycsv.Open(fh)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				rc := len(rules)
+				log.Printf("Importing %d NAT rules - this might take a few of minutes if you have a lot of rules", rc)
+
+				for i, rule := range rules {
+					boolopt := map[string]bool{
+						"TRUE":  true,
+						"true":  true,
+						"FALSE": false,
+						"false": false,
+					}
+
+					datport, _ := strconv.Atoi(rule[23])
+
+					e := nat.Entry{
+						Name:                           rule[0],
+						Description:                    rule[1],
+						Type:                           rule[2],
+						SourceZones:                    stringToSlice(rule[3]),
+						DestinationZone:                rule[4],
+						ToInterface:                    rule[5],
+						Service:                        rule[6],
+						SourceAddresses:                stringToSlice(rule[7]),
+						DestinationAddresses:           stringToSlice(rule[8]),
+						SatType:                        rule[9],
+						SatAddressType:                 rule[10],
+						SatTranslatedAddresses:         stringToSlice(rule[11]),
+						SatInterface:                   rule[12],
+						SatIpAddress:                   rule[13],
+						SatFallbackType:                rule[14],
+						SatFallbackTranslatedAddresses: stringToSlice(rule[15]),
+						SatFallbackInterface:           rule[16],
+						SatFallbackIpType:              rule[17],
+						SatFallbackIpAddress:           rule[18],
+						SatStaticTranslatedAddress:     rule[19],
+						SatStaticBiDirectional:         boolopt[rule[20]],
+						DatType:                        rule[21],
+						DatAddress:                     rule[22],
+						DatPort:                        datport,
+						DatDynamicDistribution:         rule[24],
+						Disabled:                       boolopt[rule[25]],
+						Tags:                           stringToSlice(rule[26]),
+					}
+
+					err = c.Policies.Nat.Set(dg, l, e)
+					if err != nil {
+						log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
 					}
 				}
 			}
@@ -475,7 +591,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					}
 
 					numrules := len(rules)
-					log.Printf("Moving %d rules", numrules)
+					log.Printf("Moving %d security rules", numrules)
 
 					for _, rule := range rules {
 						rulename := rule[0]
@@ -485,7 +601,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						r, err := c.Policies.Security.Get(dg, l, rulename)
 						if err != nil {
-							log.Printf("Failed to retrieve rule: %s", err)
+							log.Printf("Failed to retrieve security rule: %s", err)
 						}
 
 						err = c.Policies.Security.MoveGroup(dg, l, moveOptions[ruledest], targetrule, r)
@@ -496,7 +612,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				} else {
 					rule, err := c.Policies.Security.Get(dg, l, rulename)
 					if err != nil {
-						log.Printf("Failed to retrieve rule: %s", err)
+						log.Printf("Failed to retrieve security rule: %s", err)
 					}
 
 					err = c.Policies.Security.MoveGroup(dg, l, moveOptions[ruledest], targetrule, rule)
@@ -512,7 +628,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 func init() {
 	rootCmd.AddCommand(policyCmd)
 
-	policyCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform - import, export, or move")
+	policyCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform - import, export, or move (only for security policy)")
 	policyCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to import/export to")
 	policyCmd.Flags().StringVarP(&dg, "devicegroup", "g", "", "Device Group name; only needed when ran against Panorama")
 	policyCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
@@ -521,10 +637,10 @@ func init() {
 	policyCmd.Flags().StringVarP(&l, "location", "l", "post", "Rule location; pre or post when ran against Panorama")
 	policyCmd.Flags().BoolVarP(&xlate, "nat", "x", false, "Run the given action on the NAT policy")
 	policyCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when ran against a firewall")
-	policyCmd.Flags().StringVarP(&rulename, "rulename", "n", "", "Name of the rule you wish to move")
+	policyCmd.Flags().StringVarP(&rulename, "rulename", "n", "", "Name of the security rule you wish to move")
 	policyCmd.Flags().StringVarP(&ruledest, "ruledest", "w", "", "Where to move the rule - after, before, top, or bottom")
 	policyCmd.Flags().StringVarP(&targetrule, "targetrule", "t", "", "Name of the rule 'ruledest' is referencing")
-	policyCmd.Flags().BoolVarP(&movemultiple, "movemultiple", "m", true, "Specifies you wish to move multiple rules; use only with --file")
+	policyCmd.Flags().BoolVarP(&movemultiple, "movemultiple", "m", true, "Specifies you wish to move multiple security rules; use only with --file")
 	policyCmd.MarkFlagRequired("user")
 	policyCmd.MarkFlagRequired("pass")
 	policyCmd.MarkFlagRequired("device")
