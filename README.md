@@ -10,15 +10,17 @@ Abilities include:
 * Import (create, update) and export a security policy:
   * Add new rules to a policy.
   * Modify existing rules to update values (e.g. update lots of rules with a Log Profile, or Security Profile group).
+* Import (create, update) and export a NAT policy.
 * Move rules in a policy
-  * Move a single rule, or multiple rules (using a CSV file) anywhere within a policy.
+  * Move a single rule, or multiple rules (using a CSV file) anywhere within a security policy.
 
-* Provision a device using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) or from a different configuration file.
+* Configure a device using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) or from a different configuration file.
   * Can use a local file, or pull one from a remote HTTP location.
+* Export a device's configuration to a file (XML).
 
 For a detailed explanation of commands, and how they are used, please visit the [Wiki](https://github.com/scottdware/panco/wiki) page or click on any one of the command names below (takes you to their respective Wiki page).
 
-`panco` [`help`](https://github.com/scottdware/panco#usage), [`objects`][objects-doc], [`policy`][policy-doc], [`provision`][provision-doc]
+`panco` [`help`](https://github.com/scottdware/panco#usage), [`objects`][objects-doc], [`policy`][policy-doc], [`config`][config-doc]
 
 ## Installation
 
@@ -58,12 +60,12 @@ Usage:
   panco [command]
 
 Available Commands:
+  config      Configure a device using IronSkillet or a local or remote (HTTP) file; export a device configuration
   example     Create example CSV files for import reference
   help        Help about any command
   objects     Import and export address and service objects
   policy      Import/export a security policy, move rules
-  provision   Provision a device using IronSkillet or a local or remote (HTTP) file
-  version     Prints the version number of panco
+  version     Version information for panco
 
 Flags:
   -h, --help   help for panco
@@ -73,4 +75,4 @@ Use "panco [command] --help" for more information about a command.
 
 [objects-doc]: https://github.com/scottdware/panco/wiki/Objects
 [policy-doc]: https://github.com/scottdware/panco/wiki/Policy
-[provision-doc]: https://github.com/scottdware/panco/wiki/Provisioning
+[config-doc]: https://github.com/scottdware/panco/wiki/Config
