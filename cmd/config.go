@@ -90,6 +90,8 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 		}
 
 		if source == "export" {
+			reqopt := &grequests.RequestOptions{InsecureSkipVerify: true}
+
 			if fh == "" {
 				log.Println("You must specify the XML file to save the configuration to")
 				os.Exit(1)
@@ -100,14 +102,14 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 			switch c := con.(type) {
 			case *pango.Firewall:
-				dl, _ := grequests.Get(fmt.Sprintf("https://%s/api/?type=export&category=configuration&key=%s", device, c.ApiKey), nil)
+				dl, _ := grequests.Get(fmt.Sprintf("https://%s/api/?type=export&category=configuration&key=%s", device, c.ApiKey), reqopt)
 				if err := dl.DownloadToFile(fp); err != nil {
 					log.Printf("Error saving configuration file: %s", err)
 					os.Exit(1)
 				}
 				// resp, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=export&category=configuration&key=%s", device, c.ApiKey))
 			case *pango.Panorama:
-				dl, _ := grequests.Get(fmt.Sprintf("https://%s/api/?type=export&category=configuration&key=%s", device, c.ApiKey), nil)
+				dl, _ := grequests.Get(fmt.Sprintf("https://%s/api/?type=export&category=configuration&key=%s", device, c.ApiKey), reqopt)
 				if err := dl.DownloadToFile(fp); err != nil {
 					log.Printf("Error saving configuration file: %s", err)
 					os.Exit(1)
