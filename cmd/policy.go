@@ -161,13 +161,19 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				cfh.Write("SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,")
 				cfh.Write("DatAddress,DatPort,DatDynamicDistribution,Disabled,Tags\n")
 				for _, rule := range rules {
+					var toint string
 					r, err := c.Policies.Nat.Get(v, rule)
 					if err != nil {
 						log.Printf("Failed to retrieve NAT rule data: %s", err)
 					}
 
-					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, r.Description, r.Type, sliceToString(r.SourceZones),
-						r.DestinationZone, r.ToInterface, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
+					toint = r.ToInterface
+					if len(r.ToInterface) <= 0 {
+						toint = "any"
+					}
+
+					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, r.Description, "ipv4", sliceToString(r.SourceZones),
+						r.DestinationZone, toint, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
 					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
 						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,\"%s\"\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
@@ -255,6 +261,10 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					}
 
 					datport, _ := strconv.Atoi(rule[23])
+
+					if rule[2] != "ipv4" {
+						log.Printf("Line %d - only NAT type 'ipv4' is supported", i+1)
+					}
 
 					e := nat.Entry{
 						Name:                           rule[0],
@@ -443,13 +453,19 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				cfh.Write("SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,")
 				cfh.Write("DatAddress,DatPort,DatDynamicDistribution,Disabled,Tags\n")
 				for _, rule := range rules {
+					var toint string
 					r, err := c.Policies.Nat.Get(dg, l, rule)
 					if err != nil {
 						log.Printf("Failed to retrieve NAT rule data: %s", err)
 					}
 
-					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, r.Description, r.Type, sliceToString(r.SourceZones),
-						r.DestinationZone, r.ToInterface, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
+					toint = r.ToInterface
+					if len(r.ToInterface) <= 0 {
+						toint = "any"
+					}
+
+					cfh.Write(fmt.Sprintf("%s,\"%s\",%s,\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, r.Description, "ipv4", sliceToString(r.SourceZones),
+						r.DestinationZone, toint, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
 					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
 						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t,\"%s\"\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
@@ -537,6 +553,10 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					}
 
 					datport, _ := strconv.Atoi(rule[23])
+
+					if rule[2] != "ipv4" {
+						log.Printf("Line %d - only NAT type 'ipv4' is supported", i+1)
+					}
 
 					e := nat.Entry{
 						Name:                           rule[0],
