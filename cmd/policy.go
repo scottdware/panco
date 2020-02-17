@@ -645,5 +645,4 @@ func init() {
 	policyCmd.MarkFlagRequired("pass")
 	policyCmd.MarkFlagRequired("device")
 	policyCmd.MarkFlagRequired("action")
-	// policyCmd.MarkFlagRequired("file")
 }
