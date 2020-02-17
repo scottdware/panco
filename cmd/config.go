@@ -97,20 +97,21 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				os.Exit(1)
 			}
 
-			fbase := filepath.Base(fh)
-			fp := fmt.Sprintf("%s", fbase)
+			// fbase := filepath.Base(fh)
+			// fp := fmt.Sprintf("%s\\%s", os.TempDir(), fbase)
+			// fp := fmt.Sprintf("%s", fbase)
 
 			switch c := con.(type) {
 			case *pango.Firewall:
 				dl, _ := grequests.Get(fmt.Sprintf("https://%s/api/?type=export&category=configuration&key=%s", device, c.ApiKey), reqopt)
-				if err := dl.DownloadToFile(fp); err != nil {
+				if err := dl.DownloadToFile(fh); err != nil {
 					log.Printf("Error saving configuration file: %s", err)
 					os.Exit(1)
 				}
 				// resp, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=export&category=configuration&key=%s", device, c.ApiKey))
 			case *pango.Panorama:
 				dl, _ := grequests.Get(fmt.Sprintf("https://%s/api/?type=export&category=configuration&key=%s", device, c.ApiKey), reqopt)
-				if err := dl.DownloadToFile(fp); err != nil {
+				if err := dl.DownloadToFile(fh); err != nil {
 					log.Printf("Error saving configuration file: %s", err)
 					os.Exit(1)
 				}
