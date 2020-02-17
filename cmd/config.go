@@ -45,12 +45,14 @@ type contents struct {
 
 // configCmd represents the config command
 var configCmd = &cobra.Command{
-	Use:   "provision",
-	Short: "Provision a device using IronSkillet or a local or remote (HTTP) file",
+	Use:   "config",
+	Short: "Configure a device using IronSkillet or a local or remote (HTTP) file; export a device configuration",
 	Long: `This command will allow you to configure your device with best practice templates that have
 been setup by Palo Alto Networks, in their IronSkillet Github repository. You can also choose to load a 
 config file locally, or from a remote source using HTTP. Only the pre-built "loadable_configs" are an 
 option at this time.
+
+You can also export the configuration from a device when the source is set to "export."
 
 When using IronSkillet as the source (--source ironskillet), you will need to specifcy a couple of options:
 
