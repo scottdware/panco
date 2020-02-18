@@ -32,6 +32,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/addrgrp"
 	"github.com/PaloAltoNetworks/pango/objs/srvc"
 	"github.com/PaloAltoNetworks/pango/objs/srvcgrp"
+	"github.com/PaloAltoNetworks/pango/objs/tags"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
 	"gopkg.in/resty.v1"
@@ -73,11 +74,11 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				}
 
 				fh = strings.TrimSuffix(fh, ".csv")
-				afh := fmt.Sprintf("%s_addr.csv", fh)
-				agfh := fmt.Sprintf("%s_addrgrp.csv", fh)
-				sfh := fmt.Sprintf("%s_srvc.csv", fh)
-				sgfh := fmt.Sprintf("%s_srvcgrp.csv", fh)
-				tfh := fmt.Sprintf("%s_tags.csv", fh)
+				afh := fmt.Sprintf("%s-addr.csv", fh)
+				agfh := fmt.Sprintf("%s-addrgrp.csv", fh)
+				sfh := fmt.Sprintf("%s-srvc.csv", fh)
+				sgfh := fmt.Sprintf("%s-srvcgrp.csv", fh)
+				tfh := fmt.Sprintf("%s-tags.csv", fh)
 
 				log.Printf("Exporting objects - this might take a few of minutes if you have a lot of objects")
 
@@ -212,7 +213,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 						log.Printf("Failed to retrieve object data for '%s': %s", tag, err)
 					}
 
-					tc.Write(fmt.Sprintf("%s,tag,%s,\"%s\",,%s\n", t.Name, t.Color, t.Comment, v))
+					tc.Write(fmt.Sprintf("%s,tag,%s,\"%s\",,%s\n", t.Name, color2tag[t.Color], t.Comment, v))
 				}
 
 				tc.End()
@@ -398,6 +399,25 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 						if err != nil {
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
 						}
+					case "tag":
+						e := tags.Entry{}
+						if value == "None" || value == "none" || value == "color0" || value == "" {
+							e = tags.Entry{
+								Name:    name,
+								Comment: desc,
+							}
+						} else {
+							e = tags.Entry{
+								Name:    name,
+								Color:   tag2color[value],
+								Comment: desc,
+							}
+						}
+
+						err = c.Objects.Tags.Set(v, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+						}
 					}
 				}
 			}
@@ -408,11 +428,11 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				}
 
 				fh = strings.TrimSuffix(fh, ".csv")
-				afh := fmt.Sprintf("%s_addr.csv", fh)
-				agfh := fmt.Sprintf("%s_addrgrp.csv", fh)
-				sfh := fmt.Sprintf("%s_srvc.csv", fh)
-				sgfh := fmt.Sprintf("%s_srvcgrp.csv", fh)
-				tfh := fmt.Sprintf("%s_tags.csv", fh)
+				afh := fmt.Sprintf("%s-addr.csv", fh)
+				agfh := fmt.Sprintf("%s-addrgrp.csv", fh)
+				sfh := fmt.Sprintf("%s-srvc.csv", fh)
+				sgfh := fmt.Sprintf("%s-srvcgrp.csv", fh)
+				tfh := fmt.Sprintf("%s-tags.csv", fh)
 
 				log.Printf("Exporting objects - this might take a few of minutes if you have a lot of objects")
 
@@ -547,7 +567,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 						log.Printf("Failed to retrieve object data for '%s': %s", tag, err)
 					}
 
-					tc.Write(fmt.Sprintf("%s,tag,%s,\"%s\",,%s\n", t.Name, t.Color, t.Comment, v))
+					tc.Write(fmt.Sprintf("%s,tag,%s,\"%s\",,%s\n", t.Name, color2tag[t.Color], t.Comment, v))
 				}
 
 				tc.End()
@@ -756,6 +776,25 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+						}
+					case "tag":
+						e := tags.Entry{}
+						if value == "None" || value == "none" || value == "color0" || value == "" {
+							e = tags.Entry{
+								Name:    name,
+								Comment: desc,
+							}
+						} else {
+							e = tags.Entry{
+								Name:    name,
+								Color:   tag2color[value],
+								Comment: desc,
+							}
+						}
+
+						err = c.Objects.Tags.Set(dgroup, e)
+						if err != nil {
+							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 						}
 					}
 				}
