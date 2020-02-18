@@ -77,6 +77,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				agfh := fmt.Sprintf("%s_addrgrp.csv", fh)
 				sfh := fmt.Sprintf("%s_srvc.csv", fh)
 				sgfh := fmt.Sprintf("%s_srvcgrp.csv", fh)
+				tfh := fmt.Sprintf("%s_tags.csv", fh)
 
 				log.Printf("Exporting objects - this might take a few of minutes if you have a lot of objects")
 
@@ -190,6 +191,31 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				}
 
 				sgc.End()
+
+				// Tags
+				tc, err := easycsv.NewCSV(tfh)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				tags, err := c.Objects.Tags.GetList(v)
+				if err != nil {
+					log.Printf("Failed to get the list of tags: %s", err)
+					os.Remove(sgfh)
+				}
+
+				tc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
+				for _, tag := range tags {
+					t, err := c.Objects.Tags.Get(v, tag)
+					if err != nil {
+						log.Printf("Failed to retrieve object data for '%s': %s", tag, err)
+					}
+
+					tc.Write(fmt.Sprintf("%s,tag,%s,\"%s\",,%s\n", t.Name, t.Color, t.Comment, v))
+				}
+
+				tc.End()
 			}
 
 			if action == "import" {
@@ -386,6 +412,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				agfh := fmt.Sprintf("%s_addrgrp.csv", fh)
 				sfh := fmt.Sprintf("%s_srvc.csv", fh)
 				sgfh := fmt.Sprintf("%s_srvcgrp.csv", fh)
+				tfh := fmt.Sprintf("%s_tags.csv", fh)
 
 				log.Printf("Exporting objects - this might take a few of minutes if you have a lot of objects")
 
@@ -499,6 +526,31 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				}
 
 				sgc.End()
+
+				// Tags
+				tc, err := easycsv.NewCSV(tfh)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				tags, err := c.Objects.Tags.GetList(v)
+				if err != nil {
+					log.Printf("Failed to get the list of tags: %s", err)
+					os.Remove(sgfh)
+				}
+
+				tc.Write("#Name,Type,Value,Description,Tags,Device Group/Vsys\n")
+				for _, tag := range tags {
+					t, err := c.Objects.Tags.Get(v, tag)
+					if err != nil {
+						log.Printf("Failed to retrieve object data for '%s': %s", tag, err)
+					}
+
+					tc.Write(fmt.Sprintf("%s,tag,%s,\"%s\",,%s\n", t.Name, t.Color, t.Comment, v))
+				}
+
+				tc.End()
 			}
 
 			if action == "import" {
