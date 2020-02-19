@@ -363,7 +363,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				}
 
 				for i, rule := range rules {
-					xpath := fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/service-group/entry[@name='%s']", v, rule[0])
+					xpath := fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/rulebase/security/rules/entry[@name='%s']", v, rule[0])
 					ele := fmt.Sprintf("<group-tag>%s</group-tag>", rule[1])
 
 					_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&key=%s&element=%s", device, xpath, c.ApiKey, ele))
