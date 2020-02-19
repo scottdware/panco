@@ -366,7 +366,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					xpath := fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/service-group/entry[@name='%s']", v, rule[0])
 					ele := fmt.Sprintf("<group-tag>%s</group-tag>", rule[1])
 
-					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&key=%s&element=%s", device, xpath, c.ApiKey, ele))
+					_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&key=%s&element=%s", device, xpath, c.ApiKey, ele))
 					if err != nil {
 						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], err)
 					}
