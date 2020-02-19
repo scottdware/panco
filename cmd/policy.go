@@ -21,6 +21,7 @@
 package cmd
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
 	"os"
@@ -33,6 +34,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
+	"gopkg.in/resty.v1"
 )
 
 // policyCmd represents the policy command
@@ -51,6 +53,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		// pass := passwd()
+		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 
 		cl := pango.Client{
 			Hostname: device,
@@ -349,6 +352,26 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					}
 				}
 			}
+
+			if action == "grouptag" {
+				// /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/security/rules/entry[@name='Block_Gaming']/group-tag
+				// /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/nat/rules/entry[@name='Default_Outbound']/group-tag
+				rules, err := easycsv.Open(fh)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				for i, rule := range rules {
+					xpath := fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/service-group/entry[@name='%s']", v, rule[0])
+					ele := fmt.Sprintf("<group-tag>%s</group-tag>", rule[1])
+
+					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&key=%s&element=%s", device, xpath, c.ApiKey, ele))
+					if err != nil {
+						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], err)
+					}
+				}
+			}
 		case *pango.Panorama:
 			switch l {
 			case "pre":
@@ -641,6 +664,11 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 					}
 				}
 			}
+
+			// if action == "grouptag" {
+			// /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/security/rules/entry[@name='Block_Gaming']/group-tag
+			// /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/nat/rules/entry[@name='Default_Outbound']/group-tag
+			// }
 		}
 	},
 }
