@@ -28,6 +28,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/levigross/grequests"
@@ -75,6 +76,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 			"dhcp":   "https://api.github.com/repos/PaloAltoNetworks/iron-skillet/contents/loadable_configs/sample-mgmt-dhcp/%s/iron_skillet_%s_full.xml",
 			"static": "https://api.github.com/repos/PaloAltoNetworks/iron-skillet/contents/loadable_configs/sample-mgmt-static/%s/iron_skillet_%s_full.xml",
 		}
+		keyrexp := regexp.MustCompile(`key=([0-9A-Za-z\=]+).*`)
 
 		cl := pango.Client{
 			Hostname: device,
@@ -101,13 +103,15 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 			case *pango.Firewall:
 				dl, _ := grequests.Get(fmt.Sprintf("https://%s/api/?type=export&category=configuration&key=%s", device, c.ApiKey), reqopt)
 				if err := dl.DownloadToFile(fh); err != nil {
-					log.Printf("Error saving configuration file: %s", err)
+					formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+					log.Printf("Error saving configuration file: %s", formatkey)
 					os.Exit(1)
 				}
 			case *pango.Panorama:
 				dl, _ := grequests.Get(fmt.Sprintf("https://%s/api/?type=export&category=configuration&key=%s", device, c.ApiKey), reqopt)
 				if err := dl.DownloadToFile(fh); err != nil {
-					log.Printf("Error saving configuration file: %s", err)
+					formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+					log.Printf("Error saving configuration file: %s", formatkey)
 					os.Exit(1)
 				}
 			}

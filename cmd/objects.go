@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/PaloAltoNetworks/pango"
@@ -52,6 +53,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 		var err error
 		// pass := passwd()
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
+		keyrexp := regexp.MustCompile(`key=([0-9A-Za-z\=]+).*`)
 
 		cl := pango.Client{
 			Hostname: device,
@@ -370,7 +372,8 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 						}
 					case "rename-addressgroup":
 						var xpath string
@@ -379,7 +382,8 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 						}
 					case "rename-service":
 						var xpath string
@@ -388,7 +392,8 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 						}
 					case "rename-servicegroup":
 						var xpath string
@@ -397,7 +402,8 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 						}
 					case "tag":
 						e := tags.Entry{}
@@ -730,7 +736,8 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 						}
 					case "rename-addressgroup":
 						var xpath string
@@ -745,7 +752,8 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 						}
 					case "rename-service":
 						var xpath string
@@ -760,7 +768,8 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 						}
 					case "rename-servicegroup":
 						var xpath string
@@ -775,7 +784,8 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 						if err != nil {
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, err)
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 						}
 					case "tag":
 						e := tags.Entry{}
