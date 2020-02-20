@@ -10,13 +10,18 @@ Abilities include:
 * Import (create, update) and export a security policy:
   * Add new rules to a policy.
   * Modify existing rules to update values (e.g. update lots of rules with a Log Profile, or Security Profile group).
+
 * Import (create, update) and export a NAT policy.
+
 * Move rules in a policy
   * Move a single rule, or multiple rules (using a CSV file) anywhere within a security policy.
 
 * Configure a device using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) or from a different configuration file.
   * Can use a local file, or pull one from a remote HTTP location.
+
 * Export a device's configuration to a file (XML).
+
+* Group multiple rules (security, NAT) by a tag.
 
 For a detailed explanation of commands, and how they are used, please visit the [Wiki](https://github.com/scottdware/panco/wiki) page or click on any one of the command names below (takes you to their respective Wiki page).
 
