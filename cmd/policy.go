@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -54,6 +55,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 		var err error
 		// pass := passwd()
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
+		keyrexp := regexp.MustCompile(`key=([0-9A-Za-z\=]+).*`)
 
 		cl := pango.Client{
 			Hostname: device,
@@ -353,14 +355,15 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				}
 			}
 
-			if action == "grouptag" {
-				// /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/security/rules/entry[@name='Block_Gaming']/group-tag
-				// /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/nat/rules/entry[@name='Default_Outbound']/group-tag
+			if action == "groupbytag" && !xlate {
 				rules, err := easycsv.Open(fh)
 				if err != nil {
 					log.Printf("CSV file error - %s", err)
 					os.Exit(1)
 				}
+
+				rc := len(rules)
+				log.Printf("Grouping %d security rules by tags", rc)
 
 				for i, rule := range rules {
 					xpath := fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/rulebase/security/rules/entry[@name='%s']", v, rule[0])
@@ -368,7 +371,30 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 
 					_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&key=%s&element=%s", device, xpath, c.ApiKey, ele))
 					if err != nil {
-						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], err)
+						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], formatkey)
+					}
+				}
+			}
+
+			if action == "groupbytag" && xlate {
+				rules, err := easycsv.Open(fh)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				rc := len(rules)
+				log.Printf("Grouping %d NAT rules by tags", rc)
+
+				for i, rule := range rules {
+					xpath := fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/rulebase/nat/rules/entry[@name='%s']", v, rule[0])
+					ele := fmt.Sprintf("<group-tag>%s</group-tag>", rule[1])
+
+					_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&key=%s&element=%s", device, xpath, c.ApiKey, ele))
+					if err != nil {
+						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], formatkey)
 					}
 				}
 			}
@@ -665,10 +691,77 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 				}
 			}
 
-			// if action == "grouptag" {
-			// /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/security/rules/entry[@name='Block_Gaming']/group-tag
-			// /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/rulebase/nat/rules/entry[@name='Default_Outbound']/group-tag
-			// }
+			if action == "groupbytag" && !xlate {
+				if dg == "" {
+					log.Printf("You must specify the device-group (use the -g or --devicegroup flag)")
+					os.Exit(1)
+				}
+
+				rules, err := easycsv.Open(fh)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				rc := len(rules)
+				log.Printf("Grouping %d security rules by tags", rc)
+
+				for i, rule := range rules {
+					var xpath string
+
+					if dg == "shared" {
+						xpath = fmt.Sprintf("/config/shared/%s/security/rules/entry[@name='%s']", l, rule[0])
+					}
+
+					if dg != "shared" {
+						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/%s/security/rules/entry[@name='%s']", dg, l, rule[0])
+					}
+
+					ele := fmt.Sprintf("<group-tag>%s</group-tag>", rule[1])
+
+					_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&key=%s&element=%s", device, xpath, c.ApiKey, ele))
+					if err != nil {
+						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], formatkey)
+					}
+				}
+			}
+
+			if action == "groupbytag" && xlate {
+				if dg == "" {
+					log.Printf("You must specify the device-group (use the -g or --devicegroup flag)")
+					os.Exit(1)
+				}
+
+				rules, err := easycsv.Open(fh)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				rc := len(rules)
+				log.Printf("Grouping %d NAT rules by tags", rc)
+
+				for i, rule := range rules {
+					var xpath string
+
+					if dg == "shared" {
+						xpath = fmt.Sprintf("/config/shared/%s/nat/rules/entry[@name='%s']", l, rule[0])
+					}
+
+					if dg != "shared" {
+						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/%s/nat/rules/entry[@name='%s']", dg, l, rule[0])
+					}
+
+					ele := fmt.Sprintf("<group-tag>%s</group-tag>", rule[1])
+
+					_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&key=%s&element=%s", device, xpath, c.ApiKey, ele))
+					if err != nil {
+						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], formatkey)
+					}
+				}
+			}
 		}
 	},
 }
