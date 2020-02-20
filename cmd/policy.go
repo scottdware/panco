@@ -769,7 +769,7 @@ See https://github.com/scottdware/panco/Wiki for more information`,
 func init() {
 	rootCmd.AddCommand(policyCmd)
 
-	policyCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform - import, export, or move (only for security policy)")
+	policyCmd.Flags().StringVarP(&action, "action", "a", "", "Action to perform - import, export, groupbytag, or move (only for security policy)")
 	policyCmd.Flags().StringVarP(&fh, "file", "f", "", "Name of the CSV file to import/export to")
 	policyCmd.Flags().StringVarP(&dg, "devicegroup", "g", "", "Device Group name; only needed when ran against Panorama")
 	policyCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
