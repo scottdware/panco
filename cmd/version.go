@@ -48,7 +48,7 @@ var versionCmd = &cobra.Command{
 newer version available.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var releases []release
-		curver := "v2020.02-1"
+		curver := "v2020.03"
 
 		resp, err := resty.R().
 			SetHeader("Content-Type", "application/json").
