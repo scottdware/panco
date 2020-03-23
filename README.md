@@ -33,6 +33,7 @@ Current support OS's:
 
 * Windows
 * Mac OS
+* Linux
 
 Just download the `panco-<OS>.zip` file, extract the binary and place it somewhere in your PATH.
 
