@@ -4,14 +4,12 @@ Command-line tool that interacts with Palo Alto firewalls and Panorama.
 
 Abilities include:
 
-* Import (create, update) and export the following:
-  * Address objects (IP, Range, FQDN), address groups (static and dynamic), service objects (TCP, UDP, port-ranges, etc.), service groups.
+* Import (create, update) and export the following objects:
+  * Address objects (IP, Range, FQDN), address groups (static and dynamic), service objects (TCP, UDP, port-ranges, etc.), service groups, tags.
 
-* Import (create, update) and export a security policy:
+* Import (create, update) and export a security policy, NAT policy:
   * Add new rules to a policy.
   * Modify existing rules to update values (e.g. update lots of rules with a Log Profile, or Security Profile group).
-
-* Import (create, update) and export a NAT policy.
 
 * Move rules in a policy
   * Move a single rule, or multiple rules (using a CSV file) anywhere within a security policy.
