@@ -4,7 +4,7 @@ Click on any one of the available commands to view the full documentation and us
 
 ## Available Commands
 
-* [config](config.md)
-* [objects](objects.md)
-* [policy](policy.md)
-* [userid](userid.md)
+* [config](config.html)
+* [objects](objects.html)
+* [policy](policy.html)
+* [userid](userid.html)

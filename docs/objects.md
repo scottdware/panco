@@ -16,46 +16,16 @@ Flags:
 Use "panco objects [command] --help" for more information about a command.
 ```
 
+## Overview
+
 The `objects` command allows you to import (create, modify) address, service and tag objects, along with exporting them from
 the device. You can also find duplicate address and service objects, which will output to an Excel file for you to review.
 
 Click on any one of the available commands to view the documentation and usage:
 
-* [`duplicates`](https://scottdware.github.io/panco/objects_duplicates.md)
-* [`export`](https://scottdware.github.io/panco/objects_export.md)
-* [`import`](https://scottdware.github.io/panco/objects_import.md)
-
-
-
-
-
-* [Command Usage](https://scottdware.github.io/panco/objects#usage)
-* [CSV Structure](https://scottdware.github.io/panco/objects#csv-structure)
-* [Examples](https://scottdware.github.io/panco/objects#examples)
-
-## Usage
-
-```
-This command allows you to import and export address and service objects. You
-can also add objects to groups, as well as remove addreses objects from address groups.
-
-Please run "panco example" for sample CSV file to use as a reference when importing.
-
-See https://github.com/scottdware/panco/Wiki for more information
-
-Usage:
-  panco objects [flags]
-
-Flags:
-  -a, --action string        Action to perform; import or export
-  -d, --device string        Device to connect to
-  -g, --devicegroup string   Device Group name when exporting from Panorama (default "shared")
-  -f, --file string          Name of the CSV file to import/export to
-  -h, --help                 help for objects
-  -p, --pass string          Password for the user account specified
-  -u, --user string          User to connect to the device as
-  -v, --vsys string          Vsys name when exporting from a firewall (default "vsys1")
-```
+* [duplicates](https://scottdware.github.io/panco/objects_duplicates.html)
+* [export](https://scottdware.github.io/panco/objects_export.html)
+* [import](https://scottdware.github.io/panco/objects_import.html)
 
 ## CSV Structure
 

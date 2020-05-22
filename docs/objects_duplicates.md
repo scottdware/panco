@@ -35,4 +35,3 @@ What this will do is create a file called `Dups.xlsx` which will have four tabs:
 
 If you were to just specify `--type address` for example, then you would just have the first two tabs listed above. Now
 that we have our file, if you open it up it will look like the following:
-
