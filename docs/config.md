@@ -1,12 +1,10 @@
-[Home](https://scottdware.github.io/panco)
-
 # Config Command
 
 Using the `config` command allows you to use default, best practice configuration templates to load into a device. These templates were created by Palo Alto Networks and are a part of their [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) repository. You can also use a local file on your machine, or fetch a remote one using HTTP.
 
 When using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) configs to provision a device, currently only the pre-built [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) are an option at this time. Defining custom values will have to be done manually (e.g. can be changed in the GUI once the config is loaded), but are coming in a future release of `panco`.
 
-* [Usage](https://scottdware.github.io/panco/config#usage)
+* [Command Usage](https://scottdware.github.io/panco/config#usage)
 * [Examples](https://scottdware.github.io/panco/config#examples)
 
 ## Usage

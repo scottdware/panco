@@ -1,10 +1,37 @@
 # Objects Command
 
-This page will help to show you how to structure your CSV file for importing and updating address and service objects.
+```
+Usage:
+  panco objects [flags]
+  panco objects [command]
 
-* [Usage](https://github.com/scottdware/panco/wiki/Objects#usage)
-* [CSV Structure](https://github.com/scottdware/panco/wiki/Objects#csv-structure)
-* [Example Files](https://github.com/scottdware/panco/wiki/Objects#example-files)
+Available Commands:
+  duplicates  Find duplicate address and service objects
+  export      Export address, service and tag objects
+  import      Import (create, modify) address, service and tag objects
+
+Flags:
+  -h, --help   help for objects
+
+Use "panco objects [command] --help" for more information about a command.
+```
+
+The `objects` command allows you to import (create, modify) address, service and tag objects, along with exporting them from
+the device. You can also find duplicate address and service objects, which will output to an Excel file for you to review.
+
+Click on any one of the available commands to view the documentation and usage:
+
+* [`duplicates`](https://scottdware.github.io/panco/objects_duplicates.md)
+* [`export`](https://scottdware.github.io/panco/objects_export.md)
+* [`import`](https://scottdware.github.io/panco/objects_import.md)
+
+
+
+
+
+* [Command Usage](https://scottdware.github.io/panco/objects#usage)
+* [CSV Structure](https://scottdware.github.io/panco/objects#csv-structure)
+* [Examples](https://scottdware.github.io/panco/objects#examples)
 
 ## Usage
 
