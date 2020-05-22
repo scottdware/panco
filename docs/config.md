@@ -1,11 +1,13 @@
+[Home](https://scottdware.github.io/panco)
+
 # Config Command
 
 Using the `config` command allows you to use default, best practice configuration templates to load into a device. These templates were created by Palo Alto Networks and are a part of their [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) repository. You can also use a local file on your machine, or fetch a remote one using HTTP.
 
 When using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) configs to provision a device, currently only the pre-built [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) are an option at this time. Defining custom values will have to be done manually (e.g. can be changed in the GUI once the config is loaded), but are coming in a future release of `panco`.
 
-* [Usage](https://github.com/scottdware/panco/wiki/Config#usage)
-* [Examples](https://github.com/scottdware/panco/wiki/Config#examples)
+* [Usage](https://scottdware.github.io/panco/config#usage)
+* [Examples](https://scottdware.github.io/panco/config#examples)
 
 ## Usage
 
@@ -35,11 +37,11 @@ Flags:
   -d, --device string   Device to connect to
   -f, --file string     Name of the XML config file - only used when source is local, remote or export
   -h, --help            help for config
-  -l, --load            Load the file into the running-config - use with caution
-  -o, --os string       Device OS - only used when source is ironskillet; panos or panorama
+  -l, --load            Load the file into the running-config - USE WITH CAUTION
+  -o, --os string       Device OS - only used when source is ironskillet - <panos|panorama>
   -p, --pass string     Password for the user account specified
-  -s, --source string   Source of config - ironskillet, local, remote or export
-  -t, --type string     IronSkillet config to use - aws|azure|gcp|dhcp|static (default "static")
+  -s, --source string   Source of config - <ironskillet|local|remote|export>
+  -t, --type string     IronSkillet config to use - <aws|azure|gcp|dhcp|static> (default "static")
   -u, --user string     User to connect to the device as
 ```
 
