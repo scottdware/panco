@@ -1,11 +1,15 @@
 # panco Documentation
 
-`panco [command]`
+Click on any one of the available commands to view the documentation and usage for it.
 
-**Available Commands**:
+Command-line usage: `panco [command]`
 
-[`objects`](objects.md)
+## Available Commands
 
-[`policy`](policy.md)
+[config](config.md)
 
-[`userid`](userid.md)
+[objects](objects.md)
+
+[policy](policy.md)
+
+[userid](userid.md)

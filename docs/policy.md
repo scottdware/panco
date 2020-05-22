@@ -1,4 +1,4 @@
-# `policy` Command
+# Policy Command
 
 This page will help to show you how the CSV file is formatted when used to import and update rules in a policy.
 

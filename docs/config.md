@@ -1,4 +1,4 @@
-# `config` Command
+# Config Command
 
 Using the `config` command allows you to use default, best practice configuration templates to load into a device. These templates were created by Palo Alto Networks and are a part of their [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) repository. You can also use a local file on your machine, or fetch a remote one using HTTP.
 

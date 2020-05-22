@@ -1,4 +1,4 @@
-# `objects` Command
+# Objects Command
 
 This page will help to show you how to structure your CSV file for importing and updating address and service objects.
 
