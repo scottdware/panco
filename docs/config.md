@@ -17,7 +17,7 @@ If you do not specify the --load flag, the the configuration will only be transf
 will have to load it manually. If you specify the --load flag, then the configuration will be loaded automatically,
 but will still need to be manually committed.
 
-See https://github.com/scottdware/panco/Wiki for more information
+See https://scottdware.github.io/panco for more information
 
 Usage:
   panco config [flags]
@@ -39,6 +39,11 @@ Flags:
 Using the `config` command allows you to use default, best practice configuration templates to load into a device. These templates were created by Palo Alto Networks and are a part of their [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) repository. You can also use a local file on your machine, or fetch a remote one using HTTP.
 
 When using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) configs to provision a device, currently only the pre-built [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) are an option at this time. Defining custom values will have to be done manually (e.g. can be changed in the GUI once the config is loaded), but are coming in a future release of `panco`.
+
+When using IronSkillet as a source, you will need to specify a couple of additional options:
+
+* `os` must be `panos` or `panorama`
+* `config` can be any of `aws`, `azure`, `gcp`, `dhcp` or `static`
 
 ## Examples
 
