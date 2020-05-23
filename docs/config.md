@@ -57,7 +57,8 @@ Behind the scenes, this is what the command will do:
 
 If we take a look at the screenshot, you can see the config file we just downloaded has been saved to the firewall, and is ready to be used:
 
-![Screenshot: IronSkillet loaded config](https://github.com/scottdware/panco-examples/blob/master/provision_loaded_config.png)
+<img src="https://github.com/scottdware/panco-examples/blob/master/provision_loaded_config.png" alt="IronSkillet loaded config"/>
+<!-- ![Screenshot: IronSkillet loaded config](https://github.com/scottdware/panco-examples/blob/master/provision_loaded_config.png) -->
 
 If we were to include the `--load` option, then the configuration file will also be loaded into the running-config, ready to be committed.
 
