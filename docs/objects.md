@@ -43,6 +43,7 @@ The CSV file for object creation (import) should be organized with the following
 > * When ran against a local firewall, the default value for `Vsys` is "vsys1" if you do not specify one. When ran against Panorama, the default value for `Device Group` is "shared."
 
 > **_WARNING_**: If an existing address or service object has the same name as one you are creating, it's value will be overwritten with what you specify.
+> Please refer to the [`duplicates`](https://scottdware.github.io/panco/objects_duplicates.html) command to help alleviate this.
 
 ### Creating Address Objects
 

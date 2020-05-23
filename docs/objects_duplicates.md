@@ -24,7 +24,9 @@ address or service objects to find duplicates on, or both. When specifying eithe
 created which includes the results in separate tabs. For example, to find _all_ duplicate address and service
 objects, run the following command:
 
-`panco objects duplicates --type all --file Dups --device 192.168.1.1 --user admin --password 'paloalto' --vsys vsys1`
+```
+panco objects duplicates --type all --file Dups --device 192.168.1.1 --user admin --password 'paloalto' --vsys vsys1
+```
 
 What this will do is create a file called `Dups.xlsx` which will have four tabs:
 

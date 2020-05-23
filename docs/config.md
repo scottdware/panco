@@ -40,16 +40,15 @@ Using the `config` command allows you to use default, best practice configuratio
 
 When using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) configs to provision a device, currently only the pre-built [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) are an option at this time. Defining custom values will have to be done manually (e.g. can be changed in the GUI once the config is loaded), but are coming in a future release of `panco`.
 
-* [Command Usage](https://scottdware.github.io/panco/config#usage)
-* [Examples](https://scottdware.github.io/panco/config#examples)
-
 ## Examples
 
-#### IronSkillet Configs
+### IronSkillet Configs
 
 In this example, we'll configure our firewall using one of the [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) pre-built configs. Let's choose the `dhcp` option (management interface uses DHCP):
 
-`panco config --source ironskillet --os panos --config dhcp --device pa-vm --user admin`
+```
+panco config --source ironskillet --os panos --config dhcp --device pa-vm --user admin
+```
 
 Behind the scenes, this is what the command will do:
 
@@ -58,22 +57,28 @@ Behind the scenes, this is what the command will do:
 
 If we take a look at the screenshot, you can see the config file we just downloaded has been saved to the firewall, and is ready to be used:
 
-[Screenshot: IronSkillet loaded config](https://github.com/scottdware/panco-examples/blob/master/provision_loaded_config.png)
+![Screenshot: IronSkillet loaded config](https://github.com/scottdware/panco-examples/blob/master/provision_loaded_config.png)
 
 If we were to include the `--load` option, then the configuration file will also be loaded into the running-config, ready to be committed.
 
-#### Local and Remote Files
+### Local and Remote Files
 
 Choosing a local or a remote file to provision a device with works very similar as the above example. For these options, the parameters change as you do not need to specify your OS type, as well as a couple others:
 
-`panco config --source local --file /path/to/config.xml --device pa-vm --user admin`
+```
+panco config --source local --file /path/to/config.xml --device pa-vm --user admin
+```
 
 Remote files work the same way, except you would specify the URL to where the file is located:
 
-`panco config --source remote --file https://sdubs.org/path/to/config.xml --device pa-vm --user admin`
+```
+panco config --source remote --file https://sdubs.org/path/to/config.xml --device pa-vm --user admin
+```
 
 Again, you can choose to add the `--load` flag if you wish to have the configuration automatically loaded into the running-config.
 
-#### Export Device Configuration
+### Export Device Configuration
 
-`panco config --source export --file firewall-config.xml --device pa-vm --user admin`
+```
+panco config --source export --file firewall-config.xml --device pa-vm --user admin
+```
