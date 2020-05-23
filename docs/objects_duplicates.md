@@ -1,8 +1,6 @@
 # Finding Duplicate Address and Service Objects
 
 ```
-Find duplicate address and service objects
-
 Usage:
   panco objects duplicates [flags]
 

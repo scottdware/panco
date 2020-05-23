@@ -1,8 +1,6 @@
 # Exporting Objects
 
 ```
-Export address, service and tag objects
-
 Usage:
   panco objects export [flags]
 
