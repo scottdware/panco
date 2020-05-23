@@ -25,10 +25,12 @@ tagging multiple objects, importing a policy (Security, NAT or PBF), changing va
 finding duplicate address and service objects, and more. WHen it comes to creating and modifying
 (importing) objects, all of this can be done by using a CSV file...and you can accomplish multiple tasks within the same file.
 
-Please use the below link to the CSV structure as a guide when using the import function on the `objects`
+Please use the below links to the CSV structure as a guide when using the import function on the `objects`
 , `poilcy` and `userid` commands.
 
-* [CSV Structure](https://scottdware.github.io/panco/csv.html)
+* [CSV Structure - Objects](https://scottdware.github.io/panco/csv_objects.html)
+* [CSV Structure - Policies](https://scottdware.github.io/panco/csv_policy.html)
+* [CSV Structure - Userid Functions](https://scottdware.github.io/panco/csv_userid.html)
 
 Click on any one of the available commands to view the full documentation and usage.
 

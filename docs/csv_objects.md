@@ -1,11 +1,19 @@
-# CSV Structure
+# CSV Structure - Objects
 
-The CSV file for object creation (import) should be organized with the following columns:
+This guide will help show you the way to structure your CSV file(s) for use when working with the various
+objects types - address, service and tag.
+
+## Objects
+
+When creating (importing) address, service and tag objects, the CSV file needs to have the following columns:
 
 `Name,Type,Value,Description,Tags,Device Group/Vsys`
 
 * The `Description` and `Tags` fields are optional, however you **MUST** still include them even if they are blank in your file!
 * If any line begins with a hashtag `#`, it WILL be ignored!
+
+**_TIP_**: A good example is to first [export](https://scottdware.github.io/panco/objects_export.html) address, service or tag objects from the device.
+That way, you get a good idea of how the CSV file is laid out.
 
 > **_NOTE_**: Here are a few things to keep in mind when creating objects:
 > * For the name of the object, it cannot be longer than 32 characters, and must only include letters, numbers, spaces, hyphens, and underscores.
@@ -20,18 +28,18 @@ The CSV file for object creation (import) should be organized with the following
 
 Column | Description
 :--- | :---
-`Name` | Name of the object you wish to create.
-`Type` | **ip**, **range**, or **fqdn**
-`Value` | Must contain the IP address, FQDN, or IP range of the object.
+`Name` | Name of the address object you wish to create.
+`Type` | **ip**, **ip-netmask**, **range** or **fqdn**
+`Value` | Must contain the IP address, FQDN or IP range of the object.
 `Description` | (Optional) A description of the object.
-`Tags` | (Optional) Name of a pre-existing tag on the device to apply.
+`Tags` | (Optional) Name of a pre-existing tag on the device to apply to the object.
 `Device Group/Vsys` | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
 ### Creating Address Groups - or Add to Existing
 
 Column | Description
 :--- | :---
-`Name` | Name of the address group you wish to create.
+`Name` | Name of the address group you wish to create or add to.
 `Type` | `static` or `dynamic`
 `Value` | ** See below explanation
 `Description` | (Optional) A description of the object.
@@ -40,12 +48,16 @@ Column | Description
 
 For a `static` address group, `Value` must contain a comma, or semicolon separated list of members to add to the group, enclosed in quotes `""`, e.g.:
 
-`"ip-host1, ip-net1; fqdn-example.com"`
+```
+"ip-host1, ip-net1; fqdn-example.com"
+```
 
 For a `dynamic` address group, `Value` must contain the criteria (tags) to match on. This **_MUST_** be enclosed in quotes `""`, and
 each criteria (tag) must be surrounded by single-quotes `'`, e.g.:
 
-`"'Servers' or 'Web-Servers' and 'DMZ'"`
+```
+"'Servers' or 'Web-Servers' and 'DMZ'"
+```
 
 ### Removing Objects From Address Groups
 
@@ -62,27 +74,46 @@ Column | Description
 
 Column | Description
 :--- | :---
-`Name` | Name of the object you wish to create.
+`Name` | Name of the service object you wish to create.
 `Type` | `tcp` or `udp`
 `Value` | ** See below
 `Description` | (Optional) A description of the object.
 `Tags` | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
 `Device Group/Vsys` | Name of the device-group, or **shared** if creating a shared object.
 
-`Value` must contain a single port number (443), range (1023-3000), or comma separated list of ports, enclosed in quotes, e.g.: `"80, 443, 8080"`.
+`Value` must contain a single port number (443), range (1023-3000), or comma separated list of ports, enclosed in quotes, e.g.:
+
+```
+"80, 443, 8080"
+```
 
 ### Creating Service Groups - or Add to Existing
 
 Column | Description
 :--- | :---
-`Name` | Name of the object you wish to create.
+`Name` | Name of the service group you wish to create or add to.
 `Type` | `service`
 `Value` | ** See below
 `Description` | Not used - leave blank (not available on service groups).
 `Tags` | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
 `Device Group/Vsys` | Name of the device-group, or **shared** if creating a shared object.
 
-** `Value` must contain a comma or semicolon separated list of service objects to add to the group, enclosed in quotes `""`, e.g.: `"tcp_8080, udp_666; tcp_range"`.
+** `Value` must contain a comma or semicolon separated list of service objects to add to the group, enclosed in quotes `""`, e.g.:
+
+```
+"tcp_8080, udp_666; tcp_range"
+```
+
+### Removing Objects From Service Groups
+
+Column | Description
+:--- | :---
+`Name` | Name of the service group you wish to remove object(s) from.
+`Type` | `remove-service`
+`Value` | Must contain a comma, or semicolon separated list of members to remove from group, enclosed in quotes `""`.
+`Description` | Not used - leave blank.
+`Tags` | Not used - leave blank.
+`Device Group/Vsys` | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
 ### Creating Tags
 
