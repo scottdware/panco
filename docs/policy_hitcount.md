@@ -41,4 +41,6 @@ panco policy hitcount --file <name-of-Output-File> --type all
 
 THe files will have the following columns defined:
 
-`Name,Hit Count,First Hit,Last Hit,Last Reset,Rule Created,Rule Modified`
+```
+Name,Hit Count,First Hit,Last Hit,Last Reset,Rule Created,Rule Modified
+```

@@ -14,9 +14,9 @@ Here is the format that your CSV file must adhere to when tagging or untagging a
 
 Column | Description
 :--- | :---
-`IP Address` | This can **_ONLY_** be a single IP address. Subnets are not supported at this time.
-`Action` | Action to perform - `tag` or `untag`
-`Tag` | Name of the tag(s) you wish to apply.
+IP Address | This can **_ONLY_** be a single IP address. Subnets are not supported at this time.
+Action | Action to perform - `tag` or `untag`
+Tag | Name of the tag(s) you wish to apply.
 
 * When specifying the IP address, it does **_NOT_** need to pre-exist as an object on the device.
 * If you wish to apply multiple tags to an IP address, they must be enclosed in quotes and separated by a comma - e.g.: `"Malicious, Block-IP"`
@@ -28,8 +28,8 @@ When logging in (registering) or logging out (unregistering) users, here is the 
 
 Column | Description
 :--- | :---
-`User` | Name of the user to login/logout.
-`Action` | Action to perform - `login` or `logout`
-`IP Address` | IP address to assign to the user.
+User | Name of the user to login/logout.
+Action | Action to perform - `login` or `logout`
+IP Address | IP address to assign to the user.
 
 * You can also include a domain for the user if necessary - e.g.: `MYDOMAIN\user`

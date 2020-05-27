@@ -81,12 +81,12 @@ When using the `panco policy move` command, here is the format that the CSV file
 
 Column | Description
 :--- | :---
-`Rule Type` | Type of rule - `security`, `nat` or `pbf`
-`Location` | ** Only used when ran against Panorama (`pre` or `post`); leave blank otherwise.
-`Rule Name` | Name of the rule you wish to move.
-`Destination` | Where to move the rule - `after`, `before`, `top` or `bottom`
-`Target Rule` | Target rule where `Destination` is referencing.
-`Device Group/Vsys` | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
+Rule Type | Type of rule - `security`, `nat` or `pbf`
+Location | ** Only used when ran against Panorama (`pre` or `post`); leave blank otherwise.
+Rule Name | Name of the rule you wish to move.
+Destination | Where to move the rule - `after`, `before`, `top` or `bottom`
+Target Rule | Target rule where `Destination` is referencing.
+Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
 Once you have specified what rules you need to move, you can execute it with the following command:
 
@@ -100,8 +100,8 @@ You can group multiple rules by tags, which allow you to "View the Rulebase as G
 
 Column | Description
 :--- | :---
-`Rule Name` | Name of the rule you wish to order-by tag.
-`Tag` | Name of the tag you wish to group rules by - MUST be pre-existing on the device.
+Rule Name | Name of the rule you wish to order-by tag.
+Tag | Name of the tag you wish to group rules by - MUST be pre-existing on the device.
 
 If you want to do this on an existing rulebase, the easiest way is to first export the policy that you want, then, remove all of the other columns outside of the `Name` column and then add in what Tags you want applied to each rule to group them by. Once you have your file all set, run the following command:
 
