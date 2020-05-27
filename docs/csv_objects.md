@@ -5,7 +5,9 @@ objects types - address, service and tag.
 
 When creating (importing) address, service and tag objects, the CSV file needs to have the following columns:
 
-`Name,Type,Value,Description,Tags,Device Group/Vsys`
+```
+Name,Type,Value,Description,Tags,Device Group/Vsys
+```
 
 * The `Description` and `Tags` fields are optional, however you **_MUST_** still include them even if they are blank in your file!
 * If any line begins with a hashtag `#`, it WILL be ignored!
@@ -132,7 +134,13 @@ Column | Description
 
 ** `Value` is the color that you want the tag to represent. Below are the following colors available for use:
 
-`None`, `Red`, `Green`, `Blue`, `Yellow`, `Copper`, `Orange`, `Purple`, `Gray`, `Light Green`, `Cyan`, `Light Gray`, `Blue Gray`, `Lime`, `Black`, `Gold`, `Brown`, `Olive`, `Maroon`, `Red-Orange`, `Yellow-Orange`, `Forest Green`, `Turquoise Blue`, `Azure Blue`, `Cerulean Blue`, `Midnight Blue`, `Medium Blue`, `Cobalt Blue`, `Blue Violet`, `Medium Violet`, `Medium Rose`, `Lavender`, `Orchid`, `Thistle`, `Peach`, `Salmon`, `Magenta`, `Red Violet`, `Mahogany`, `Burnt Sienna`, `Chestnut`
+```
+None, Red, Green, Blue, Yellow, Copper, Orange, Purple, Gray, Light Green, Cyan, Light Gray,
+Blue Gray, Lime, Black, Gold, Brown, Olive, Maroon, Red-Orange, Yellow-Orange, Forest Green,
+Turquoise Blue, Azure Blue, Cerulean Blue, Midnight Blue, Medium Blue, Cobalt Blue, Blue Violet,
+Medium Violet, Medium Rose, Lavender, Orchid, Thistle, Peach, Salmon, Magenta, Red Violet,
+Mahogany, Burnt Sienna, Chestnut
+```
 
 ### Renaming Objects
 
