@@ -34,23 +34,23 @@ panco objects import --file <name-of-CSV-file>
 
 Column | Description
 :--- | :---
-`Name` | Name of the address object you wish to create.
-`Type` | **ip**, **ip-netmask**, **range** or **fqdn**
-`Value` | Must contain the IP address, FQDN or IP range of the object.
-`Description` | (Optional) A description of the object.
-`Tags` | (Optional) Name of a pre-existing tag on the device to apply to the object.
-`Device Group/Vsys` | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
+Name | Name of the address object you wish to create.
+Type | **ip**, **ip-netmask**, **range** or **fqdn**
+Value | Must contain the IP address, FQDN or IP range of the object.
+Description | (Optional) A description of the object.
+Tags | (Optional) Name of a pre-existing tag on the device to apply to the object.
+Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
 ### Creating Address Groups - or Add to Existing
 
 Column | Description
 :--- | :---
-`Name` | Name of the address group you wish to create or add to.
-`Type` | `static` or `dynamic`
-`Value` | ** See below explanation
-`Description` | (Optional) A description of the object.
-`Tags` | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
-`Device Group/Vsys` | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
+Name | Name of the address group you wish to create or add to.
+Type | `static` or `dynamic`
+Value | ** See below explanation
+Description | (Optional) A description of the object.
+Tags | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
+Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
 For a `static` address group, `Value` must contain a comma, or semicolon separated list of members to add to the group, enclosed in quotes `""`, e.g.:
 
@@ -69,23 +69,23 @@ each criteria (tag) must be surrounded by single-quotes `'`, e.g.:
 
 Column | Description
 :--- | :---
-`Name` | Name of the address group you wish to remove object(s) from.
-`Type` | `remove-address`
-`Value` | Must contain a comma, or semicolon separated list of members to remove from group, enclosed in quotes `""`.
-`Description` | Not used - leave blank.
-`Tags` | Not used - leave blank.
-`Device Group/Vsys` | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
+Name | Name of the address group you wish to remove object(s) from.
+Type | `remove-address`
+Value | Must contain a comma, or semicolon separated list of members to remove from group, enclosed in quotes `""`.
+Description | Not used - leave blank.
+Tags | Not used - leave blank.
+Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
 ### Creating Service Objects
 
 Column | Description
 :--- | :---
-`Name` | Name of the service object you wish to create.
-`Type` | `tcp` or `udp`
-`Value` | ** See below
-`Description` | (Optional) A description of the object.
-`Tags` | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
-`Device Group/Vsys` | Name of the device-group, or **shared** if creating a shared object.
+Name | Name of the service object you wish to create.
+Type | `tcp` or `udp`
+Value | ** See below
+Description | (Optional) A description of the object.
+Tags | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
+Device Group/Vsys | Name of the device-group, or **shared** if creating a shared object.
 
 `Value` must contain a single port number (443), range (1023-3000), or comma separated list of ports, enclosed in quotes, e.g.:
 
@@ -97,12 +97,12 @@ Column | Description
 
 Column | Description
 :--- | :---
-`Name` | Name of the service group you wish to create or add to.
-`Type` | `service`
-`Value` | ** See below
-`Description` | Not used - leave blank (not available on service groups).
-`Tags` | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
-`Device Group/Vsys` | Name of the device-group, or **shared** if creating a shared object.
+Name | Name of the service group you wish to create or add to.
+Type | `service`
+Value | ** See below
+Description | Not used - leave blank (not available on service groups).
+Tags | (Optional) Name of a pre-existing tag or tags on the device to apply. Separate multiple using a comma or semicolon.
+Device Group/Vsys | Name of the device-group, or **shared** if creating a shared object.
 
 ** `Value` must contain a comma or semicolon separated list of service objects to add to the group, enclosed in quotes `""`, e.g.:
 
@@ -114,23 +114,23 @@ Column | Description
 
 Column | Description
 :--- | :---
-`Name` | Name of the service group you wish to remove object(s) from.
-`Type` | `remove-service`
-`Value` | Must contain a comma, or semicolon separated list of members to remove from group, enclosed in quotes `""`.
-`Description` | Not used - leave blank.
-`Tags` | Not used - leave blank.
-`Device Group/Vsys` | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
+Name | Name of the service group you wish to remove object(s) from.
+Type | `remove-service`
+Value | Must contain a comma, or semicolon separated list of members to remove from group, enclosed in quotes `""`.
+Description | Not used - leave blank.
+Tags | Not used - leave blank.
+Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
 ### Creating Tags
 
 Column | Description
 :--- | :---
-`Name` | Name of the tag you wish to create.
-`Type` | `tag`
-`Value` | ** See below
-`Description` | (Optional) A description of the tag.
-`Tags` | Not used - leave blank
-`Device Group/Vsys` | Name of the device-group, or **shared** if creating a shared object.
+Name | Name of the tag you wish to create.
+Type | `tag`
+Value | ** See below
+Description | (Optional) A description of the tag.
+Tags | Not used - leave blank
+Device Group/Vsys | Name of the device-group, or **shared** if creating a shared object.
 
 ** `Value` is the color that you want the tag to represent. Below are the following colors available for use:
 
@@ -146,9 +146,9 @@ Mahogany, Burnt Sienna, Chestnut
 
 Column | Description
 :--- | :---
-`Name` | Name of the object you wish to rename.
-`Type` | One of: `rename-address`, `rename-addressgroup`, `rename-service`, `rename-servicegroup`
-`Value` | New name of the object you wish to rename to.
-`Description` | Not used for rename - leave blank.
-`Tags` | Not used for rename - leave blank.
-`Device Group/Vsys` | Name of the device-group/vsys, or **shared** if renaming a shared object.
+Name | Name of the object you wish to rename.
+Type | One of: `rename-address`, `rename-addressgroup`, `rename-service`, `rename-servicegroup`
+Value | New name of the object you wish to rename to.
+Description | Not used for rename - leave blank.
+Tags | Not used for rename - leave blank.
+Device Group/Vsys | Name of the device-group/vsys, or **shared** if renaming a shared object.
