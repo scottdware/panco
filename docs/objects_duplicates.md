@@ -23,7 +23,7 @@ created which includes the results in separate tabs. For example, to find _all_ 
 objects, run the following command:
 
 ```
-panco objects duplicates --type all --file Dups --device 192.168.1.1 --user admin --password 'paloalto' --vsys vsys1
+panco objects duplicates --type all --file Duplicate-Objects --vsys vsys1
 ```
 
 What this will do is create a file called `Dups.xlsx` which will have four tabs:
@@ -33,5 +33,7 @@ What this will do is create a file called `Dups.xlsx` which will have four tabs:
 * service-Unique
 * service-Duplicates
 
-If you were to just specify `--type address` for example, then you would just have the first two tabs listed above. Now
-that we have our file, if you open it up it will look like the following:
+If you were to just specify `--type address` for example, then you would just have the first two tabs listed above. Here
+is an example of how this file looks:
+
+<img src="duplicates.png" alt="Duplicate objects"/>

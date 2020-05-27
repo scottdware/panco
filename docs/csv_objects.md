@@ -3,13 +3,11 @@
 This guide will help show you the way to structure your CSV file(s) for use when working with the various
 objects types - address, service and tag.
 
-## Objects
-
 When creating (importing) address, service and tag objects, the CSV file needs to have the following columns:
 
 `Name,Type,Value,Description,Tags,Device Group/Vsys`
 
-* The `Description` and `Tags` fields are optional, however you **MUST** still include them even if they are blank in your file!
+* The `Description` and `Tags` fields are optional, however you **_MUST_** still include them even if they are blank in your file!
 * If any line begins with a hashtag `#`, it WILL be ignored!
 
 **_TIP_**: A good example is to first [export](https://scottdware.github.io/panco/objects_export.html) address, service or tag objects from the device.
@@ -23,6 +21,12 @@ That way, you get a good idea of how the CSV file is laid out.
 
 > **_WARNING_**: If an existing address or service object has the same name as one you are creating, it's value will be overwritten with what you specify.
 > Please refer to the [`duplicates`](https://scottdware.github.io/panco/objects_duplicates.html) command to help alleviate this.
+
+Once your CSV file is organized with any of the following options, you can execute the changes using the following command:
+
+```
+panco objects import --file <name-of-CSV-file>
+```
 
 ### Creating Address Objects
 
