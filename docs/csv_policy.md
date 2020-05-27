@@ -7,7 +7,12 @@ policy actions - importing or modifying rules, exporting rules, moving rules, gr
 
 When importing a CSV file to create security rules or modify them, the file **_MUST_** have the following fields in this order:
 
-`Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering`
+```
+Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,DestinationZones,
+DestinationAddresses,NegateDestination,Applications,Services,Categories,Action,LogSetting,LogStart,LogEnd,Disabled,
+Schedule,IcmpUnreachable,DisableServerResponseInspection,Group,Virus,Spyware,Vulnerability,UrlFiltering,
+FileBlocking,WildFireAnalysis,DataFiltering
+```
 
 > **_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the security policy first (using the `panco policy export` command),
 > and then modifying the output file. For example:
@@ -28,7 +33,12 @@ Name,Type,Action
 
 When importing a CSV file to create NAT rules or modify them, the file **_MUST_** have the following columns in this order:
 
-`Name,Type,Description,Tags,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,DatAddress,DatPort,DatDynamicDistribution,Disabled`
+```
+Name,Type,Description,Tags,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,
+SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,
+SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,
+DatAddress,DatPort,DatDynamicDistribution,Disabled
+```
 
 > **_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the NAT policy first (using the `panco policy export` command),
 > and then modifying the output file. For example:
@@ -49,7 +59,12 @@ Name,Type,ToInterface
 
 When importing a CSV file to create policy-based forwarding rules or modify them, the file **_MUST_** have the following columns in this order:
 
-`Name,Description,Tags,FromType,FromValues,SourceAddresses,SourceUsers,NegateSource,DestinationAddresses,NegateDestination,Applications,Services,Schedule,Disabled,Action,ForwardVsys,ForwardEgressInterface,ForwardNextHopType,ForwardNextHopValue,ForwardMonitorProfile,ForwardMonitorIpAddress,ForwardMonitorDisableIfUnreachable,EnableEnforceSymmetricReturn,SymmetricReturnAddresses,ActiveActiveDeviceBinding,NegateTarget,Uuid`
+```
+Name,Description,Tags,FromType,FromValues,SourceAddresses,SourceUsers,NegateSource,DestinationAddresses,NegateDestination,
+Applications,Services,Schedule,Disabled,Action,ForwardVsys,ForwardEgressInterface,ForwardNextHopType,ForwardNextHopValue,
+ForwardMonitorProfile,ForwardMonitorIpAddress,ForwardMonitorDisableIfUnreachable,EnableEnforceSymmetricReturn,
+SymmetricReturnAddresses,ActiveActiveDeviceBinding,NegateTarget,Uuid
+```
 
 **_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the NAT policy first (using the `panco policy export` command),
 and then modifying the output file. For example:
