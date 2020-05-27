@@ -17,7 +17,7 @@ Flags:
 Using the import command allows you to create or modify address and service objects, tag objects, and more. For each type of action you want to perform,
 you will need to make sure your CSV file is structured accordingly. Please use the following guide for this purpose:
 
-[CSV Structure for Object Actions](https://scottdware.github.io/panco/csv_objects.html)
+[CSV Structure for Object Actions](https://panco.dev/csv_objects.html)
 
 Once your CSV file is all set, you can execute the following command to apply the changes:
 

@@ -17,7 +17,7 @@ If you do not specify the --load flag, the the configuration will only be transf
 will have to load it manually. If you specify the --load flag, then the configuration will be loaded automatically,
 but will still need to be manually committed.
 
-See https://scottdware.github.io/panco for more information
+See https://panco.dev for more information
 
 Usage:
   panco config [flags]

@@ -33,7 +33,7 @@ What this will do is create a file called `Dups.xlsx` which will have four tabs:
 * service-Unique
 * service-Duplicates
 
-If you were to just specify `--type address` for example, then you would just have the first two tabs listed above. Here
+<!-- If you were to just specify `--type address` for example, then you would just have the first two tabs listed above. Here
 is an example of how this file looks:
 
-<img src="duplicates.png" alt="Duplicate objects"/>
+<img src="duplicates.png" alt="Duplicate objects"/> -->

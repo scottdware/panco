@@ -23,7 +23,7 @@ you can **_ONLY_** group security and NAT rules by tags at this time.
 
 Please use the below link as a guide on how to structure your CSV file when grouping rules:
 
-[CSV Structure - Policies (Group Rules By Tag)](https://scottdware.github.io/panco/csv_policy.html#group-rules-by-tags)
+[CSV Structure - Policies (Group Rules By Tag)](https://panco.dev/csv_policy.html#group-rules-by-tags)
 
 Once your CSV file structure is all set, you can apply the changes by running the following command:
 

@@ -26,4 +26,4 @@ The destnination can be any of the four types:
 
 Please use the below link as a guide on how to structure your CSV file when moving rules:
 
-[CSV Structure - Policies (Moving Rules)](https://scottdware.github.io/panco/csv_policy.html#moving-rules)
+[CSV Structure - Policies (Moving Rules)](https://panco.dev/csv_policy.html#moving-rules)

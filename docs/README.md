@@ -28,9 +28,9 @@ finding duplicate address and service objects, and more. WHen it comes to creati
 Please use the below links to the CSV structure as a guide when using the import function on the `objects`
 , `poilcy` and `userid` commands.
 
-* [CSV Structure - Objects](https://scottdware.github.io/panco/csv_objects.html)
-* [CSV Structure - Policies](https://scottdware.github.io/panco/csv_policy.html)
-* [CSV Structure - Userid Functions](https://scottdware.github.io/panco/csv_userid.html)
+* [CSV Structure - Objects](https://panco.dev/csv_objects.html)
+* [CSV Structure - Policies](https://panco.dev/csv_policy.html)
+* [CSV Structure - Userid Functions](https://panco.dev/csv_userid.html)
 
 Click on any one of the available commands to view the full documentation and usage.
 
