@@ -1,4 +1,7 @@
-# What Is It?
+# panco
+---
+
+## What Is It
 
 `panco` is a command-line tool which helps to automate bulk tasks which normally would be cumbersome having
 to do them one-by-one. Features of this tool include:
@@ -20,7 +23,7 @@ to do them one-by-one. Features of this tool include:
 
 > **_NOTE_**: Your account must have API access to the devices in order to use this tool!
 
-## How Do I Get It?
+## How Do I Get It
 
 You can install `panco` by clicking on the below link and downloading the binary for your specific OS
 (Windows, Mac OS and Linux are supported). Links are available on the main [Github repo](https://github.com/scottdware/panco) page as well.
