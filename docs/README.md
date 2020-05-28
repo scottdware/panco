@@ -32,7 +32,7 @@ to do them one-by-one. Features of this tool include:
 You can install `panco` by clicking on the below link and downloading the binary for your specific OS
 (Windows, Mac OS and Linux are supported). Links are available on the main [Github repo](https://github.com/scottdware/panco) page as well.
 
-* [Get panco!](https://github.com/scottdware/panco/releases)
+* [Download panco!](https://github.com/scottdware/panco/releases)
 
 Once you download the binary, place it in your `PATH` environment variable, or run it from it's current location.
 
