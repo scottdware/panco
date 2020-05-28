@@ -1,10 +1,23 @@
 # What Is It?
 
-`panco` is a command-line tool which helps to automate large tasks such as creating and modifying objects,
-tagging objects, importing or modifying a policy (Security, NAT or PBF), finding duplicate address
-and service objects, and more...all using CSV files.
+`panco` is a command-line tool which helps to automate bulk tasks which normally would be cumbersome having
+to do them one-by-one. Features of this tool include:
 
-Your account must have API access to the devices in order to use this tool!
+* Exporting objects from the device - address, service, tag
+* Creating address, service and tag objects
+* Renaming address, service and tag objects
+* Adding or removing objects from address and service groups
+* Finding duplicate address and service objects
+* Exporting a security, NAT or Policy-Based Forwarding (PBF) policy
+* Creating security, NAT or Policy-Based Forwarding (PBF) rules
+  * Modifying the above rule types, which include adding/updating rules
+* Group security or NAT rules by tags
+* Move multiple security, NAT or Policy-Based Forwarding (PBF) rules at a time
+* Get the hit count data on security, NAT or Policy-Based Forwarding (PBF) rules
+* Tag/untag IP addresses for use in dynamic address groups
+* Manually login/logout a user and map them to an IP address
+
+> **_NOTE_**: Your account must have API access to the devices in order to use this tool!
 
 ## How Do I Get It?
 
