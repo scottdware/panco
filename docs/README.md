@@ -1,46 +1,22 @@
-# panco Documentation
+# What Is It?
 
-```
-Usage:
-  panco [command]
+`panco` is a command-line tool which helps to automate large tasks such as creating and modifying objects,
+tagging objects, importing or modifying a policy (Security, NAT or PBF), finding duplicate address
+and service objects, and more...all using CSV files.
 
-Available Commands:
-  config      Configure a device using IronSkillet or a local or remote (HTTP) file; export a device configuration
-  help        Help about any command
-  objects     Commands to work with address, service, and tag objects
-  policy      Commands to work with security, NAT and PBF policies
-  userid      Commands to interact with user-id functions
-  version     Version information for panco
+Your account must have API access to the devices in order to use this tool!
 
-Flags:
-  -h, --help   help for panco
+## How Do I Get It?
 
-Use "panco [command] --help" for more information about a command.
-```
-
-## Overview
-
-This command-line tool helps to automate large tasks such as creating and modifying lots of objects,
-tagging multiple objects, importing a policy (Security, NAT or PBF), changing values on rules,
-finding duplicate address and service objects, and more. WHen it comes to creating and modifying
-(importing) objects, all of this can be done by using a CSV file...and you can accomplish multiple tasks within the same file.
-
-To install `panco`, click on the link below. Links are available on the main [Github repo](https://github.com/scottdware/panco) page as well.
+You can install `panco` by clicking on the below link and downloading the binary for your specific OS
+(Windows, Mac OS and Linux are supported). Links are available on the main [Github repo](https://github.com/scottdware/panco) page as well.
 
 * [Get panco!](https://github.com/scottdware/panco/releases)
 
-Please use the below links to the CSV structure as a guide when using the import function on the `objects`
-, `poilcy` and `userid` commands.
+Once you download the binary, place it in your `PATH` environment variable, or run it from it's current location.
 
-* [CSV Structure - Objects](https://panco.dev/csv_objects.html)
-* [CSV Structure - Policies](https://panco.dev/csv_policy.html)
-* [CSV Structure - Userid Functions](https://panco.dev/csv_userid.html)
+## Documentation
 
-Click on any one of the available commands to view the full documentation and usage.
+Access the full package documentation below!
 
-## Available Commands
-
-* [config](config.html)
-* [objects](objects.html)
-* [policy](policy.html)
-* [userid](userid.html)
+* [panco Documentation](https://panco.dev/docs.html)
