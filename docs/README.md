@@ -8,9 +8,10 @@ to do them one-by-one. Features of this tool include:
 * Renaming address, service and tag objects
 * Adding or removing objects from address and service groups
 * Finding duplicate address and service objects
+* Tag multiple objects
 * Exporting a security, NAT or Policy-Based Forwarding (PBF) policy
 * Creating security, NAT or Policy-Based Forwarding (PBF) rules
-  * Modifying the above rule types, which include adding/updating rules
+* Modifying security, NAT or Policy-Based Forwarding (PBF) rules - e.g. adding a Log Profile to all rules
 * Group security or NAT rules by tags
 * Move multiple security, NAT or Policy-Based Forwarding (PBF) rules at a time
 * Get the hit count data on security, NAT or Policy-Based Forwarding (PBF) rules
