@@ -4,8 +4,8 @@
 
 ## What Is It
 
-`panco` is a command-line tool which helps to automate bulk tasks which normally would be cumbersome having
-to do them one-by-one. Features of this tool include:
+`panco` is a command-line tool which helps to automate bulk tasks when working with [Palo Alto Networks](https://paloaltonetworks.com) firewalls
+and Panorama, which normally would be cumbersome having to do them one-by-one. Features of this tool include:
 
 * Exporting objects from the device - address, service, tag
 * Creating address, service and tag objects
