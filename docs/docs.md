@@ -5,7 +5,6 @@ Usage:
   panco [command]
 
 Available Commands:
-  config      Configure a device using IronSkillet or a local or remote (HTTP) file; export a device configuration
   help        Help about any command
   objects     Commands to work with address, service, and tag objects
   policy      Commands to work with security, NAT and Policy-Based Forwarding policies
@@ -31,7 +30,7 @@ Click on any one of the available commands to view the full documentation and us
 
 ## Available Commands
 
-* [config](config.html)
+<!-- * [config](config.html) -->
 * [objects](objects.html)
 * [policy](policy.html)
 * [userid](userid.html)
