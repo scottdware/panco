@@ -30,7 +30,7 @@ Once your CSV file is organized with any of the following options, you can execu
 panco objects import --file <name-of-CSV-file>
 ```
 
-### Creating Address Objects
+## Creating or Modifying Address Objects
 
 Column | Description
 :--- | :---
@@ -41,7 +41,7 @@ Description | (Optional) A description of the object.
 Tags | (Optional) Name of a pre-existing tag on the device to apply to the object.
 Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
-### Creating Address Groups - or Add to Existing
+## Creating Address Groups - or Add to Existing
 
 Column | Description
 :--- | :---
@@ -65,7 +65,7 @@ each criteria (tag) must be surrounded by single-quotes `'`, e.g.:
 "'Servers' or 'Web-Servers' and 'DMZ'"
 ```
 
-### Removing Objects From Address Groups
+## Removing Objects From Address Groups
 
 Column | Description
 :--- | :---
@@ -76,7 +76,7 @@ Description | Not used - leave blank.
 Tags | Not used - leave blank.
 Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
-### Creating Service Objects
+## Creating or Modifying Service Objects
 
 Column | Description
 :--- | :---
@@ -93,7 +93,7 @@ Device Group/Vsys | Name of the device-group, or **shared** if creating a shared
 "80, 443, 8080"
 ```
 
-### Creating Service Groups - or Add to Existing
+## Creating Service Groups - or Add to Existing
 
 Column | Description
 :--- | :---
@@ -110,7 +110,7 @@ Device Group/Vsys | Name of the device-group, or **shared** if creating a shared
 "tcp_8080, udp_666; tcp_range"
 ```
 
-### Removing Objects From Service Groups
+## Removing Objects From Service Groups
 
 Column | Description
 :--- | :---
@@ -121,7 +121,7 @@ Description | Not used - leave blank.
 Tags | Not used - leave blank.
 Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
-### Creating Tags
+## Creating Tags
 
 Column | Description
 :--- | :---
@@ -142,7 +142,7 @@ Medium Violet, Medium Rose, Lavender, Orchid, Thistle, Peach, Salmon, Magenta, R
 Mahogany, Burnt Sienna, Chestnut
 ```
 
-### Renaming Objects
+## Renaming Objects
 
 Column | Description
 :--- | :---
@@ -152,3 +152,15 @@ Value | New name of the object you wish to rename to.
 Description | Not used for rename - leave blank.
 Tags | Not used for rename - leave blank.
 Device Group/Vsys | Name of the device-group/vsys, or **shared** if renaming a shared object.
+
+## Tagging Objects
+
+When applying tags to objects, use the same CSV format as you would when creating or modifying, but
+in the `tags` column, enter in the name of a pre-existing tag you wish to apply.
+
+If you wish to apply multiple tags, use a comma or semicolon separated list of pre-existing tags,
+enclosed in quotes `""`, e.g.:
+
+```
+"Windows-Server, Internet-Access"
+```
