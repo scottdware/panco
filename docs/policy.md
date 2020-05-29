@@ -6,11 +6,11 @@ Usage:
   panco policy [command]
 
 Available Commands:
-  export      Export a security, NAT or PBF policy
+  export      Export a security, NAT or Policy-Based Forwarding policy
   group       Group security or NAT rules by tags
-  hitcount    Get the hit count data on a security, NAT or PBF policy - FIREWALL ONLY
-  import      Import (create, modify) a security, NAT or PBF policy
-  move        Move multiple rules within a security, NAT or PBF policy
+  hitcount    Get the hit count data on a security, NAT or Policy-Based Forwarding policy - FIREWALL ONLY
+  import      Import (create, modify) a security, NAT or Policy-Based Forwarding policy
+  move        Move multiple rules within a security, NAT or Policy-Based Forwarding policy
 
 Flags:
   -h, --help   help for policy
