@@ -34,7 +34,7 @@ panco objects import --file <name-of-CSV-file>
 
 Column | Description
 :--- | :---
-Name | Name of the address object you wish to create.
+Name | Name of the address object you wish to create or modify.
 Type | **ip**, **ip-netmask**, **range** or **fqdn**
 Value | Must contain the IP address, FQDN or IP range of the object.
 Description | (Optional) A description of the object.
@@ -80,7 +80,7 @@ Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for
 
 Column | Description
 :--- | :---
-Name | Name of the service object you wish to create.
+Name | Name of the service object you wish to create or modify.
 Type | `tcp` or `udp`
 Value | ** See below
 Description | (Optional) A description of the object.
