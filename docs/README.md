@@ -21,9 +21,6 @@ and Panorama, which normally would be cumbersome having to do them one-by-one. F
 * Get the hit count data on security, NAT or Policy-Based Forwarding (PBF) rules
 * Tag/untag IP addresses for use in dynamic address groups
 * Manually login/logout a user and map them to an IP address
-<!-- * Configure a device using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) or from a different configuration file.
-* Conifgure a device using a local file, or pull one from a remote HTTP location.
-* Export a device's configuration to a file (XML) -->
 
 > **_NOTE_**: Your account must have API access to the devices in order to use this tool
 
