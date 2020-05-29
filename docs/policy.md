@@ -20,8 +20,9 @@ Use "panco policy [command] --help" for more information about a command.
 
 ## Overview
 
-The `policy` command allows you to work with security, NAT or PBF policies. You will be able to export a policy, import
-(create/modify) a policy, move multiple rules within different rulebases, group security or NAT rules by tags, and more.
+The `policy` command allows you to work with security, NAT or Policy-Based Forwarding policies. You will
+be able to export a policy, import (create/modify) a policy, move multiple rules within different
+rulebases, group security or NAT rules by tags, and more.
 
 **_Important_**: Please refer to the [CSV Structure - Policies](https://panco.dev/csv_policy.html) page
 on how to structure your CSV files when importing, grouping or moving rules.

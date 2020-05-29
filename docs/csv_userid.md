@@ -1,12 +1,12 @@
-## CSV Structure - Userid Functions
+## CSV Structure - User-ID Functions
 
 This guide will help show you the way to structure your CSV file(s) for use when working with the different
-user-id based functions.
+User-ID based functions.
 
 The current actions you can perform are as follows:
 
 * Tagging/untagging an IP addresses for use in dynamic address groups (no commit required).
-* Manually registering/mapping an IP address to a user-id, as well as un-registering/removing the mapping from them.
+* Manually registering/mapping an IP address to a User-ID, as well as un-registering/removing the mapping from them.
 
 ## Tagging/Untagging IP Addresses
 

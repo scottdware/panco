@@ -17,7 +17,7 @@ Use "panco userid [command] --help" for more information about a command.
 
 ## Overview
 
-The `userid` command allows you to work with different user-id based functions. These functions include
+The `userid` command allows you to work with different User-ID based functions. These functions include
 tagging and untagging an IP address (for use in dynamic address groups), logging in/logging out users, which
 you can manually map a user to an IP address (and unmap them). Tagging or logging in users each require their
 own CSV file structure. Please refer to the below link as a guide on how to format:

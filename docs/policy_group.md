@@ -10,7 +10,7 @@ Flags:
   -f, --file string          Name of the CSV file
   -h, --help                 help for group
   -p, --pass string          Password for the user account specified
-  -t, --type string          <security|nat>
+  -t, --type string          <security|nat|pbf>
   -u, --user string          User to connect to the device as
   -v, --vsys string          Vsys name (default "vsys1")
 ```
@@ -18,8 +18,7 @@ Flags:
 ## Overview
 
 This command allows you to group rules by a tag. This is helpful when looking at the policy and being able to filter
-down on a select group of rules for the purpose defined in the tag specified (e.g. "Trust-to-Internet" rules). Currently,
-you can **_ONLY_** group security and NAT rules by tags at this time.
+down on a select group of rules for the purpose defined in the tag specified (e.g. "Trust-to-Internet" rules).
 
 Please use the below link as a guide on how to structure your CSV file when grouping rules:
 
@@ -28,5 +27,5 @@ Please use the below link as a guide on how to structure your CSV file when grou
 Once your CSV file structure is all set, you can apply the changes by running the following command:
 
 ```
-panco policy group --file <name-of-CSV-file> --type <security|nat>
+panco policy group --file <name-of-CSV-file> --type <security|nat|pbf>
 ```
