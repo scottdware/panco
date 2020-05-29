@@ -25,7 +25,9 @@ to do them one-by-one. Features of this tool include:
 * Conifgure a device using a local file, or pull one from a remote HTTP location.
 * Export a device's configuration to a file (XML)
 
-> **_NOTE_**: Your account must have API access to the devices in order to use this tool!
+> **_NOTE_**: Your account must have API access to the devices in order to use this tool
+
+Check out the [About panco](https://panco.dev/about.html) page for more info.
 
 ## How Do I Get It
 
