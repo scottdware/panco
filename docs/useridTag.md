@@ -26,4 +26,4 @@ configuration has already been committed.
 
 Please refer to the below link as a guide on how to format your CSV file:
 
-[CSV Structure - Userid Functions](https://panco.dev/csv_userid.html)
+[CSV Structure - Userid Functions](https://panco.dev/csvUserid.html)

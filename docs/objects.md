@@ -21,10 +21,10 @@ Use "panco objects [command] --help" for more information about a command.
 The `objects` command allows you to import (create, modify) address, service and tag objects, along with exporting them from
 the device. You can also find duplicate address and service objects, which will output to an Excel file for you to review.
 
-**_Important_**: Please refer to the [CSV Structure](https://panco.dev/csv_objects.html) page on how to structure your CSV files when importing/modifying objects.
+**_Important_**: Please refer to the [CSV Structure](https://panco.dev/csvObjects.html) page on how to structure your CSV files when importing/modifying objects.
 
 Click on any one of the available commands to view the full documentation and usage:
 
-* [duplicates](https://panco.dev/objects_duplicates.html)
-* [export](https://panco.dev/objects_export.html)
-* [import](https://panco.dev/objects_import.html)
+* [duplicates](https://panco.dev/objectsDuplicates.html)
+* [export](https://panco.dev/objectsExport.html)
+* [import](https://panco.dev/objectsImport.html)
