@@ -3,6 +3,8 @@
 * `panco` is written using the [Go](https://golang.org) programming language
 * The underlying library behind it Palo Alto's [pango library](https://github.com/PaloAltoNetworks/pango)
 
+## How It Works
+
 When `panco` creates or modifies an object or rule, it uses the "set" API action against
 the device. I chose this method over the "edit" API action for the following reasons (taken from the below link)
 
@@ -26,6 +28,9 @@ deleted or removed fromt the configuration (unless you choose to remove somethin
 For more infomation on these actions, please refer to the following guide from Palo Alto:
 
 [Actions for Modifying a Configuration](https://docs.paloaltonetworks.com/pan-os/9-0/pan-os-panorama-api/pan-os-xml-api-request-types/pan-os-xml-api-request-types-and-actions/configuration-actions/actions-for-modifying-a-configuration.html)
+
+If you run into issues, or need assistance, please submit an issue on the [main Github repository](https://github.com/scottdware/panco),
+or drop me a line on Twitter [@scottdware](https://twitter.com/scottdware).
 
 ## References
 
