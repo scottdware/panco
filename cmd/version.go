@@ -44,11 +44,11 @@ type asset struct {
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Version information for panco",
-	Long: `Shows the current version of panco you are running, as well as if there is a 
+	Long: `Shows the current version of panco you are running, and checks to see if there is a
 newer version available.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var releases []release
-		curver := "v2020.03"
+		curver := "v2020.06"
 
 		resp, err := resty.R().
 			SetHeader("Content-Type", "application/json").
@@ -67,9 +67,9 @@ newer version available.`,
 		download := releases[0].URL
 
 		if curver == latestver {
-			fmt.Printf("You are running the latest version of panco - %s\n", curver)
+			fmt.Printf("You are running the latest version of panco - %s\n\nSee https://panco.dev for complete documentation", curver)
 		} else {
-			fmt.Printf("New version available - %s. Download here: %s\n", latestver, download)
+			fmt.Printf("New version available - %s! Download here: %s\n\nSee https://panco.dev for complete documentation", latestver, download)
 		}
 	},
 }

@@ -32,9 +32,9 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 )
 
-var cfgFile, rulename, ruledest, targetrule, pass string
-var action, dg, user, device, fh, t, query, l, v, source, ostype, config string
-var load, movemultiple, xlate bool
+var cfgFile, srcrule, mvwhere, targetrule, pass string
+var action, dg, user, device, f, t, query, l, v, source, ostype, config string
+var load, multiple, xlate, hit bool
 
 var tag2color = map[string]string{
 	"None":           "color0",
@@ -129,10 +129,10 @@ var color2tag = map[string]string{
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "panco",
-	Short: "Command-line tool that interacts with Palo Alto firewalls and Panorama",
-	Long: `Command-line tool that interacts with Palo Alto firewalls and Panorama.
+	Short: "Command-line tool that interacts with Palo Alto firewalls and Panorama using CSV files",
+	Long: `Command-line tool that interacts with Palo Alto firewalls and Panorama using CSV files
 	
-See https://github.com/scottdware/panco/Wiki for more information`,
+See https://panco.dev for complete documentation`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
@@ -238,4 +238,33 @@ func userStringToSlice(str string) []string {
 	}
 
 	return slice
+}
+
+func duplicateObjects(objects map[string]string) (map[string]string, map[string]string) {
+	unique := map[string]string{}
+	dups := map[string]string{}
+
+	for k, v := range objects {
+		_, exists := unique[v]
+
+		if exists {
+			dups[k] = v
+		} else {
+			unique[v] = k
+		}
+	}
+
+	result := map[string]string{}
+	for key := range unique {
+		result[unique[key]] = key
+	}
+
+	return result, dups
+}
+
+func formatDesc(str string) string {
+	s := strings.ReplaceAll(str, ",", "")
+	s = strings.ReplaceAll(s, "\n", " ")
+
+	return s
 }

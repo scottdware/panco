@@ -3,7 +3,10 @@ module github.com/scottdware/panco
 go 1.13
 
 require (
-	github.com/PaloAltoNetworks/pango v0.3.12
+	github.com/360EntSecGroup-Skylar/excelize v1.4.1
+	github.com/360EntSecGroup-Skylar/excelize/v2 v2.2.0 // indirect
+	github.com/PaloAltoNetworks/pango v0.4.0
+	github.com/TheJumpCloud/jcapi-go v3.0.0+incompatible // indirect
 	github.com/levigross/grequests v0.0.0-20190908174114-253788527a1a
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/scottdware/go-easycsv v0.0.0-20180104194405-695e7e580f43

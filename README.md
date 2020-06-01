@@ -1,29 +1,25 @@
 # panco
 
-Command-line tool that interacts with Palo Alto firewalls and Panorama.
+Command-line tool that interacts with Palo Alto firewalls and Panorama using CSV files
+
+パン粉 - Pronounced like the breadcrum!
 
 Abilities include:
 
-* Import (create, update) and export the following objects:
-  * Address objects (IP, Range, FQDN), address groups (static and dynamic), service objects (TCP, UDP, port-ranges, etc.), service groups, tags.
-
-* Import (create, update) and export a security policy, NAT policy:
-  * Add new rules to a policy.
-  * Modify existing rules to update values (e.g. update lots of rules with a Log Profile, or Security Profile group).
-
-* Move rules in a policy
-  * Move a single rule, or multiple rules (using a CSV file) anywhere within a security policy.
-
-* Configure a device using [IronSkillet](https://github.com/PaloAltoNetworks/iron-skillet) [`loadable_configs`](https://github.com/PaloAltoNetworks/iron-skillet/tree/panos_v8.0/loadable_configs) or from a different configuration file.
-  * Can use a local file, or pull one from a remote HTTP location.
-
-* Export a device's configuration to a file (XML).
-
-* Group multiple rules (security, NAT) by a tag.
-
-For a detailed explanation of commands, and how they are used, please visit the [Wiki](https://github.com/scottdware/panco/wiki) page or click on any one of the command names below (takes you to their respective Wiki page).
-
-`panco` [`help`](https://github.com/scottdware/panco#usage), [`objects`][objects-doc], [`policy`][policy-doc], [`config`][config-doc]
+* Exporting objects from the device - address, service, tag
+* Creating address, service and tag objects
+* Renaming address, service and tag objects
+* Adding or removing objects from address and service groups
+* Finding duplicate address and service objects
+* Tag multiple objects
+* Exporting a security, NAT or Policy-Based Forwarding (PBF) policy
+* Creating security, NAT or Policy-Based Forwarding (PBF) rules
+* Modifying security, NAT or Policy-Based Forwarding (PBF) rules - e.g. adding a Log Profile to all rules
+* Group security or NAT rules by tags
+* Move multiple security, NAT or Policy-Based Forwarding (PBF) rules at a time
+* Get the hit count data on security, NAT or Policy-Based Forwarding (PBF) rules
+* Tag/untag IP addresses for use in dynamic address groups
+* Manually login/logout a user and map them to an IP address
 
 ## Installation
 
@@ -37,38 +33,27 @@ Current support OS's:
 
 Just download the `panco-<OS>.zip` file, extract the binary and place it somewhere in your PATH.
 
-### Build Option
+## Getting Started/Documentation
 
-You can also build the binaries yourself by cloning this repo, and running `go build -o <name of binary> panco\main.go`
+* Visit the [panco Documentation](https://panco.dev) site.
 
-## Getting Started
-
-* Visit the [Wiki](https://github.com/scottdware/panco/wiki)
-
-There you will find in-depth documentation and examples on how to structure the CSV file(s) when working with objects
- and policies.
+There you will find in-depth documentation and examples on how to structure the CSV file(s), as well as using the different commands.
 
 ## Usage
 
->**Note on passwords**: Due to some changes in Go code for certain functions this library uses, there were issues when inputing your
-password on Windows, where it wouldn't respond unless you hit `CTRL-C`, which would exit you out of the program.
->The fix for this, is the new `--pass (-p)` flag attached to every command. I understand that this allows your password to be viewed
-in plain text on the CLI, but I am working on finding other solutions for this.
-
 ```
-Command-line tool that interacts with Palo Alto firewalls and Panorama.
+Command-line tool that interacts with Palo Alto firewalls and Panorama using CSV files
 
-See https://github.com/scottdware/panco/Wiki for more information
+See https://panco.dev for complete documentation
 
 Usage:
   panco [command]
 
 Available Commands:
-  config      Configure a device using IronSkillet or a local or remote (HTTP) file; export a device configuration
-  example     Create example CSV files for import reference
   help        Help about any command
-  objects     Import and export address and service objects
-  policy      Import/export a security policy, move rules
+  objects     Commands to work with address, service, and tag objects
+  policy      Commands to work with security, NAT and Policy-Based Forwarding policies
+  userid      Commands to interact with User-ID functions
   version     Version information for panco
 
 Flags:
@@ -76,7 +61,3 @@ Flags:
 
 Use "panco [command] --help" for more information about a command.
 ```
-
-[objects-doc]: https://github.com/scottdware/panco/wiki/Objects
-[policy-doc]: https://github.com/scottdware/panco/wiki/Policy
-[config-doc]: https://github.com/scottdware/panco/wiki/Config
