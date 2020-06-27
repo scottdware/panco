@@ -427,6 +427,7 @@ func init() {
 	policyImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
 	policyImportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when exporting from a firewall")
 	policyImportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import")
+	policyImportCmd.Flags().StringVarP(&l, "location", "l", "post", "Location of the rulebase - <pre|post>")
 	policyImportCmd.MarkFlagRequired("user")
 	policyImportCmd.MarkFlagRequired("pass")
 	policyImportCmd.MarkFlagRequired("device")
