@@ -21,6 +21,9 @@ Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,Dat
 panco policy export --type security --file <file-to-output>
 ```
 
+>*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
+> this is the "post" rulebase.
+
 When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty.
 
 Any field that you want to add or modify you need to have a value there, but at the very least, you **_MUST_** have values in the following fields:
@@ -48,6 +51,9 @@ DatPort,DatDynamicDistribution,Disabled
 panco policy export --type nat --file <file-to-output>
 ```
 
+>*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
+> this is the "post" rulebase.
+
 When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty.
 
 Any field that you want to add or modify you need to have a value there, but at the very least, you **_MUST_** have values in the following fields:
@@ -74,6 +80,9 @@ and then modifying the output file. For example:
 ```
 panco policy export --type pbf --file <file-to-output>
 ```
+
+>*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
+> this is the "post" rulebase.
 
 ## Moving Rules
 

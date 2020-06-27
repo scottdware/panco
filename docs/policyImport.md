@@ -9,6 +9,7 @@ Flags:
   -g, --devicegroup string   Device Group name when exporting from Panorama (default "shared")
   -f, --file string          Name of the CSV file to export to
   -h, --help                 help for import
+  -l, --location string      Location of the rulebase - <pre|post> (default "post")
   -p, --pass string          Password for the user account specified
   -t, --type string          Type of policy to import
   -u, --user string          User to connect to the device as
