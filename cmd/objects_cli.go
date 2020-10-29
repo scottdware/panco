@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -28,7 +29,7 @@ import (
 // cliCmd represents the cli command
 var objectsCliCmd = &cobra.Command{
 	Use:   "cli",
-	Short: "Convert CSV file entries to CLI set commands",
+	Short: "Convert CSV object entries to CLI set commands",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		lines, err := easycsv.Open(f)
@@ -37,8 +38,16 @@ var objectsCliCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		txtfile, err := os.Create(txt)
+		if err != nil {
+			log.Printf("TXT file error - %s", err)
+			os.Exit(1)
+		}
+
+		defer txtfile.Close()
+
 		lc := len(lines)
-		log.Printf("Converting %d lines - this might take a few of minutes if you have a lot of objects", lc)
+		log.Printf("Converting %d lines - saving results to '%s'", lc, txt)
 
 		for i, line := range lines {
 			var command string
@@ -87,7 +96,12 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				fmt.Printf("%s", command)
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "range", "IP Range", "ip-range":
 				if value == "delete" {
 					if strings.Contains(devtype, "vsys") {
@@ -125,7 +139,12 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				fmt.Printf("%s", command)
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "fqdn", "FQDN", "Fqdn":
 				if value == "delete" {
 					if strings.Contains(devtype, "vsys") {
@@ -163,7 +182,12 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				fmt.Printf("%s", command)
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "tcp", "udp":
 				if value == "delete" {
 					if strings.Contains(devtype, "vsys") {
@@ -175,7 +199,7 @@ var objectsCliCmd = &cobra.Command{
 					}
 				} else {
 					if strings.Contains(devtype, "vsys") {
-						command = fmt.Sprintf("\nset service %s protocol %s %s", name, otype, value)
+						command = fmt.Sprintf("\nset service %s protocol %s port %s", name, otype, value)
 
 						if desc != "" {
 							command += fmt.Sprintf("\nset service %s description \"%s\"", name, desc)
@@ -188,7 +212,7 @@ var objectsCliCmd = &cobra.Command{
 					}
 
 					if !strings.Contains(devtype, "vsys") {
-						command = fmt.Sprintf("\nset device-group %s service %s protocol %s %s", devtype, name, otype, value)
+						command = fmt.Sprintf("\nset device-group %s service %s protocol %s port %s", devtype, name, otype, value)
 
 						if desc != "" {
 							command += fmt.Sprintf("\nset device-group %s service %s description \"%s\"", devtype, name, desc)
@@ -201,7 +225,12 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				fmt.Printf("%s", command)
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "service":
 				if value == "delete" {
 					if strings.Contains(devtype, "vsys") {
@@ -233,7 +262,12 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				fmt.Printf("%s", command)
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "static":
 				if value == "delete" {
 					if strings.Contains(devtype, "vsys") {
@@ -260,7 +294,7 @@ var objectsCliCmd = &cobra.Command{
 
 					if !strings.Contains(devtype, "vsys") {
 						members := stringToSlice(value)
-						command = fmt.Sprintf("\nset device-group %s service-group %s static [ %s ]", devtype, name, strings.Join(members, " "))
+						command = fmt.Sprintf("\nset device-group %s address-group %s static [ %s ]", devtype, name, strings.Join(members, " "))
 
 						if desc != "" {
 							command += fmt.Sprintf("\nset device-group %s address-group %s description \"%s\"", devtype, name, desc)
@@ -273,7 +307,12 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				fmt.Printf("%s", command)
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "dynamic":
 				if value == "delete" {
 					if strings.Contains(devtype, "vsys") {
@@ -311,41 +350,164 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				fmt.Printf("%s", command)
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "remove-address":
 				if len(value) <= 0 {
 					log.Printf("Line %d - you must specify a value to remove from group: %s", i+1, name)
 				}
 
-				// remove := stringToSlice(value)
+				if strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\ndelete address-group %s static %s", name, value)
+				}
 
+				if !strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\ndelete device-group %s address-group %s static %s", devtype, name, value)
+				}
+
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "remove-service":
 				if len(value) <= 0 {
 					log.Printf("Line %d - you must specify a value to remove from group: %s", i+1, name)
 				}
 
-				// remove := stringToSlice(value)
+				if strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\ndelete service-group %s members %s", name, value)
+				}
 
+				if !strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\ndelete device-group %s service-group %s members %s", devtype, name, value)
+				}
+
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "rename-address":
+				if strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\nrename address %s to %s", name, value)
+				}
 
+				if !strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\nrename device-group %s address %s to %s", devtype, name, value)
+				}
+
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "rename-addressgroup":
+				if strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\nrename address-group %s to %s", name, value)
+				}
 
+				if !strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\nrename device-group %s address-group %s to %s", devtype, name, value)
+				}
+
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "rename-service":
+				if strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\nrename service %s to %s", name, value)
+				}
 
+				if !strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\nrename device-group %s service %s to %s", devtype, name, value)
+				}
+
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "rename-servicegroup":
+				if strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\nrename service-group %s to %s", name, value)
+				}
 
+				if !strings.Contains(devtype, "vsys") {
+					command = fmt.Sprintf("\nrename device-group %s service-group %s to %s", devtype, name, value)
+				}
+
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
 			case "tag":
 				if value == "delete" {
-
-				} else {
-					if value == "None" || value == "none" || value == "color0" || value == "" {
-
-					} else {
-
+					if strings.Contains(devtype, "vsys") {
+						command = fmt.Sprintf("\ndelete tag %s", name)
 					}
 
+					if !strings.Contains(devtype, "vsys") {
+						command = fmt.Sprintf("\ndelete device-group %s tag %s", devtype, name)
+					}
+				} else {
+					if value == "None" || value == "none" || value == "color0" || value == "" {
+						if strings.Contains(devtype, "vsys") {
+							command = fmt.Sprintf("\nset tag %s color color0", name)
+
+							if desc != "" {
+								command += fmt.Sprintf("\nset tag %s comments \"%s\"", name, desc)
+							}
+						}
+
+						if !strings.Contains(devtype, "vsys") {
+							command = fmt.Sprintf("\nset device-group %s tag %s color color0", devtype, name)
+
+							if desc != "" {
+								command += fmt.Sprintf("\nset device-group %s tag %s comments \"%s\"", devtype, name, desc)
+							}
+						}
+					} else {
+						if strings.Contains(devtype, "vsys") {
+							command = fmt.Sprintf("\nset tag %s color %s", name, tag2color[value])
+
+							if desc != "" {
+								command += fmt.Sprintf("\nset tag %s comments \"%s\"", name, desc)
+							}
+						}
+
+						if !strings.Contains(devtype, "vsys") {
+							command = fmt.Sprintf("\nset device-group %s tag %s color %s", devtype, name, tag2color[value])
+
+							if desc != "" {
+								command += fmt.Sprintf("\nset device-group %s tag %s comments \"%s\"", devtype, name, desc)
+							}
+						}
+					}
+				}
+
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
 				}
 			}
+
+			txtfile.Sync()
 		}
 	},
 }
@@ -354,20 +516,7 @@ func init() {
 	objectsCmd.AddCommand(objectsCliCmd)
 
 	objectsCliCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to convert")
-
+	objectsCliCmd.Flags().StringVarP(&txt, "txt", "t", "", "Name of the TXT file to output SET commands")
 	objectsCliCmd.MarkFlagRequired("file")
-}
-
-func genDeleteCli(name, obj, devtype string) string {
-	var command string
-
-	if strings.Contains(devtype, "vsys") {
-		command = fmt.Sprintf("\ndelete %s %s", obj, name)
-	}
-
-	if !strings.Contains(devtype, "vsys") {
-		command = fmt.Sprintf("\ndelete device-group %s %s %s", devtype, obj, name)
-	}
-
-	return command
+	objectsCliCmd.MarkFlagRequired("txt")
 }
