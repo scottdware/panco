@@ -1,4 +1,4 @@
-# Converting CSV Entries to CLI Commands
+# Generate CLI Commands from a CSV File
 
 ```
 Usage:
@@ -12,7 +12,7 @@ Flags:
 
 ## Overview
 
-Using the cli command allows you to generate CLI "set" format commands from the CSV file that can be pasted into the device. For each type of action you want to perform,
+Using the cli command allows you to generate CLI set commands from the CSV file that can be pasted into the device. For each type of action you want to perform,
 you will need to make sure your CSV file is structured accordingly. Please use the following guide for this purpose:
 
 [CSV Structure for Object Actions](https://panco.dev/csvObjects.html)

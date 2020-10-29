@@ -20,6 +20,7 @@ Abilities include:
 * Get the hit count data on security, NAT or Policy-Based Forwarding (PBF) rules
 * Tag/untag IP addresses for use in dynamic address groups
 * Manually login/logout a user and map them to an IP address
+* Generate CLI set commands from a CSV file used for importing objects, policies
 
 ## Installation
 
