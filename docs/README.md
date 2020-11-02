@@ -13,6 +13,7 @@ and Panorama, which normally would be cumbersome having to do them one-by-one. F
 * Adding or removing objects from address and service groups
 * Finding duplicate address and service objects
 * Tag multiple objects
+* Deleting objects
 * Exporting a security, NAT or Policy-Based Forwarding (PBF) policy
 * Creating security, NAT or Policy-Based Forwarding (PBF) rules
 * Modifying security, NAT or Policy-Based Forwarding (PBF) rules - e.g. adding a Log Profile to all rules
