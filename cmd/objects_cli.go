@@ -516,7 +516,7 @@ func init() {
 	objectsCmd.AddCommand(objectsCliCmd)
 
 	objectsCliCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to convert")
-	objectsCliCmd.Flags().StringVarP(&txt, "txt", "t", "", "Name of the TXT file to output SET commands")
+	objectsCliCmd.Flags().StringVarP(&txt, "output", "o", "", "Name of the file to output SET commands to")
 	objectsCliCmd.MarkFlagRequired("file")
-	objectsCliCmd.MarkFlagRequired("txt")
+	objectsCliCmd.MarkFlagRequired("output")
 }
