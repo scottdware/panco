@@ -61,19 +61,17 @@ var objectsCliCmd = &cobra.Command{
 			switch otype {
 			case "ip", "IP Netmask", "ip-netmask":
 				if value == "delete" {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\ndelete address %s", name)
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\ndelete shared address %s", name)
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\ndelete device-group %s address %s", devtype, name)
 					}
 				} else {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\nset address %s ip-netmask %s", name, value)
 
 						if desc != "" {
@@ -84,9 +82,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset address %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\nset shared address %s ip-netmask %s", name, value)
 
 						if desc != "" {
@@ -97,9 +93,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset shared address %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\nset device-group %s address %s ip-netmask %s", devtype, name, value)
 
 						if desc != "" {
@@ -121,19 +115,17 @@ var objectsCliCmd = &cobra.Command{
 				}
 			case "range", "IP Range", "ip-range":
 				if value == "delete" {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\ndelete address %s", name)
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\ndelete shared address %s", name)
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\ndelete device-group %s address %s", devtype, name)
 					}
 				} else {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\nset address %s ip-range %s", name, value)
 
 						if desc != "" {
@@ -144,9 +136,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset address %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\nset shared address %s ip-range %s", name, value)
 
 						if desc != "" {
@@ -157,9 +147,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset shared address %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\nset device-group %s address %s ip-range %s", devtype, name, value)
 
 						if desc != "" {
@@ -181,19 +169,17 @@ var objectsCliCmd = &cobra.Command{
 				}
 			case "fqdn", "FQDN", "Fqdn":
 				if value == "delete" {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\ndelete address %s", name)
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\ndelete shared address %s", name)
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\ndelete device-group %s address %s", devtype, name)
 					}
 				} else {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\nset address %s fqdn %s", name, value)
 
 						if desc != "" {
@@ -204,9 +190,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset address %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\nset shared address %s fqdn %s", name, value)
 
 						if desc != "" {
@@ -217,9 +201,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset shared address %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\nset device-group %s address %s fqdn %s", devtype, name, value)
 
 						if desc != "" {
@@ -241,19 +223,17 @@ var objectsCliCmd = &cobra.Command{
 				}
 			case "tcp", "udp":
 				if value == "delete" {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\ndelete service %s", name)
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\ndelete shared service %s", name)
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\ndelete device-group %s service %s", devtype, name)
 					}
 				} else {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\nset service %s protocol %s port %s", name, otype, value)
 
 						if desc != "" {
@@ -264,9 +244,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset service %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\nset shared service %s protocol %s port %s", name, otype, value)
 
 						if desc != "" {
@@ -277,9 +255,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset shared service %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\nset device-group %s service %s protocol %s port %s", devtype, name, otype, value)
 
 						if desc != "" {
@@ -301,19 +277,17 @@ var objectsCliCmd = &cobra.Command{
 				}
 			case "service":
 				if value == "delete" {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\ndelete service-group %s", name)
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\ndelete shared service-group %s", name)
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\ndelete device-group %s service-group %s", devtype, name)
 					}
 				} else {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						members := stringToSlice(value)
 						command = fmt.Sprintf("\nset service-group %s members [ %s ]", name, strings.Join(members, " "))
 
@@ -321,9 +295,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset service-group %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						members := stringToSlice(value)
 						command = fmt.Sprintf("\nset shared service-group %s members [ %s ]", name, strings.Join(members, " "))
 
@@ -331,9 +303,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset shared service-group %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						members := stringToSlice(value)
 						command = fmt.Sprintf("\nset device-group %s service-group %s members [ %s ]", devtype, name, strings.Join(members, " "))
 
@@ -352,19 +322,17 @@ var objectsCliCmd = &cobra.Command{
 				}
 			case "static":
 				if value == "delete" {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\ndelete address-group %s", name)
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\ndelete shared address-group %s", name)
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\ndelete device-group %s address-group %s", devtype, name)
 					}
 				} else {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						members := stringToSlice(value)
 						command = fmt.Sprintf("\nset address-group %s static [ %s ]", name, strings.Join(members, " "))
 
@@ -376,9 +344,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset address-group %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						members := stringToSlice(value)
 						command = fmt.Sprintf("\nset shared address-group %s static [ %s ]", name, strings.Join(members, " "))
 
@@ -390,9 +356,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset shared address-group %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						members := stringToSlice(value)
 						command = fmt.Sprintf("\nset device-group %s address-group %s static [ %s ]", devtype, name, strings.Join(members, " "))
 
@@ -415,19 +379,17 @@ var objectsCliCmd = &cobra.Command{
 				}
 			case "dynamic":
 				if value == "delete" {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\ndelete address-group %s", name)
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\ndelete shared address-group %s", name)
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\ndelete device-group %s address-group %s", devtype, name)
 					}
 				} else {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\nset address-group %s dynamic filter \"%s\"", name, value)
 
 						if desc != "" {
@@ -438,9 +400,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset address-group %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\nset shared address-group %s dynamic filter \"%s\"", name, value)
 
 						if desc != "" {
@@ -451,9 +411,7 @@ var objectsCliCmd = &cobra.Command{
 							tags := stringToSlice(tg)
 							command += fmt.Sprintf("\nset shared address-group %s tag [ %s ]", name, strings.Join(tags, " "))
 						}
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\nset device-group %s address-group %s dynamic filter \"%s\"", devtype, name, value)
 
 						if desc != "" {
@@ -478,15 +436,12 @@ var objectsCliCmd = &cobra.Command{
 					log.Printf("Line %d - you must specify a value to remove from group: %s", i+1, name)
 				}
 
-				if strings.Contains(devtype, "vsys") {
+				switch devtype {
+				case "vsys1":
 					command = fmt.Sprintf("\ndelete address-group %s static %s", name, value)
-				}
-
-				if strings.ToLower(devtype) == "shared" {
+				case "shared":
 					command = fmt.Sprintf("\ndelete shared address-group %s static %s", name, value)
-				}
-
-				if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+				default:
 					command = fmt.Sprintf("\ndelete device-group %s address-group %s static %s", devtype, name, value)
 				}
 
@@ -501,15 +456,12 @@ var objectsCliCmd = &cobra.Command{
 					log.Printf("Line %d - you must specify a value to remove from group: %s", i+1, name)
 				}
 
-				if strings.Contains(devtype, "vsys") {
+				switch devtype {
+				case "vsys1":
 					command = fmt.Sprintf("\ndelete service-group %s members %s", name, value)
-				}
-
-				if strings.ToLower(devtype) == "shared" {
+				case "shared":
 					command = fmt.Sprintf("\ndelete shared service-group %s members %s", name, value)
-				}
-
-				if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+				default:
 					command = fmt.Sprintf("\ndelete device-group %s service-group %s members %s", devtype, name, value)
 				}
 
@@ -520,15 +472,12 @@ var objectsCliCmd = &cobra.Command{
 					log.Printf("Failed to write to TXT file - %s", err)
 				}
 			case "rename-address":
-				if strings.Contains(devtype, "vsys") {
+				switch devtype {
+				case "vsys1":
 					command = fmt.Sprintf("\nrename address %s to %s", name, value)
-				}
-
-				if strings.ToLower(devtype) == "shared" {
+				case "shared":
 					command = fmt.Sprintf("\nrename shared address %s to %s", name, value)
-				}
-
-				if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+				default:
 					command = fmt.Sprintf("\nrename device-group %s address %s to %s", devtype, name, value)
 				}
 
@@ -539,15 +488,12 @@ var objectsCliCmd = &cobra.Command{
 					log.Printf("Failed to write to TXT file - %s", err)
 				}
 			case "rename-addressgroup":
-				if strings.Contains(devtype, "vsys") {
+				switch devtype {
+				case "vsys1":
 					command = fmt.Sprintf("\nrename address-group %s to %s", name, value)
-				}
-
-				if strings.ToLower(devtype) == "shared" {
+				case "shared":
 					command = fmt.Sprintf("\nrename shared address-group %s to %s", name, value)
-				}
-
-				if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+				default:
 					command = fmt.Sprintf("\nrename device-group %s address-group %s to %s", devtype, name, value)
 				}
 
@@ -558,15 +504,12 @@ var objectsCliCmd = &cobra.Command{
 					log.Printf("Failed to write to TXT file - %s", err)
 				}
 			case "rename-service":
-				if strings.Contains(devtype, "vsys") {
+				switch devtype {
+				case "vsys1":
 					command = fmt.Sprintf("\nrename service %s to %s", name, value)
-				}
-
-				if strings.ToLower(devtype) == "shared" {
+				case "shared":
 					command = fmt.Sprintf("\nrename shared service %s to %s", name, value)
-				}
-
-				if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+				default:
 					command = fmt.Sprintf("\nrename device-group %s service %s to %s", devtype, name, value)
 				}
 
@@ -577,15 +520,12 @@ var objectsCliCmd = &cobra.Command{
 					log.Printf("Failed to write to TXT file - %s", err)
 				}
 			case "rename-servicegroup":
-				if strings.Contains(devtype, "vsys") {
+				switch devtype {
+				case "vsys1":
 					command = fmt.Sprintf("\nrename service-group %s to %s", name, value)
-				}
-
-				if strings.ToLower(devtype) == "shared" {
+				case "shared":
 					command = fmt.Sprintf("\nrename shared service-group %s to %s", name, value)
-				}
-
-				if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+				default:
 					command = fmt.Sprintf("\nrename device-group %s service-group %s to %s", devtype, name, value)
 				}
 
@@ -597,36 +537,30 @@ var objectsCliCmd = &cobra.Command{
 				}
 			case "tag":
 				if value == "delete" {
-					if strings.Contains(devtype, "vsys") {
+					switch devtype {
+					case "vsys1":
 						command = fmt.Sprintf("\ndelete tag %s", name)
-					}
-
-					if strings.ToLower(devtype) == "shared" {
+					case "shared":
 						command = fmt.Sprintf("\ndelete shared tag %s", name)
-					}
-
-					if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+					default:
 						command = fmt.Sprintf("\ndelete device-group %s tag %s", devtype, name)
 					}
 				} else {
 					if value == "None" || value == "none" || value == "color0" || value == "" {
-						if strings.Contains(devtype, "vsys") {
+						switch devtype {
+						case "vsys1":
 							command = fmt.Sprintf("\nset tag %s color color0", name)
 
 							if desc != "" {
 								command += fmt.Sprintf("\nset tag %s comments \"%s\"", name, desc)
 							}
-						}
-
-						if strings.ToLower(devtype) == "shared" {
+						case "shared":
 							command = fmt.Sprintf("\nset shared tag %s color color0", name)
 
 							if desc != "" {
 								command += fmt.Sprintf("\nset shared tag %s comments \"%s\"", name, desc)
 							}
-						}
-
-						if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+						default:
 							command = fmt.Sprintf("\nset device-group %s tag %s color color0", devtype, name)
 
 							if desc != "" {
@@ -634,23 +568,20 @@ var objectsCliCmd = &cobra.Command{
 							}
 						}
 					} else {
-						if strings.Contains(devtype, "vsys") {
+						switch devtype {
+						case "vsys1":
 							command = fmt.Sprintf("\nset tag %s color %s", name, tag2color[value])
 
 							if desc != "" {
 								command += fmt.Sprintf("\nset tag %s comments \"%s\"", name, desc)
 							}
-						}
-
-						if strings.ToLower(devtype) == "shared" {
+						case "shared":
 							command = fmt.Sprintf("\nset shared tag %s color %s", name, tag2color[value])
 
 							if desc != "" {
 								command += fmt.Sprintf("\nset shared tag %s comments \"%s\"", name, desc)
 							}
-						}
-
-						if !strings.Contains(devtype, "vsys") || !strings.Contains(devtype, "hared") {
+						default:
 							command = fmt.Sprintf("\nset device-group %s tag %s color %s", devtype, name, tag2color[value])
 
 							if desc != "" {
