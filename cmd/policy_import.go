@@ -433,4 +433,5 @@ func init() {
 	policyImportCmd.MarkFlagRequired("device")
 	policyImportCmd.MarkFlagRequired("file")
 	policyImportCmd.MarkFlagRequired("type")
+	policyImportCmd.MarkFlagRequired("location")
 }
