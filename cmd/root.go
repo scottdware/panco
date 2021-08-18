@@ -32,7 +32,7 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 )
 
-var cfgFile, srcrule, mvwhere, targetrule, pass string
+var cfgFile, srcrule, mvwhere, targetrule, pass, txt string
 var action, dg, user, device, f, t, query, l, v, source, ostype, config string
 var load, multiple, xlate, hit bool
 

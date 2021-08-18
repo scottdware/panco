@@ -164,3 +164,16 @@ enclosed in quotes `""`, e.g.:
 ```
 "Windows-Server, Internet-Access"
 ```
+
+## Deleting Objects
+
+You can delete objects from devices using the following format in your CSV file:
+
+Column | Description
+:--- | :---
+Name | Name of the object you wish to delete.
+Type | This must be one of the object types you can specifcy, such as `ip`, `fqdn`, `tcp`, etc..
+Value | `delete`
+Description | Not used for object deletion - leave blank.
+Tags | Not used for object deletion - leave blank.
+Device Group/Vsys | Name of the device-group/vsys, or **shared** if deleting a shared object.

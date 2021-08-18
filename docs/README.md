@@ -13,6 +13,7 @@ and Panorama, which normally would be cumbersome having to do them one-by-one. F
 * Adding or removing objects from address and service groups
 * Finding duplicate address and service objects
 * Tag multiple objects
+* Deleting objects
 * Exporting a security, NAT or Policy-Based Forwarding (PBF) policy
 * Creating security, NAT or Policy-Based Forwarding (PBF) rules
 * Modifying security, NAT or Policy-Based Forwarding (PBF) rules - e.g. adding a Log Profile to all rules
@@ -21,6 +22,7 @@ and Panorama, which normally would be cumbersome having to do them one-by-one. F
 * Get the hit count data on security, NAT or Policy-Based Forwarding (PBF) rules
 * Tag/untag IP addresses for use in dynamic address groups
 * Manually login/logout a user and map them to an IP address
+* Generate CLI set commands from a CSV file used for importing objects, policies
 
 > **_NOTE_**: Your account must have API access to the devices in order to use this tool
 

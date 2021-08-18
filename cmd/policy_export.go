@@ -35,11 +35,20 @@ var policyExportCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 
+		// fmt.Println("Enter password:")
+		// passwd, err := terminal.ReadPassword(int(syscall.Stdin))
+		// if err != nil {
+		// 	log.Printf("Failed to read password: %s", err)
+		// }
+
+		// fmt.Println(string(passwd))
+
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
 			Password: pass,
-			Logging:  pango.LogQuiet,
+			// Password: string(passwd),
+			Logging: pango.LogQuiet,
 		}
 
 		con, err := pango.Connect(cl)
@@ -110,6 +119,7 @@ func init() {
 	policyExportCmd.MarkFlagRequired("device")
 	policyExportCmd.MarkFlagRequired("file")
 	policyExportCmd.MarkFlagRequired("type")
+	policyExportCmd.MarkFlagRequired("location")
 }
 
 // getFwSecPol is used to export the Security policy on a firewall
