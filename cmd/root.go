@@ -22,9 +22,9 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
-	"syscall"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -186,16 +186,21 @@ func initConfig() {
 	}
 }
 
-func passwd() string {
-	fmt.Print("Enter Password: ")
-	bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
+func getPassword() string {
+	// fmt.Print("Enter Password: ")
+	// bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// password := string(bytePassword)
+	// fmt.Println()
+	fmt.Printf("Enter password: ")
+	password, err := terminal.ReadPassword(int(os.Stdin.Fd()))
 	if err != nil {
-		fmt.Println(err)
+		log.Printf("Error reading password: %s", err)
 	}
-	password := string(bytePassword)
-	fmt.Println()
 
-	return strings.TrimSpace(password)
+	return strings.TrimSpace(string(password))
 }
 
 func sliceToString(slice []string) string {
