@@ -35,20 +35,11 @@ var policyExportCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 
-		// fmt.Println("Enter password:")
-		// passwd, err := terminal.ReadPassword(int(syscall.Stdin))
-		// if err != nil {
-		// 	log.Printf("Failed to read password: %s", err)
-		// }
-
-		// fmt.Println(string(passwd))
-
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
 			Password: pass,
-			// Password: string(passwd),
-			Logging: pango.LogQuiet,
+			Logging:  pango.LogQuiet,
 		}
 
 		con, err := pango.Connect(cl)
