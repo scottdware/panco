@@ -73,9 +73,20 @@ var policyImportCmd = &cobra.Command{
 						"false": false,
 					}
 
+					ruletype := rule[1]
+					apps := rule[12]
+
+					if len(ruletype) <= 0 {
+						ruletype = "universal"
+					}
+
+					if len(apps) <= 0 {
+						apps = "any"
+					}
+
 					e := security.Entry{
 						Name:                            rule[0],
-						Type:                            rule[1],
+						Type:                            ruletype,
 						Description:                     rule[2],
 						Tags:                            stringToSlice(rule[3]),
 						SourceZones:                     stringToSlice(rule[4]),
@@ -86,7 +97,7 @@ var policyImportCmd = &cobra.Command{
 						DestinationZones:                stringToSlice(rule[9]),
 						DestinationAddresses:            stringToSlice(rule[10]),
 						NegateDestination:               boolopt[rule[11]],
-						Applications:                    stringToSlice(rule[12]),
+						Applications:                    stringToSlice(apps),
 						Services:                        stringToSlice(rule[13]),
 						Categories:                      stringToSlice(rule[14]),
 						Action:                          rule[15],
@@ -138,9 +149,15 @@ var policyImportCmd = &cobra.Command{
 						log.Printf("Line %d - only NAT type 'ipv4' is supported", i+1)
 					}
 
+					ruletype := rule[1]
+
+					if len(ruletype) <= 0 {
+						ruletype = "universal"
+					}
+
 					e := nat.Entry{
 						Name:                           rule[0],
-						Type:                           rule[1],
+						Type:                           ruletype,
 						Description:                    rule[2],
 						Tags:                           stringToSlice(rule[3]),
 						SourceZones:                    stringToSlice(rule[4]),
@@ -257,9 +274,20 @@ var policyImportCmd = &cobra.Command{
 						"false": false,
 					}
 
+					ruletype := rule[1]
+					apps := rule[12]
+
+					if len(ruletype) <= 0 {
+						ruletype = "universal"
+					}
+
+					if len(apps) <= 0 {
+						apps = "any"
+					}
+
 					e := security.Entry{
 						Name:                            rule[0],
-						Type:                            rule[1],
+						Type:                            ruletype,
 						Description:                     rule[2],
 						Tags:                            stringToSlice(rule[3]),
 						SourceZones:                     stringToSlice(rule[4]),
@@ -270,7 +298,7 @@ var policyImportCmd = &cobra.Command{
 						DestinationZones:                stringToSlice(rule[9]),
 						DestinationAddresses:            stringToSlice(rule[10]),
 						NegateDestination:               boolopt[rule[11]],
-						Applications:                    stringToSlice(rule[12]),
+						Applications:                    stringToSlice(apps),
 						Services:                        stringToSlice(rule[13]),
 						Categories:                      stringToSlice(rule[14]),
 						Action:                          rule[15],
@@ -322,9 +350,15 @@ var policyImportCmd = &cobra.Command{
 						log.Printf("Line %d - only NAT type 'ipv4' is supported", i+1)
 					}
 
+					ruletype := rule[1]
+
+					if len(ruletype) <= 0 {
+						ruletype = "universal"
+					}
+
 					e := nat.Entry{
 						Name:                           rule[0],
-						Type:                           rule[1],
+						Type:                           ruletype,
 						Description:                    rule[2],
 						Tags:                           stringToSlice(rule[3]),
 						SourceZones:                    stringToSlice(rule[4]),
