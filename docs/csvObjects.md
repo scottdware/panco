@@ -76,6 +76,9 @@ Description | Not used - leave blank.
 Tags | Not used - leave blank.
 Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
 
+> **_NOTE_**: If you are removing a lot of objects from a group at once, I would recommend breaking up the removal over a
+> couple of lines, instead of putting all the objects you want to remove on one line.
+
 ## Creating or Modifying Service Objects
 
 Column | Description
@@ -120,6 +123,9 @@ Value | Must contain a comma, or semicolon separated list of members to remove f
 Description | Not used - leave blank.
 Tags | Not used - leave blank.
 Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
+
+> **_NOTE_**: If you are removing a lot of objects from a group at once, I would recommend breaking up the removal over a
+> couple of lines, instead of putting all the objects you want to remove on one line.
 
 ## Creating Tags
 

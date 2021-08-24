@@ -112,7 +112,7 @@ Column | Description
 Rule Name | Name of the rule you wish to order-by tag.
 Tag | Name of the tag you wish to group rules by - MUST be pre-existing on the device.
 
-If you want to do this on an existing rulebase, the easiest way is to first export the policy that you want, then, remove all of the other columns outside of the `Name` column and then add in what Tags you want applied to each rule to group them by. Once you have your file all set, run the following command:
+If you want to do this on an existing rulebase, the easiest way is to first export the policy that you want, then, remove all of the other columns outside of the `Name` and `Tag` columns and then add in what tags you want applied to each rule to group them by. Once you have your file all set, run the following command:
 
 ```
 panco policy group --file <name-of-CSV-file> --type <security|nat>
