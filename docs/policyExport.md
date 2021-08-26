@@ -9,7 +9,6 @@ Flags:
   -g, --devicegroup string   Device Group name when exporting from Panorama (default "shared")
   -f, --file string          Name of the CSV file you'd like to export to (default "PaloAltoPolicy")
   -h, --help                 help for export
-  -p, --pass string          Password for the user account specified
   -t, --type string          Type of policy to export - <security|nat|pbf|all>
   -u, --user string          User to connect to the device as
   -v, --vsys string          Vsys name when exporting from a firewall (default "vsys1")

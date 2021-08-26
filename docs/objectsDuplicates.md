@@ -9,7 +9,6 @@ Flags:
   -g, --devicegroup string   Device Group name when exporting from Panorama (default "shared")
   -f, --file string          Name of the output file (you don't need an extension) (default "PaloAltoDuplicates")
   -h, --help                 help for duplicates
-  -p, --pass string          Password for the user account specified
   -t, --type string          <address|service|all>
   -u, --user string          User to connect to the device as
   -v, --vsys string          Vsys name when exporting from a firewall (default "vsys1")

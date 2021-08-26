@@ -8,7 +8,6 @@ Flags:
   -d, --device string   Firewall or Panorama device to connect to
   -f, --file string     Name of the CSV file
   -h, --help            help for move
-  -p, --pass string     Password for the user account specified
   -u, --user string     User to connect to the device as
 ```
 

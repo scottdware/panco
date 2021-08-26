@@ -8,7 +8,6 @@ Flags:
   -d, --device string   Device to connect to
   -f, --file string     Name of the CSV file to import
   -h, --help            help for login
-  -p, --pass string     Password for the user account specified
   -u, --user string     User to connect to the device as
   -v, --vsys string     Vsys name (default "vsys1")
 ```

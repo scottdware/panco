@@ -1,7 +1,7 @@
 # About panco
 
 * `panco` is written using the [Go](https://golang.org) programming language
-* The underlying library behind it Palo Alto's [pango library](https://github.com/PaloAltoNetworks/pango)
+* The underlying library behind it Palo Alto's [pango library](https://github.com/PaloAltoNetworks/pango), as well as a few custom API calls.
 
 ## How It Works
 

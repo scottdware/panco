@@ -8,7 +8,6 @@ Flags:
   -d, --device string   Device to connect to
   -f, --file string     Name of the CSV file you'd like to export to (default "PaloAltoPolicy")
   -h, --help            help for hitcount
-  -p, --pass string     Password for the user account specified
   -t, --type string     Type of policy to gather hit count on - <security|nat|pbf|all>
   -u, --user string     User to connect to the device as
   -v, --vsys string     Vsys name when exporting from a firewall (default "vsys1")

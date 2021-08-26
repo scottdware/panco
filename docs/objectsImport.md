@@ -8,7 +8,6 @@ Flags:
   -d, --device string   Device to connect to
   -f, --file string     Name of the CSV file to import
   -h, --help            help for import
-  -p, --pass string     Password for the user account specified
   -u, --user string     User to connect to the device as
   ```
 

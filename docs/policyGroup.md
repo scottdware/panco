@@ -9,7 +9,6 @@ Flags:
   -g, --devicegroup string   Device Group name (default "shared")
   -f, --file string          Name of the CSV file
   -h, --help                 help for group
-  -p, --pass string          Password for the user account specified
   -t, --type string          <security|nat|pbf>
   -u, --user string          User to connect to the device as
   -v, --vsys string          Vsys name (default "vsys1")
