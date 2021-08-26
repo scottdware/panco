@@ -22,14 +22,12 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"golang.org/x/crypto/ssh/terminal"
 )
 
 var cfgFile, srcrule, mvwhere, targetrule, pass, txt string
@@ -184,23 +182,6 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
-}
-
-func getPassword() string {
-	// fmt.Print("Enter Password: ")
-	// bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// password := string(bytePassword)
-	// fmt.Println()
-	fmt.Printf("Enter password: ")
-	password, err := terminal.ReadPassword(int(os.Stdin.Fd()))
-	if err != nil {
-		log.Printf("Error reading password: %s", err)
-	}
-
-	return strings.TrimSpace(string(password))
 }
 
 func sliceToString(slice []string) string {

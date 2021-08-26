@@ -23,6 +23,7 @@ import (
 
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/Songmu/prompter"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
 	"gopkg.in/resty.v1"
@@ -36,11 +37,13 @@ var policyMoveCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
+		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
+		_ = passwd
 
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
-			Password: pass,
+			Password: passwd,
 			Logging:  pango.LogQuiet,
 		}
 
@@ -184,10 +187,10 @@ func init() {
 
 	policyMoveCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file")
 	policyMoveCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	policyMoveCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	// policyMoveCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyMoveCmd.Flags().StringVarP(&device, "device", "d", "", "Firewall or Panorama device to connect to")
 	policyMoveCmd.MarkFlagRequired("user")
-	policyMoveCmd.MarkFlagRequired("pass")
+	// policyMoveCmd.MarkFlagRequired("pass")
 	policyMoveCmd.MarkFlagRequired("device")
 	policyMoveCmd.MarkFlagRequired("file")
 }

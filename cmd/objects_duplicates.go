@@ -24,6 +24,7 @@ import (
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/PaloAltoNetworks/pango"
+	"github.com/Songmu/prompter"
 	"github.com/spf13/cobra"
 	"gopkg.in/resty.v1"
 )
@@ -39,11 +40,13 @@ var objectsDuplicatesCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
+		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
+		_ = passwd
 
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
-			Password: pass,
+			Password: passwd,
 			Logging:  pango.LogQuiet,
 		}
 
@@ -644,14 +647,14 @@ func init() {
 	// objectsDuplicatesCmd.Flags().StringVarP(&dupfind, "find", "s", "", "Object type to run duplicate actions against")
 	// objectsDuplicatesCmd.Flags().StringVarP(&dupremove, "remove", "r", "", "Object type to remove duplicates for")
 	objectsDuplicatesCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	objectsDuplicatesCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	// objectsDuplicatesCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	objectsDuplicatesCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	objectsDuplicatesCmd.Flags().StringVarP(&f, "file", "f", "PaloAltoDuplicates", "Name of the output file (you don't need an extension)")
 	objectsDuplicatesCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
 	objectsDuplicatesCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when exporting from a firewall")
 	objectsDuplicatesCmd.Flags().StringVarP(&t, "type", "t", "", "<address|service|all>")
 	objectsDuplicatesCmd.MarkFlagRequired("user")
-	objectsDuplicatesCmd.MarkFlagRequired("pass")
+	// objectsDuplicatesCmd.MarkFlagRequired("pass")
 	objectsDuplicatesCmd.MarkFlagRequired("device")
 	objectsDuplicatesCmd.MarkFlagRequired("file")
 }

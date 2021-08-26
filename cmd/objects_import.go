@@ -29,6 +29,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/srvc"
 	"github.com/PaloAltoNetworks/pango/objs/srvcgrp"
 	"github.com/PaloAltoNetworks/pango/objs/tags"
+	"github.com/Songmu/prompter"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
 	"gopkg.in/resty.v1"
@@ -43,11 +44,13 @@ var objectsImportCmd = &cobra.Command{
 		var err error
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 		keyrexp := regexp.MustCompile(`key=([0-9A-Za-z\=]+).*`)
+		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
+		_ = passwd
 
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
-			Password: pass,
+			Password: passwd,
 			Logging:  pango.LogQuiet,
 		}
 
@@ -674,13 +677,13 @@ func init() {
 	objectsCmd.AddCommand(objectsImportCmd)
 
 	objectsImportCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	objectsImportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	// objectsImportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	objectsImportCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	objectsImportCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to import")
 	// objectsImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
 	// objectsImportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when exporting from a firewall")
 	objectsImportCmd.MarkFlagRequired("user")
-	objectsImportCmd.MarkFlagRequired("pass")
+	// objectsImportCmd.MarkFlagRequired("pass")
 	objectsImportCmd.MarkFlagRequired("device")
 	objectsImportCmd.MarkFlagRequired("file")
 }

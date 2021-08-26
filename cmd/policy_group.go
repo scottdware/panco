@@ -24,6 +24,7 @@ import (
 
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/Songmu/prompter"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
 	"gopkg.in/resty.v1"
@@ -38,11 +39,13 @@ var policyGroupCmd = &cobra.Command{
 		var err error
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 		keyrexp := regexp.MustCompile(`key=([0-9A-Za-z\=]+).*`)
+		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
+		_ = passwd
 
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
-			Password: pass,
+			Password: passwd,
 			Logging:  pango.LogQuiet,
 		}
 
@@ -244,14 +247,14 @@ func init() {
 	policyCmd.AddCommand(policyGroupCmd)
 
 	policyGroupCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	policyGroupCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	// policyGroupCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyGroupCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	policyGroupCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file")
 	policyGroupCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name")
 	policyGroupCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name")
 	policyGroupCmd.Flags().StringVarP(&t, "type", "t", "", "<security|nat|pbf>")
 	policyGroupCmd.MarkFlagRequired("user")
-	policyGroupCmd.MarkFlagRequired("pass")
+	// policyGroupCmd.MarkFlagRequired("pass")
 	policyGroupCmd.MarkFlagRequired("device")
 	policyGroupCmd.MarkFlagRequired("file")
 	policyGroupCmd.MarkFlagRequired("type")

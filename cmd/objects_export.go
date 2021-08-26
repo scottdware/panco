@@ -23,6 +23,7 @@ import (
 	"strings"
 
 	"github.com/PaloAltoNetworks/pango"
+	"github.com/Songmu/prompter"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
 	"gopkg.in/resty.v1"
@@ -36,11 +37,13 @@ var objectsExportCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
+		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
+		_ = passwd
 
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
-			Password: pass,
+			Password: passwd,
 			Logging:  pango.LogQuiet,
 		}
 
@@ -131,14 +134,14 @@ func init() {
 	objectsCmd.AddCommand(objectsExportCmd)
 
 	objectsExportCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	objectsExportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	// objectsExportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	objectsExportCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	objectsExportCmd.Flags().StringVarP(&f, "file", "f", "PaloAltoObjects", "Name of the CSV file you'd like to export to")
 	objectsExportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name")
 	objectsExportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name")
 	objectsExportCmd.Flags().StringVarP(&t, "type", "t", "", "<address|addressgroup|service|servicegroup|tags|all>")
 	objectsExportCmd.MarkFlagRequired("user")
-	objectsExportCmd.MarkFlagRequired("pass")
+	// objectsExportCmd.MarkFlagRequired("pass")
 	objectsExportCmd.MarkFlagRequired("device")
 	objectsExportCmd.MarkFlagRequired("file")
 	objectsExportCmd.MarkFlagRequired("type")

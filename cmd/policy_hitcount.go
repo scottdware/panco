@@ -24,6 +24,7 @@ import (
 	"time"
 
 	"github.com/PaloAltoNetworks/pango"
+	"github.com/Songmu/prompter"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
 )
@@ -53,11 +54,13 @@ var policyHitCountCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
+		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
+		_ = passwd
 
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
-			Password: pass,
+			Password: passwd,
 			Logging:  pango.LogQuiet,
 		}
 
@@ -119,14 +122,14 @@ func init() {
 	policyCmd.AddCommand(policyHitCountCmd)
 
 	policyHitCountCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	policyHitCountCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	// policyHitCountCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyHitCountCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	policyHitCountCmd.Flags().StringVarP(&f, "file", "f", "PaloAltoPolicy", "Name of the CSV file you'd like to export to")
 	// policyHitCountCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
 	policyHitCountCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when exporting from a firewall")
 	policyHitCountCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to gather hit count on - <security|nat|pbf|all>")
 	policyHitCountCmd.MarkFlagRequired("user")
-	policyHitCountCmd.MarkFlagRequired("pass")
+	// policyHitCountCmd.MarkFlagRequired("pass")
 	policyHitCountCmd.MarkFlagRequired("device")
 	policyHitCountCmd.MarkFlagRequired("file")
 	policyHitCountCmd.MarkFlagRequired("type")

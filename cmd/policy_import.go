@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"crypto/tls"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -26,6 +27,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/poli/pbf"
 	"github.com/PaloAltoNetworks/pango/poli/security"
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/Songmu/prompter"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
 	"gopkg.in/resty.v1"
@@ -39,11 +41,13 @@ var policyImportCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
+		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
+		_ = passwd
 
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
-			Password: pass,
+			Password: passwd,
 			Logging:  pango.LogQuiet,
 		}
 
@@ -455,7 +459,7 @@ func init() {
 	policyCmd.AddCommand(policyImportCmd)
 
 	policyImportCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	policyImportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	// policyImportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyImportCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	policyImportCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to export to")
 	policyImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
@@ -463,7 +467,7 @@ func init() {
 	policyImportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import")
 	policyImportCmd.Flags().StringVarP(&l, "location", "l", "post", "Location of the rulebase - <pre|post>")
 	policyImportCmd.MarkFlagRequired("user")
-	policyImportCmd.MarkFlagRequired("pass")
+	// policyImportCmd.MarkFlagRequired("pass")
 	policyImportCmd.MarkFlagRequired("device")
 	policyImportCmd.MarkFlagRequired("file")
 	policyImportCmd.MarkFlagRequired("type")

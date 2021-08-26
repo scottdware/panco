@@ -16,12 +16,14 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"regexp"
 
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/PaloAltoNetworks/pango/userid"
+	"github.com/Songmu/prompter"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
 )
@@ -34,11 +36,13 @@ var useridTagCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		ipmatch := regexp.MustCompile(`\d+\.\d+\.\d+\.\d+`)
+		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
+		_ = passwd
 
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
-			Password: pass,
+			Password: passwd,
 			Logging:  pango.LogQuiet,
 		}
 
@@ -142,12 +146,12 @@ func init() {
 	useridCmd.AddCommand(useridTagCmd)
 
 	useridTagCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	useridTagCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	// useridTagCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	useridTagCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	useridTagCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to import")
 	useridTagCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name")
 	useridTagCmd.MarkFlagRequired("user")
-	useridTagCmd.MarkFlagRequired("pass")
+	// useridTagCmd.MarkFlagRequired("pass")
 	useridTagCmd.MarkFlagRequired("device")
 	useridTagCmd.MarkFlagRequired("file")
 	useridTagCmd.MarkFlagRequired("vsys")

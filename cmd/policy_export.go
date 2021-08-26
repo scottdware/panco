@@ -23,6 +23,7 @@ import (
 
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/Songmu/prompter"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
 )
@@ -34,11 +35,13 @@ var policyExportCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
+		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
+		_ = passwd
 
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
-			Password: pass,
+			Password: passwd,
 			Logging:  pango.LogQuiet,
 		}
 
@@ -98,7 +101,7 @@ func init() {
 	policyCmd.AddCommand(policyExportCmd)
 
 	policyExportCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	policyExportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	// policyExportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyExportCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	policyExportCmd.Flags().StringVarP(&f, "file", "f", "PaloAltoPolicy", "Name of the CSV file you'd like to export to")
 	policyExportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
@@ -106,7 +109,7 @@ func init() {
 	policyExportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to export - <security|nat|pbf|all>")
 	policyExportCmd.Flags().StringVarP(&l, "location", "l", "post", "Location of the rulebase - <pre|post>")
 	policyExportCmd.MarkFlagRequired("user")
-	policyExportCmd.MarkFlagRequired("pass")
+	// policyExportCmd.MarkFlagRequired("pass")
 	policyExportCmd.MarkFlagRequired("device")
 	policyExportCmd.MarkFlagRequired("file")
 	policyExportCmd.MarkFlagRequired("type")

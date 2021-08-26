@@ -16,11 +16,13 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/PaloAltoNetworks/pango/userid"
+	"github.com/Songmu/prompter"
 	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
 )
@@ -32,11 +34,13 @@ var useridLoginCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
+		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
+		_ = passwd
 
 		cl := pango.Client{
 			Hostname: device,
 			Username: user,
-			Password: pass,
+			Password: passwd,
 			Logging:  pango.LogQuiet,
 		}
 
@@ -131,12 +135,12 @@ func init() {
 	useridCmd.AddCommand(useridLoginCmd)
 
 	useridLoginCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	useridLoginCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	// useridLoginCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	useridLoginCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	useridLoginCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to import")
 	useridLoginCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name")
 	useridLoginCmd.MarkFlagRequired("user")
-	useridLoginCmd.MarkFlagRequired("pass")
+	// useridLoginCmd.MarkFlagRequired("pass")
 	useridLoginCmd.MarkFlagRequired("device")
 	useridLoginCmd.MarkFlagRequired("file")
 	useridLoginCmd.MarkFlagRequired("vsys")
