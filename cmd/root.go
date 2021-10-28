@@ -21,6 +21,7 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"strings"
@@ -30,7 +31,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile, srcrule, mvwhere, targetrule, pass, txt string
+var cfgFile, srcrule, mvwhere, targetrule, pass, txt, onlyrules string
 var action, dg, user, device, f, t, query, l, v, source, ostype, config string
 var load, multiple, xlate, hit bool
 
@@ -253,4 +254,25 @@ func formatDesc(str string) string {
 	s = strings.ReplaceAll(s, "\n", " ")
 
 	return s
+}
+
+func txtToSlice(file string) ([]string, error) {
+	var rules []string
+	f, err := os.Open(file)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to open rules text file - %s", err)
+	}
+
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		rules = append(rules, scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("Error reading file contents - %s", err)
+	}
+
+	return rules, nil
 }
