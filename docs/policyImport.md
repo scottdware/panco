@@ -6,13 +6,13 @@ Usage:
 
 Flags:
   -d, --device string        Device to connect to
-  -g, --devicegroup string   Device Group name when exporting from Panorama (default "shared")
+  -g, --devicegroup string   Device Group name when importing to Panorama (default "shared")
   -f, --file string          Name of the CSV file to export to
   -h, --help                 help for import
-  -l, --location string      Location of the rulebase - <pre|post> (default "post")
+  -l, --location string      Location of the rulebase - <pre|post> (default "pre")
   -t, --type string          Type of policy to import
   -u, --user string          User to connect to the device as
-  -v, --vsys string          Vsys name when exporting from a firewall (default "vsys1")
+  -v, --vsys string          Vsys name when importing to a firewall (default "vsys1")
 ```
 
 ## Overview
