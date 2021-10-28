@@ -29,7 +29,7 @@ you'd like to export in a text file, one on each line, and then referencing that
 
 **Example Text File Contents**
 
-<_rules.txt_>
+Say you have the following file called `rules.txt` with the below contents:
 
 ```
 Allow-DNS
