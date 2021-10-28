@@ -76,7 +76,7 @@ var policyExportCmd = &cobra.Command{
 			case "post":
 				l = util.PostRulebase
 			default:
-				l = util.PostRulebase
+				l = util.PreRulebase
 			}
 
 			// Security policy
@@ -107,7 +107,8 @@ func init() {
 	policyExportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
 	policyExportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when exporting from a firewall")
 	policyExportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to export - <security|nat|pbf|all>")
-	policyExportCmd.Flags().StringVarP(&l, "location", "l", "post", "Location of the rulebase - <pre|post>")
+	policyExportCmd.Flags().StringVarP(&l, "location", "l", "pre", "Location of the rulebase - <pre|post>")
+	policyExportCmd.Flags().StringVarP(&onlyrules, "rules", "r", "", "[OPTIONAL] Only export these specific rules - specify text file")
 	policyExportCmd.MarkFlagRequired("user")
 	// policyExportCmd.MarkFlagRequired("pass")
 	policyExportCmd.MarkFlagRequired("device")
@@ -138,38 +139,80 @@ func getFwSecPol(c *pango.Firewall, file string, hitcount bool) {
 		return
 	}
 
-	log.Printf("Exporting %d Security rules", rc)
-
 	cfh.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
 	cfh.Write("DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,")
 	cfh.Write("Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,")
 	cfh.Write("Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
-	for _, rule := range rules {
-		var rtype string
-		r, err := c.Policies.Security.Get(v, rule)
+
+	if len(onlyrules) > 0 {
+		inclrules, err := txtToSlice(onlyrules)
 		if err != nil {
-			log.Printf("Failed to retrieve Security rule data: %s", err)
+			log.Printf("%s", err)
 		}
 
-		switch r.Type {
-		case "universal":
-			rtype = "universal"
-		case "intrazone":
-			rtype = "intrazone"
-		case "interzone":
-			rtype = "interzone"
-		default:
-			rtype = "universal"
-		}
+		log.Printf("Exporting %d Security rules", len(inclrules))
 
-		cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, rtype, formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
-			sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
-		cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
-			sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
-		cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
-			r.IcmpUnreachable, r.DisableServerResponseInspection))
-		cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
-			r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+		for _, rule := range rules {
+			for _, orule := range inclrules {
+				if rule == orule {
+					var rtype string
+					r, err := c.Policies.Security.Get(v, orule)
+					if err != nil {
+						log.Printf("Failed to retrieve Security rule data: %s", err)
+					}
+
+					switch r.Type {
+					case "universal":
+						rtype = "universal"
+					case "intrazone":
+						rtype = "intrazone"
+					case "interzone":
+						rtype = "interzone"
+					default:
+						rtype = "universal"
+					}
+
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, rtype, formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+						sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
+					cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
+						sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
+					cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
+						r.IcmpUnreachable, r.DisableServerResponseInspection))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
+						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+				}
+			}
+		}
+	} else {
+		log.Printf("Exporting %d Security rules", rc)
+
+		for _, rule := range rules {
+			var rtype string
+			r, err := c.Policies.Security.Get(v, rule)
+			if err != nil {
+				log.Printf("Failed to retrieve Security rule data: %s", err)
+			}
+
+			switch r.Type {
+			case "universal":
+				rtype = "universal"
+			case "intrazone":
+				rtype = "intrazone"
+			case "interzone":
+				rtype = "interzone"
+			default:
+				rtype = "universal"
+			}
+
+			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, rtype, formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+				sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
+			cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
+				sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
+			cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
+				r.IcmpUnreachable, r.DisableServerResponseInspection))
+			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
+				r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+		}
 	}
 
 	cfh.End()
@@ -197,30 +240,64 @@ func getFwNatPol(c *pango.Firewall, file string, hitcount bool) {
 		return
 	}
 
-	log.Printf("Exporting %d NAT rules", rc)
-
 	cfh.Write("#Name,Type,Description,Tags,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,")
 	cfh.Write("SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,")
 	cfh.Write("SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,")
 	cfh.Write("DatAddress,DatPort,DatDynamicDistribution,Disabled\n")
-	for _, rule := range rules {
-		var toint string
-		r, err := c.Policies.Nat.Get(v, rule)
+
+	if len(onlyrules) > 0 {
+		inclrules, err := txtToSlice(onlyrules)
 		if err != nil {
-			log.Printf("Failed to retrieve NAT rule data: %s", err)
+			log.Printf("%s", err)
 		}
 
-		toint = r.ToInterface
-		if len(r.ToInterface) <= 0 {
-			toint = "any"
-		}
+		log.Printf("Exporting %d NAT rules", len(inclrules))
 
-		cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, "ipv4", formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
-			r.DestinationZone, toint, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
-		cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
-			r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
-		cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
-			r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
+		for _, rule := range rules {
+			for _, orule := range inclrules {
+				if rule == orule {
+					var toint string
+					r, err := c.Policies.Nat.Get(v, orule)
+					if err != nil {
+						log.Printf("Failed to retrieve NAT rule data: %s", err)
+					}
+
+					toint = r.ToInterface
+					if len(r.ToInterface) <= 0 {
+						toint = "any"
+					}
+
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, "ipv4", formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+						r.DestinationZone, toint, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
+						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
+						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
+				}
+			}
+		}
+	} else {
+		log.Printf("Exporting %d NAT rules", rc)
+
+		for _, rule := range rules {
+			var toint string
+			r, err := c.Policies.Nat.Get(v, rule)
+			if err != nil {
+				log.Printf("Failed to retrieve NAT rule data: %s", err)
+			}
+
+			toint = r.ToInterface
+			if len(r.ToInterface) <= 0 {
+				toint = "any"
+			}
+
+			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, "ipv4", formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+				r.DestinationZone, toint, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
+			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
+				r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
+			cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
+				r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
+		}
 	}
 
 	cfh.End()
@@ -248,26 +325,56 @@ func getFwPbfPol(c *pango.Firewall, file string, hitcount bool) {
 		return
 	}
 
-	log.Printf("Exporting %d Policy-Based Forwarding rules", rc)
-
 	cfh.Write("#Name,Description,Tags,FromType,FromValues,SourceAddresses,SourceUsers,NegateSource,DestinationAddresses,")
 	cfh.Write("NegateDestination,Applications,Services,Schedule,Disabled,Action,ForwardVsys,ForwardEgressInterface,")
 	cfh.Write("ForwardNextHopType,ForwardNextHopValue,ForwardMonitorProfile,ForwardMonitorIpAddress,ForwardMonitorDisableIfUnreachable,")
 	cfh.Write("EnableEnforceSymmetricReturn,SymmetricReturnAddresses,ActiveActiveDeviceBinding,NegateTarget,Uuid\n")
-	for _, rule := range rules {
-		r, err := c.Policies.PolicyBasedForwarding.Get(v, rule)
+
+	if len(onlyrules) > 0 {
+		inclrules, err := txtToSlice(onlyrules)
 		if err != nil {
-			log.Printf("Failed to retrieve Policy-Based Forwarding rule data: %s", err)
+			log.Printf("%s", err)
 		}
 
-		cfh.Write(fmt.Sprintf("%s,\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",%t,\"%s\",", r.Name, formatDesc(r.Description), sliceToString(r.Tags), r.FromType,
-			sliceToString(r.FromValues), sliceToString(r.SourceAddresses), userSliceToString(r.SourceUsers), r.NegateSource, sliceToString(r.DestinationAddresses)))
-		cfh.Write(fmt.Sprintf("%t,\"%s\",\"%s\",%s,%t,%s,%s,%s,", r.NegateDestination, sliceToString(r.Applications), sliceToString(r.Services), r.Schedule,
-			r.Disabled, r.Action, r.ForwardVsys, r.ForwardEgressInterface))
-		cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%t,", r.ForwardNextHopType, r.ForwardNextHopValue, r.ForwardMonitorProfile, r.ForwardMonitorIpAddress,
-			r.ForwardMonitorDisableIfUnreachable))
-		cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
-			r.NegateTarget, r.Uuid))
+		log.Printf("Exporting %d Policy-Based Forwarding rules", len(inclrules))
+
+		for _, rule := range rules {
+			for _, orule := range inclrules {
+				if rule == orule {
+					r, err := c.Policies.PolicyBasedForwarding.Get(v, rule)
+					if err != nil {
+						log.Printf("Failed to retrieve Policy-Based Forwarding rule data: %s", err)
+					}
+
+					cfh.Write(fmt.Sprintf("%s,\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",%t,\"%s\",", r.Name, formatDesc(r.Description), sliceToString(r.Tags), r.FromType,
+						sliceToString(r.FromValues), sliceToString(r.SourceAddresses), userSliceToString(r.SourceUsers), r.NegateSource, sliceToString(r.DestinationAddresses)))
+					cfh.Write(fmt.Sprintf("%t,\"%s\",\"%s\",%s,%t,%s,%s,%s,", r.NegateDestination, sliceToString(r.Applications), sliceToString(r.Services), r.Schedule,
+						r.Disabled, r.Action, r.ForwardVsys, r.ForwardEgressInterface))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%t,", r.ForwardNextHopType, r.ForwardNextHopValue, r.ForwardMonitorProfile, r.ForwardMonitorIpAddress,
+						r.ForwardMonitorDisableIfUnreachable))
+					cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
+						r.NegateTarget, r.Uuid))
+				}
+			}
+		}
+	} else {
+		log.Printf("Exporting %d Policy-Based Forwarding rules", rc)
+
+		for _, rule := range rules {
+			r, err := c.Policies.PolicyBasedForwarding.Get(v, rule)
+			if err != nil {
+				log.Printf("Failed to retrieve Policy-Based Forwarding rule data: %s", err)
+			}
+
+			cfh.Write(fmt.Sprintf("%s,\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",%t,\"%s\",", r.Name, formatDesc(r.Description), sliceToString(r.Tags), r.FromType,
+				sliceToString(r.FromValues), sliceToString(r.SourceAddresses), userSliceToString(r.SourceUsers), r.NegateSource, sliceToString(r.DestinationAddresses)))
+			cfh.Write(fmt.Sprintf("%t,\"%s\",\"%s\",%s,%t,%s,%s,%s,", r.NegateDestination, sliceToString(r.Applications), sliceToString(r.Services), r.Schedule,
+				r.Disabled, r.Action, r.ForwardVsys, r.ForwardEgressInterface))
+			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%t,", r.ForwardNextHopType, r.ForwardNextHopValue, r.ForwardMonitorProfile, r.ForwardMonitorIpAddress,
+				r.ForwardMonitorDisableIfUnreachable))
+			cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
+				r.NegateTarget, r.Uuid))
+		}
 	}
 
 	cfh.End()
@@ -295,38 +402,80 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
 		return
 	}
 
-	log.Printf("Exporting %d Security rules", rc)
-
 	cfh.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
 	cfh.Write("DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,")
 	cfh.Write("Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,")
 	cfh.Write("Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
-	for _, rule := range rules {
-		var rtype string
-		r, err := c.Policies.Security.Get(dg, l, rule)
+
+	if len(onlyrules) > 0 {
+		inclrules, err := txtToSlice(onlyrules)
 		if err != nil {
-			log.Printf("Failed to retrieve Security rule data: %s", err)
+			log.Printf("%s", err)
 		}
 
-		switch r.Type {
-		case "universal":
-			rtype = "universal"
-		case "intrazone":
-			rtype = "intrazone"
-		case "interzone":
-			rtype = "interzone"
-		default:
-			rtype = "universal"
-		}
+		log.Printf("Exporting %d Security rules", len(inclrules))
 
-		cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, rtype, formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
-			sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
-		cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
-			sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
-		cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
-			r.IcmpUnreachable, r.DisableServerResponseInspection))
-		cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
-			r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+		for _, rule := range rules {
+			for _, orule := range inclrules {
+				if rule == orule {
+					var rtype string
+					r, err := c.Policies.Security.Get(dg, l, orule)
+					if err != nil {
+						log.Printf("Failed to retrieve Security rule data: %s", err)
+					}
+
+					switch r.Type {
+					case "universal":
+						rtype = "universal"
+					case "intrazone":
+						rtype = "intrazone"
+					case "interzone":
+						rtype = "interzone"
+					default:
+						rtype = "universal"
+					}
+
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, rtype, formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+						sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
+					cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
+						sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
+					cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
+						r.IcmpUnreachable, r.DisableServerResponseInspection))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
+						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+				}
+			}
+		}
+	} else {
+		log.Printf("Exporting %d Security rules", rc)
+
+		for _, rule := range rules {
+			var rtype string
+			r, err := c.Policies.Security.Get(dg, l, rule)
+			if err != nil {
+				log.Printf("Failed to retrieve Security rule data: %s", err)
+			}
+
+			switch r.Type {
+			case "universal":
+				rtype = "universal"
+			case "intrazone":
+				rtype = "intrazone"
+			case "interzone":
+				rtype = "interzone"
+			default:
+				rtype = "universal"
+			}
+
+			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, rtype, formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+				sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
+			cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
+				sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
+			cfh.Write(fmt.Sprintf("%s,%s,%t,%t,%t,%s,%t,%t,", r.Action, r.LogSetting, r.LogStart, r.LogEnd, r.Disabled, r.Schedule,
+				r.IcmpUnreachable, r.DisableServerResponseInspection))
+			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
+				r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+		}
 	}
 
 	cfh.End()
@@ -354,30 +503,64 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool) {
 		return
 	}
 
-	log.Printf("Exporting %d NAT rules", rc)
-
 	cfh.Write("#Name,Type,Description,Tags,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,")
 	cfh.Write("SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,")
 	cfh.Write("SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,")
 	cfh.Write("DatAddress,DatPort,DatDynamicDistribution,Disabled\n")
-	for _, rule := range rules {
-		var toint string
-		r, err := c.Policies.Nat.Get(dg, l, rule)
+
+	if len(onlyrules) > 0 {
+		inclrules, err := txtToSlice(onlyrules)
 		if err != nil {
-			log.Printf("Failed to retrieve NAT rule data: %s", err)
+			log.Printf("%s", err)
 		}
 
-		toint = r.ToInterface
-		if len(r.ToInterface) <= 0 {
-			toint = "any"
-		}
+		log.Printf("Exporting %d NAT rules", len(inclrules))
 
-		cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, "ipv4", formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
-			r.DestinationZone, toint, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
-		cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
-			r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
-		cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
-			r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
+		for _, rule := range rules {
+			for _, orule := range inclrules {
+				if rule == orule {
+					var toint string
+					r, err := c.Policies.Nat.Get(dg, l, orule)
+					if err != nil {
+						log.Printf("Failed to retrieve NAT rule data: %s", err)
+					}
+
+					toint = r.ToInterface
+					if len(r.ToInterface) <= 0 {
+						toint = "any"
+					}
+
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, "ipv4", formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+						r.DestinationZone, toint, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
+						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
+						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
+				}
+			}
+		}
+	} else {
+		log.Printf("Exporting %d NAT rules", rc)
+
+		for _, rule := range rules {
+			var toint string
+			r, err := c.Policies.Nat.Get(dg, l, rule)
+			if err != nil {
+				log.Printf("Failed to retrieve NAT rule data: %s", err)
+			}
+
+			toint = r.ToInterface
+			if len(r.ToInterface) <= 0 {
+				toint = "any"
+			}
+
+			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, "ipv4", formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+				r.DestinationZone, toint, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
+			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
+				r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
+			cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
+				r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
+		}
 	}
 
 	cfh.End()
@@ -405,26 +588,56 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
 		return
 	}
 
-	log.Printf("Exporting %d Policy-Based Forwarding rules", rc)
-
 	cfh.Write("#Name,Description,Tags,FromType,FromValues,SourceAddresses,SourceUsers,NegateSource,DestinationAddresses,")
 	cfh.Write("NegateDestination,Applications,Services,Schedule,Disabled,Action,ForwardVsys,ForwardEgressInterface,")
 	cfh.Write("ForwardNextHopType,ForwardNextHopValue,ForwardMonitorProfile,ForwardMonitorIpAddress,ForwardMonitorDisableIfUnreachable,")
 	cfh.Write("EnableEnforceSymmetricReturn,SymmetricReturnAddresses,ActiveActiveDeviceBinding,NegateTarget,Uuid\n")
-	for _, rule := range rules {
-		r, err := c.Policies.PolicyBasedForwarding.Get(dg, l, rule)
+
+	if len(onlyrules) > 0 {
+		inclrules, err := txtToSlice(onlyrules)
 		if err != nil {
-			log.Printf("Failed to retrieve Policy-Based Forwarding rule data: %s", err)
+			log.Printf("%s", err)
 		}
 
-		cfh.Write(fmt.Sprintf("%s,\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",%t,\"%s\",", r.Name, formatDesc(r.Description), sliceToString(r.Tags), r.FromType,
-			sliceToString(r.FromValues), sliceToString(r.SourceAddresses), userSliceToString(r.SourceUsers), r.NegateSource, sliceToString(r.DestinationAddresses)))
-		cfh.Write(fmt.Sprintf("%t,\"%s\",\"%s\",%s,%t,%s,%s,%s,", r.NegateDestination, sliceToString(r.Applications), sliceToString(r.Services), r.Schedule,
-			r.Disabled, r.Action, r.ForwardVsys, r.ForwardEgressInterface))
-		cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%t,", r.ForwardNextHopType, r.ForwardNextHopValue, r.ForwardMonitorProfile, r.ForwardMonitorIpAddress,
-			r.ForwardMonitorDisableIfUnreachable))
-		cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
-			r.NegateTarget, r.Uuid))
+		log.Printf("Exporting %d Policy-Based Forwarding rules", len(inclrules))
+
+		for _, rule := range rules {
+			for _, orule := range inclrules {
+				if rule == orule {
+					r, err := c.Policies.PolicyBasedForwarding.Get(dg, l, orule)
+					if err != nil {
+						log.Printf("Failed to retrieve Policy-Based Forwarding rule data: %s", err)
+					}
+
+					cfh.Write(fmt.Sprintf("%s,\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",%t,\"%s\",", r.Name, formatDesc(r.Description), sliceToString(r.Tags), r.FromType,
+						sliceToString(r.FromValues), sliceToString(r.SourceAddresses), userSliceToString(r.SourceUsers), r.NegateSource, sliceToString(r.DestinationAddresses)))
+					cfh.Write(fmt.Sprintf("%t,\"%s\",\"%s\",%s,%t,%s,%s,%s,", r.NegateDestination, sliceToString(r.Applications), sliceToString(r.Services), r.Schedule,
+						r.Disabled, r.Action, r.ForwardVsys, r.ForwardEgressInterface))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%t,", r.ForwardNextHopType, r.ForwardNextHopValue, r.ForwardMonitorProfile, r.ForwardMonitorIpAddress,
+						r.ForwardMonitorDisableIfUnreachable))
+					cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
+						r.NegateTarget, r.Uuid))
+				}
+			}
+		}
+	} else {
+		log.Printf("Exporting %d Policy-Based Forwarding rules", rc)
+
+		for _, rule := range rules {
+			r, err := c.Policies.PolicyBasedForwarding.Get(dg, l, rule)
+			if err != nil {
+				log.Printf("Failed to retrieve Policy-Based Forwarding rule data: %s", err)
+			}
+
+			cfh.Write(fmt.Sprintf("%s,\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",%t,\"%s\",", r.Name, formatDesc(r.Description), sliceToString(r.Tags), r.FromType,
+				sliceToString(r.FromValues), sliceToString(r.SourceAddresses), userSliceToString(r.SourceUsers), r.NegateSource, sliceToString(r.DestinationAddresses)))
+			cfh.Write(fmt.Sprintf("%t,\"%s\",\"%s\",%s,%t,%s,%s,%s,", r.NegateDestination, sliceToString(r.Applications), sliceToString(r.Services), r.Schedule,
+				r.Disabled, r.Action, r.ForwardVsys, r.ForwardEgressInterface))
+			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%t,", r.ForwardNextHopType, r.ForwardNextHopValue, r.ForwardMonitorProfile, r.ForwardMonitorIpAddress,
+				r.ForwardMonitorDisableIfUnreachable))
+			cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
+				r.NegateTarget, r.Uuid))
+		}
 	}
 
 	cfh.End()
