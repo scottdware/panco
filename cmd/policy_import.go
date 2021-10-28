@@ -257,7 +257,7 @@ var policyImportCmd = &cobra.Command{
 			case "post":
 				l = util.PostRulebase
 			default:
-				l = util.PostRulebase
+				l = util.PreRulebase
 			}
 
 			if t == "security" {
@@ -462,10 +462,10 @@ func init() {
 	// policyImportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyImportCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	policyImportCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to export to")
-	policyImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
-	policyImportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when exporting from a firewall")
+	policyImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when importing to Panorama")
+	policyImportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when importing to a firewall")
 	policyImportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import")
-	policyImportCmd.Flags().StringVarP(&l, "location", "l", "post", "Location of the rulebase - <pre|post>")
+	policyImportCmd.Flags().StringVarP(&l, "location", "l", "pre", "Location of the rulebase - <pre|post>")
 	policyImportCmd.MarkFlagRequired("user")
 	// policyImportCmd.MarkFlagRequired("pass")
 	policyImportCmd.MarkFlagRequired("device")
