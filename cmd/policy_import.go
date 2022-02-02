@@ -21,6 +21,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/PaloAltoNetworks/pango/poli/nat"
@@ -126,6 +127,8 @@ var policyImportCmd = &cobra.Command{
 					if err != nil {
 						log.Printf("Line %d - failed to create Security rule: %s", i+1, err)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 
@@ -193,6 +196,8 @@ var policyImportCmd = &cobra.Command{
 					if err != nil {
 						log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 
@@ -248,6 +253,8 @@ var policyImportCmd = &cobra.Command{
 					if err != nil {
 						log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 		case *pango.Panorama:
@@ -327,6 +334,8 @@ var policyImportCmd = &cobra.Command{
 					if err != nil {
 						log.Printf("Line %d - failed to create security rule: %s", i+1, err)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 
@@ -394,6 +403,8 @@ var policyImportCmd = &cobra.Command{
 					if err != nil {
 						log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 
@@ -449,6 +460,8 @@ var policyImportCmd = &cobra.Command{
 					if err != nil {
 						log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 		}
@@ -471,5 +484,5 @@ func init() {
 	policyImportCmd.MarkFlagRequired("device")
 	policyImportCmd.MarkFlagRequired("file")
 	policyImportCmd.MarkFlagRequired("type")
-	policyImportCmd.MarkFlagRequired("location")
+	// policyImportCmd.MarkFlagRequired("location")
 }

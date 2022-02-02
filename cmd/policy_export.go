@@ -20,6 +20,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/PaloAltoNetworks/pango/util"
@@ -108,13 +109,13 @@ func init() {
 	policyExportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when exporting from a firewall")
 	policyExportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to export - <security|nat|pbf|all>")
 	policyExportCmd.Flags().StringVarP(&l, "location", "l", "pre", "Location of the rulebase - <pre|post>")
-	policyExportCmd.Flags().StringVarP(&onlyrules, "rules", "r", "", "[OPTIONAL] Only export these specific rules - specify text file")
+	policyExportCmd.Flags().StringVarP(&onlyrules, "rules", "r", "", "[OPTIONAL] Only export these specific rules in referenced text file")
 	policyExportCmd.MarkFlagRequired("user")
 	// policyExportCmd.MarkFlagRequired("pass")
 	policyExportCmd.MarkFlagRequired("device")
 	policyExportCmd.MarkFlagRequired("file")
 	policyExportCmd.MarkFlagRequired("type")
-	policyExportCmd.MarkFlagRequired("location")
+	// policyExportCmd.MarkFlagRequired("location")
 }
 
 // getFwSecPol is used to export the Security policy on a firewall
@@ -180,6 +181,8 @@ func getFwSecPol(c *pango.Firewall, file string, hitcount bool) {
 						r.IcmpUnreachable, r.DisableServerResponseInspection))
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 		}
@@ -212,6 +215,8 @@ func getFwSecPol(c *pango.Firewall, file string, hitcount bool) {
 				r.IcmpUnreachable, r.DisableServerResponseInspection))
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 				r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 
@@ -273,6 +278,8 @@ func getFwNatPol(c *pango.Firewall, file string, hitcount bool) {
 						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 		}
@@ -297,6 +304,8 @@ func getFwNatPol(c *pango.Firewall, file string, hitcount bool) {
 				r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 				r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
+
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 
@@ -354,6 +363,8 @@ func getFwPbfPol(c *pango.Firewall, file string, hitcount bool) {
 						r.ForwardMonitorDisableIfUnreachable))
 					cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 						r.NegateTarget, r.Uuid))
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 		}
@@ -374,6 +385,8 @@ func getFwPbfPol(c *pango.Firewall, file string, hitcount bool) {
 				r.ForwardMonitorDisableIfUnreachable))
 			cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 				r.NegateTarget, r.Uuid))
+
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 
@@ -443,6 +456,8 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
 						r.IcmpUnreachable, r.DisableServerResponseInspection))
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 		}
@@ -475,6 +490,8 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
 				r.IcmpUnreachable, r.DisableServerResponseInspection))
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 				r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
+
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 
@@ -536,6 +553,8 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool) {
 						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 		}
@@ -560,6 +579,8 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool) {
 				r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 				r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
+
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 
@@ -617,6 +638,8 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
 						r.ForwardMonitorDisableIfUnreachable))
 					cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 						r.NegateTarget, r.Uuid))
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 		}
@@ -637,6 +660,8 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
 				r.ForwardMonitorDisableIfUnreachable))
 			cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 				r.NegateTarget, r.Uuid))
+
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 

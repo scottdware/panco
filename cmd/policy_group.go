@@ -21,6 +21,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"time"
 
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/PaloAltoNetworks/pango/util"
@@ -76,6 +77,8 @@ var policyGroupCmd = &cobra.Command{
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], formatkey)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 
@@ -98,6 +101,8 @@ var policyGroupCmd = &cobra.Command{
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], formatkey)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 
@@ -120,6 +125,8 @@ var policyGroupCmd = &cobra.Command{
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], formatkey)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 		case *pango.Panorama:
@@ -165,6 +172,8 @@ var policyGroupCmd = &cobra.Command{
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], formatkey)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 
@@ -201,6 +210,8 @@ var policyGroupCmd = &cobra.Command{
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], formatkey)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 
@@ -237,6 +248,8 @@ var policyGroupCmd = &cobra.Command{
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 						log.Printf("Line %d - failed to group rule by tag %s: %s", i+1, rule[0], formatkey)
 					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 			}
 		}

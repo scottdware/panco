@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/PaloAltoNetworks/pango/util"
@@ -110,6 +111,8 @@ var policyMoveCmd = &cobra.Command{
 						fmt.Println(err)
 					}
 				}
+
+				time.Sleep(100 * time.Millisecond)
 			}
 		case *pango.Panorama:
 			moveOptions := map[string]int{
@@ -177,6 +180,8 @@ var policyMoveCmd = &cobra.Command{
 						fmt.Println(err)
 					}
 				}
+
+				time.Sleep(100 * time.Millisecond)
 			}
 		}
 	},
