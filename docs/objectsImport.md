@@ -13,7 +13,7 @@ Flags:
 
 ## Overview
 
-Using the import command allows you to create or modify address and service objects, tag objects, and more. For each type of action you want to perform,
+Using the import command allows you to create or modify address and service objects, custom URL and tag objects, and more. For each type of action you want to perform,
 you will need to make sure your CSV file is structured accordingly. Please use the following guide for this purpose:
 
 [CSV Structure for Object Actions](https://panco.dev/csvObjects.html)

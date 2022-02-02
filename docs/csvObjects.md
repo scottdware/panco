@@ -159,6 +159,17 @@ Description | Not used for rename - leave blank.
 Tags | Not used for rename - leave blank.
 Device Group/Vsys | Name of the device-group/vsys, or **shared** if renaming a shared object.
 
+## Adding or Removing URL Entries from a Custom Category
+
+Column | Description
+:--- | :---
+Name | Name of the custom URL category you wish to add or remove URL's.
+Type | `urladd` to add, `urlremove` to remove
+Value | Single URL to add or remove, e.g.: `bing.com/` or `*.bing.com/`
+Description | Not used - leave blank.
+Tags | Not used - leave blank.
+Device Group/Vsys | Name of the device-group, or **shared** if modifying a shared object.
+
 ## Tagging Objects
 
 When applying tags to objects, use the same CSV format as you would when creating or modifying, but
