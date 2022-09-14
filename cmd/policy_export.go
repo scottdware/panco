@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -132,7 +132,7 @@ func getFwSecPol(c *pango.Firewall, file string, hitcount bool) {
 		return
 	}
 
-	secfile := fmt.Sprintf("%s-Security.csv", file)
+	secfile := fmt.Sprintf("%s.csv", file)
 
 	cfh, err := easycsv.NewCSV(secfile)
 	if err != nil {
@@ -237,7 +237,7 @@ func getFwNatPol(c *pango.Firewall, file string, hitcount bool) {
 		return
 	}
 
-	natfile := fmt.Sprintf("%s-NAT.csv", file)
+	natfile := fmt.Sprintf("%s.csv", file)
 
 	cfh, err := easycsv.NewCSV(natfile)
 	if err != nil {
@@ -326,7 +326,7 @@ func getFwPbfPol(c *pango.Firewall, file string, hitcount bool) {
 		return
 	}
 
-	pbffile := fmt.Sprintf("%s-PBF.csv", file)
+	pbffile := fmt.Sprintf("%s.csv", file)
 
 	cfh, err := easycsv.NewCSV(pbffile)
 	if err != nil {
@@ -407,7 +407,7 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
 		return
 	}
 
-	secfile := fmt.Sprintf("%s-Security.csv", file)
+	secfile := fmt.Sprintf("%s.csv", file)
 
 	cfh, err := easycsv.NewCSV(secfile)
 	if err != nil {
@@ -512,7 +512,7 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool) {
 		return
 	}
 
-	natfile := fmt.Sprintf("%s-NAT.csv", file)
+	natfile := fmt.Sprintf("%s.csv", file)
 
 	cfh, err := easycsv.NewCSV(natfile)
 	if err != nil {
@@ -601,7 +601,7 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
 		return
 	}
 
-	pbffile := fmt.Sprintf("%s-PBF.csv", file)
+	pbffile := fmt.Sprintf("%s.csv", file)
 
 	cfh, err := easycsv.NewCSV(pbffile)
 	if err != nil {
