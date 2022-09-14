@@ -193,6 +193,8 @@ var objectsImportCmd = &cobra.Command{
 							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 						}
 					} else {
+                        groupLen := len(stringToSlice(value))
+                        
 						e := addrgrp.Entry{
 							Name:            name,
 							Description:     desc,
@@ -203,6 +205,9 @@ var objectsImportCmd = &cobra.Command{
 						err = c.Objects.AddressGroup.Set(vsys, e)
 						if err != nil {
 							log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+                            if groupLen > 40 {
+                                log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+                            }
 						}
 					}
 				case "dynamic":
@@ -536,6 +541,8 @@ var objectsImportCmd = &cobra.Command{
 							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 						}
 					} else {
+                        groupLen := len(stringToSlice(value))
+                        
 						e := addrgrp.Entry{
 							Name:            name,
 							Description:     desc,
@@ -546,6 +553,9 @@ var objectsImportCmd = &cobra.Command{
 						err = c.Objects.AddressGroup.Set(dgroup, e)
 						if err != nil {
 							log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+                            if groupLen > 40 {
+                                log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+                            }
 						}
 					}
 				case "dynamic":

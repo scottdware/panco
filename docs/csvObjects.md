@@ -65,6 +65,8 @@ each criteria (tag) must be surrounded by single-quotes `'`, e.g.:
 "'Servers' or 'Web-Servers' and 'DMZ'"
 ```
 
+> **IMPORTANT**: If the number of members in the group is over 40, try to break up the creation/addition into multiple entries, keeeping the member count between 20-30.
+
 ## Removing Objects From Address Groups
 
 Column | Description
