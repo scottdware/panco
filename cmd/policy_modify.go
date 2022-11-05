@@ -5,16 +5,24 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"crypto/tls"
 	"fmt"
+	"log"
+	"os"
+	"time"
 
+	"github.com/PaloAltoNetworks/pango"
+	"github.com/Songmu/prompter"
+	easycsv "github.com/scottdware/go-easycsv"
 	"github.com/spf13/cobra"
+	"gopkg.in/resty.v1"
 )
 
 // modifyCmd represents the modify command
 var policyModifyCmd = &cobra.Command{
 	Use:   "modify",
 	Short: "Modify existing rules - add source, destination objects to them",
-	Long: ``
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
@@ -44,7 +52,7 @@ var policyModifyCmd = &cobra.Command{
 
 			for _, rule := range rules {
 				name := rule[0]
-                ruleloc := rule[1]
+				ruleloc := rule[1]
 				action := rule[2]
 				value := stringToSlice(rule[3])
 				dgroup := rule[4]
@@ -54,16 +62,16 @@ var policyModifyCmd = &cobra.Command{
 					var xpath, xmlBody string
 
 					if dgroup == "shared" {
-                        for _, src := range value {
-                            xmlBody += fmt.Sprintf("<member>%s</member>", src)
-                        }
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
 						xpath = fmt.Sprintf("/config/shared/%s-rulebase/security/rules/entry[@name='%s']/source", ruleloc, name)
 					}
 
 					if dgroup != "shared" {
-                        for _, src := range value {
-                            xmlBody += fmt.Sprintf("<member>%s</member>", src)
-                        }
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
 						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/%s-rulebase/security/rules/entry[@name='%s']/source", dgroup, ruleloc, name)
 					}
 
@@ -76,16 +84,16 @@ var policyModifyCmd = &cobra.Command{
 					var xpath, xmlBody string
 
 					if dgroup == "shared" {
-                        for _, src := range value {
-                            xmlBody += fmt.Sprintf("<member>%s</member>", src)
-                        }
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
 						xpath = fmt.Sprintf("/config/shared/%s-rulebase/security/rules/entry[@name='%s']/destination", ruleloc, name)
 					}
 
 					if dgroup != "shared" {
-                        for _, src := range value {
-                            xmlBody += fmt.Sprintf("<member>%s</member>", src)
-                        }
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
 						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/%s-rulebase/security/rules/entry[@name='%s']/destination", dgroup, ruleloc, name)
 					}
 
@@ -107,7 +115,7 @@ var policyModifyCmd = &cobra.Command{
 
 			for _, rule := range rules {
 				name := rule[0]
-                ruleloc := rule[1]
+				ruleloc := rule[1]
 				action := rule[2]
 				value := stringToSlice(rule[3])
 				dgroup := rule[4]
@@ -117,16 +125,16 @@ var policyModifyCmd = &cobra.Command{
 					var xpath, xmlBody string
 
 					if dgroup == "shared" {
-                        for _, src := range value {
-                            xmlBody += fmt.Sprintf("<member>%s</member>", src)
-                        }
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
 						xpath = fmt.Sprintf("/config/shared/%s-rulebase/security/rules/entry[@name='%s']/source", ruleloc, name)
 					}
 
 					if dgroup != "shared" {
-                        for _, src := range value {
-                            xmlBody += fmt.Sprintf("<member>%s</member>", src)
-                        }
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
 						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/%s-rulebase/security/rules/entry[@name='%s']/source", dgroup, ruleloc, name)
 					}
 
@@ -139,16 +147,16 @@ var policyModifyCmd = &cobra.Command{
 					var xpath, xmlBody string
 
 					if dgroup == "shared" {
-                        for _, src := range value {
-                            xmlBody += fmt.Sprintf("<member>%s</member>", src)
-                        }
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
 						xpath = fmt.Sprintf("/config/shared/%s-rulebase/security/rules/entry[@name='%s']/destination", ruleloc, name)
 					}
 
 					if dgroup != "shared" {
-                        for _, src := range value {
-                            xmlBody += fmt.Sprintf("<member>%s</member>", src)
-                        }
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
 						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/%s-rulebase/security/rules/entry[@name='%s']/destination", dgroup, ruleloc, name)
 					}
 
@@ -161,14 +169,14 @@ var policyModifyCmd = &cobra.Command{
 
 				time.Sleep(100 * time.Millisecond)
 			}
-        }
+		}
 	},
 }
 
 func init() {
 	policyCmd.AddCommand(policyModifyCmd)
 
-    policyModifyCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file")
+	policyModifyCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file")
 	policyModifyCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
 	// policyMoveCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyModifyCmd.Flags().StringVarP(&device, "device", "d", "", "Firewall or Panorama device to connect to")
