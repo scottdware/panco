@@ -48,6 +48,9 @@ var policyModifyCmd = &cobra.Command{
 				log.Printf("CSV file error - %s", err)
 				os.Exit(1)
 			}
+            
+			lc := len(rules)
+			log.Printf("Running actions on %d lines - this might take a few of minutes if you have a lot of rules to modify", lc)            
 
 			for i, rule := range rules {
 				name := rule[0]
@@ -99,7 +102,7 @@ var policyModifyCmd = &cobra.Command{
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
 					if err != nil {
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to add sources to rule %s: %s", i+1, name, formatkey)
+						log.Printf("Line %d - failed to add destinations to rule %s: %s", i+1, name, formatkey)
 					}
 				}
 
@@ -111,6 +114,9 @@ var policyModifyCmd = &cobra.Command{
 				log.Printf("CSV file error - %s", err)
 				os.Exit(1)
 			}
+            
+			lc := len(rules)
+			log.Printf("Running actions on %d lines - this might take a few of minutes if you have a lot of rules to modify", lc)  
 
 			for i, rule := range rules {
 				name := rule[0]
@@ -162,7 +168,7 @@ var policyModifyCmd = &cobra.Command{
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
 					if err != nil {
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to add sources to rule %s: %s", i+1, name, formatkey)
+						log.Printf("Line %d - failed to add destinations to rule %s: %s", i+1, name, formatkey)
 					}
 				}
 
