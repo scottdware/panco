@@ -146,7 +146,7 @@ var policyModifyCmd = &cobra.Command{
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
 					if err != nil {
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to add sources to rule %s: %s", i+1, name, formatkey)
+						log.Printf("Line %d - failed to add source(s) to rule %s: %s", i+1, name, formatkey)
 					}
 				case "adddest":
 					var xpath, xmlBody string
@@ -168,7 +168,51 @@ var policyModifyCmd = &cobra.Command{
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
 					if err != nil {
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to add destinations to rule %s: %s", i+1, name, formatkey)
+						log.Printf("Line %d - failed to add destination(s) to rule %s: %s", i+1, name, formatkey)
+					}
+                case "addapp":
+					var xpath, xmlBody string
+
+					if dgroup == "shared" {
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
+						xpath = fmt.Sprintf("/config/shared/%s-rulebase/security/rules/entry[@name='%s']/application", ruleloc, name)
+					}
+
+					if dgroup != "shared" {
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
+						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/%s-rulebase/security/rules/entry[@name='%s']/application", dgroup, ruleloc, name)
+					}
+
+					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
+					if err != nil {
+						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+						log.Printf("Line %d - failed to add application(s) to rule %s: %s", i+1, name, formatkey)
+					}
+                case "addservice":
+					var xpath, xmlBody string
+
+					if dgroup == "shared" {
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
+						xpath = fmt.Sprintf("/config/shared/%s-rulebase/security/rules/entry[@name='%s']/service", ruleloc, name)
+					}
+
+					if dgroup != "shared" {
+						for _, src := range value {
+							xmlBody += fmt.Sprintf("<member>%s</member>", src)
+						}
+						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/%s-rulebase/security/rules/entry[@name='%s']/service", dgroup, ruleloc, name)
+					}
+
+					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
+					if err != nil {
+						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+						log.Printf("Line %d - failed to add service(s) to rule %s: %s", i+1, name, formatkey)
 					}
 				}
 
