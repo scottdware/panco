@@ -48,9 +48,9 @@ var policyModifyCmd = &cobra.Command{
 				log.Printf("CSV file error - %s", err)
 				os.Exit(1)
 			}
-            
+
 			lc := len(rules)
-			log.Printf("Running actions on %d lines - this might take a few of minutes if you have a lot of rules to modify", lc)            
+			log.Printf("Running actions on %d lines - this might take a few of minutes if you have a lot of rules to modify", lc)
 
 			for i, rule := range rules {
 				name := rule[0]
@@ -114,9 +114,9 @@ var policyModifyCmd = &cobra.Command{
 				log.Printf("CSV file error - %s", err)
 				os.Exit(1)
 			}
-            
+
 			lc := len(rules)
-			log.Printf("Running actions on %d lines - this might take a few of minutes if you have a lot of rules to modify", lc)  
+			log.Printf("Running actions on %d lines - this might take a few of minutes if you have a lot of rules to modify", lc)
 
 			for i, rule := range rules {
 				name := rule[0]
@@ -170,7 +170,7 @@ var policyModifyCmd = &cobra.Command{
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 						log.Printf("Line %d - failed to add destination(s) to rule %s: %s", i+1, name, formatkey)
 					}
-                case "addapp":
+				case "addapp":
 					var xpath, xmlBody string
 
 					if dgroup == "shared" {
@@ -192,7 +192,7 @@ var policyModifyCmd = &cobra.Command{
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 						log.Printf("Line %d - failed to add application(s) to rule %s: %s", i+1, name, formatkey)
 					}
-                case "addservice":
+				case "addservice":
 					var xpath, xmlBody string
 
 					if dgroup == "shared" {
