@@ -49,7 +49,7 @@ var policyModifyCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			for _, rule := range rules {
+			for i, rule := range rules {
 				name := rule[0]
 				ruleloc := rule[1]
 				action := rule[2]
@@ -112,7 +112,7 @@ var policyModifyCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			for _, rule := range rules {
+			for i, rule := range rules {
 				name := rule[0]
 				ruleloc := rule[1]
 				action := rule[2]
