@@ -47,7 +47,7 @@ var templateCmd = &cobra.Command{
 			output.Write("Change_Me_ServiceGroup,rename-servicegroup,New_ServiceGroup_Name,,,vsys1\n")
 			output.End()
 		case "policy":
-			output, err := easycsv.NewCSV("Objects.csv")
+			output, err := easycsv.NewCSV("Policy.csv")
 			if err != nil {
 				log.Printf("Error creating CSV file - %s", err)
 				os.Exit(1)
