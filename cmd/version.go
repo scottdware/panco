@@ -67,9 +67,9 @@ newer version available.`,
 		download := releases[0].URL
 
 		if curver == latestver {
-			fmt.Printf("You are running the latest version of panco - %s\n\nSee https://panco.dev for complete documentation", curver)
+			fmt.Printf("You are running the latest version of panco - %s\n\nSee https://panco.dev for complete documentation\n", curver)
 		} else {
-			fmt.Printf("New version available - %s! Download here: %s\n\nSee https://panco.dev for complete documentation", latestver, download)
+			fmt.Printf("New version available - %s! Download here: %s\n\nSee https://panco.dev for complete documentation\n", latestver, download)
 		}
 	},
 }
