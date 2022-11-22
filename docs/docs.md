@@ -23,9 +23,9 @@ Use "panco [command] --help" for more information about a command.
 Please use the below links to the CSV structure as a guide when using the import function on the `objects`
 , `poilcy` and `userid` commands.
 
-* [CSV Structure - Objects](https://panco.dev/csvObjects.html)
-* [CSV Structure - Policies](https://panco.dev/csvPolicy.html)
-* [CSV Structure - User-ID Functions](https://panco.dev/csvUserid.html)
+* [CSV Structure - Objects](https://panco.dev/csv_objects.html)
+* [CSV Structure - Policies](https://panco.dev/csv_policy.html)
+* [CSV Structure - User-ID Functions](https://panco.dev/csv_userid.html)
 
 Click on any one of the available commands to view the full documentation and usage.
 

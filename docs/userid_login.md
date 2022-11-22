@@ -22,4 +22,4 @@ but still want to write rules around users, not just IP addresses.
 
 Please refer to the below link as a guide on how to format your CSV file:
 
-[CSV Structure - Userid Functions](https://panco.dev/csvUserid.html)
+[CSV Structure - Userid Functions](https://panco.dev/csv_userid.html)

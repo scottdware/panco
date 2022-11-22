@@ -21,7 +21,7 @@ down on a select group of rules for the purpose defined in the tag specified (e.
 
 Please use the below link as a guide on how to structure your CSV file when grouping rules:
 
-[CSV Structure - Policies (Group Rules By Tag)](https://panco.dev/csvPolicy.html#group-rules-by-tags)
+[CSV Structure - Policies (Group Rules By Tag)](https://panco.dev/csv_policy.html#group-rules-by-tags)
 
 Once your CSV file structure is all set, you can apply the changes by running the following command:
 

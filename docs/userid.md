@@ -22,9 +22,9 @@ tagging and untagging an IP address (for use in dynamic address groups), logging
 you can manually map a user to an IP address (and unmap them). Tagging or logging in users each require their
 own CSV file structure. Please refer to the below link as a guide on how to format:
 
-[CSV Structure - Userid Functions](https://panco.dev/csvUserid.html)
+[CSV Structure - Userid Functions](https://panco.dev/csv_userid.html)
 
 Click on any one of the available commands to view the full documentation and usage:
 
-* [login](https://panco.dev/useridLogin.html)
-* [tag](https://panco.dev/useridTag.html)
+* [login](https://panco.dev/userid_login.html)
+* [tag](https://panco.dev/userid_tag.html)

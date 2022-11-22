@@ -26,11 +26,11 @@ You can also add/remove URL entries from a custom URL category object.
 
 Using the `cli` command, you can convert the CSV object entries to CLI set commands that can be pasted into the device.
 
-**_Important_**: Please refer to the [CSV Structure](https://panco.dev/csvObjects.html) page on how to structure your CSV files when importing/modifying objects.
+**_Important_**: Please refer to the [CSV Structure](https://panco.dev/csv_objects.html) page on how to structure your CSV files when importing/modifying objects.
 
 Click on any one of the available commands to view the full documentation and usage:
 
-* [cli](https://panco.dev/objectsCli.html)
-* [duplicates](https://panco.dev/objectsDuplicates.html)
-* [export](https://panco.dev/objectsExport.html)
-* [import](https://panco.dev/objectsImport.html)
+* [cli](https://panco.dev/objects_cli.html)
+* [duplicates](https://panco.dev/objects_duplicates.html)
+* [export](https://panco.dev/objects_export.html)
+* [import](https://panco.dev/objects_import.html)

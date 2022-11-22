@@ -15,7 +15,7 @@ Flags:
 Using the cli command allows you to generate CLI set commands from the CSV file that can be pasted into the device. For each type of action you want to perform,
 you will need to make sure your CSV file is structured accordingly. Please use the following guide for this purpose:
 
-[CSV Structure for Object Actions](https://panco.dev/csvObjects.html)
+[CSV Structure for Object Actions](https://panco.dev/csv_objects.html)
 
 Once your CSV file is all set, you can execute the following command to generate a text file with the commands:
 

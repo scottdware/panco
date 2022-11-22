@@ -12,7 +12,7 @@ Name,Type,Value,Description,Tags,Device Group/Vsys
 * The `Description` and `Tags` fields are optional, however you **_MUST_** still include them even if they are blank in your file!
 * If any line begins with a hashtag `#`, it WILL be ignored!
 
-**_TIP_**: A good example is to first [export](https://panco.dev/objectsExport.html) address, service or tag objects from the device.
+**_TIP_**: A good example is to first [export](https://panco.dev/objects_export.html) address, service or tag objects from the device.
 That way, you get a good idea of how the CSV file is laid out.
 
 > **_NOTE_**: Here are a few things to keep in mind when creating objects:
@@ -22,7 +22,7 @@ That way, you get a good idea of how the CSV file is laid out.
 > * When ran against a local firewall, the default value for `Vsys` is "vsys1" if you do not specify one. When ran against Panorama, the default value for `Device Group` is "shared."
 
 > **_WARNING_**: If an existing address or service object has the same name as one you are creating, it's value will be overwritten with what you specify.
-> Please refer to the [`duplicates`](https://panco.dev/objectsDuplicates.html) command to help alleviate this.
+> Please refer to the [`duplicates`](https://panco.dev/objects_duplicates.html) command to help alleviate this.
 
 Once your CSV file is organized with any of the following options, you can execute the changes using the following command:
 

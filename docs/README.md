@@ -50,5 +50,4 @@ Check out the [About panco](https://panco.dev/about.html) page for more info.
 
 ## Help & Support
 
-If you run into issues, or need assistance, please submit an issue on the [main Github repository](https://github.com/scottdware/panco),
-or drop me a line on Twitter [@scottdware](https://twitter.com/scottdware).
+If you run into issues, or need assistance, please submit an issue on the [main Github repository](https://github.com/scottdware/panco)

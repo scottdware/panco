@@ -34,10 +34,10 @@ import (
 	"gopkg.in/resty.v1"
 )
 
-// importCmd represents the import command
-var policyImportCmd = &cobra.Command{
-	Use:   "import",
-	Short: "Import (create) a security, NAT or Policy-Based Forwarding policy",
+// modifyCmd represents the import command
+var policyModifyCmd = &cobra.Command{
+	Use:   "modify",
+	Short: "Modify (edit) a security, NAT or Policy-Based Forwarding policy",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
@@ -68,7 +68,7 @@ var policyImportCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Importing/modifying %d Security rules", rc)
+				log.Printf("Modifying %d Security rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -123,9 +123,9 @@ var policyImportCmd = &cobra.Command{
 						DataFiltering:                   rule[30],
 					}
 
-					err = c.Policies.Security.Set(v, e)
+					err = c.Policies.Security.Edit(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create Security rule: %s", i+1, err)
+						log.Printf("Line %d - failed to modify Security rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -140,7 +140,7 @@ var policyImportCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Importing/modifying %d NAT rules", rc)
+				log.Printf("Modifying %d NAT rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -156,15 +156,15 @@ var policyImportCmd = &cobra.Command{
 						log.Printf("Line %d - only NAT type 'ipv4' is supported", i+1)
 					}
 
-					ruletype := rule[1]
+					// ruletype := rule[1]
 
-					if len(ruletype) <= 0 {
-						ruletype = "universal"
-					}
+					// if len(ruletype) <= 0 {
+					// 	ruletype = "universal"
+					// }
 
 					e := nat.Entry{
 						Name:                           rule[0],
-						Type:                           ruletype,
+						Type:                           rule[1],
 						Description:                    rule[2],
 						Tags:                           stringToSlice(rule[3]),
 						SourceZones:                    stringToSlice(rule[4]),
@@ -192,9 +192,9 @@ var policyImportCmd = &cobra.Command{
 						Disabled:                       boolopt[rule[26]],
 					}
 
-					err = c.Policies.Nat.Set(v, e)
+					err = c.Policies.Nat.Edit(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
+						log.Printf("Line %d - failed to modify NAT rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -209,7 +209,7 @@ var policyImportCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Importing/modifying %d Policy-Based Forwarding rules", rc)
+				log.Printf("Modifying %d Policy-Based Forwarding rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -249,9 +249,9 @@ var policyImportCmd = &cobra.Command{
 						Uuid:                               rule[26],
 					}
 
-					err = c.Policies.PolicyBasedForwarding.Set(v, e)
+					err = c.Policies.PolicyBasedForwarding.Edit(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
+						log.Printf("Line %d - failed to modify Policy-Based Forwarding rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -275,7 +275,7 @@ var policyImportCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Importing/modifying %d Security rules", rc)
+				log.Printf("Modifying %d Security rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -285,20 +285,20 @@ var policyImportCmd = &cobra.Command{
 						"false": false,
 					}
 
-					ruletype := rule[1]
-					apps := rule[12]
+					// ruletype := rule[1]
+					// apps := rule[12]
 
-					if len(ruletype) <= 0 {
-						ruletype = "universal"
-					}
+					// if len(ruletype) <= 0 {
+					// 	ruletype = "universal"
+					// }
 
-					if len(apps) <= 0 {
-						apps = "any"
-					}
+					// if len(apps) <= 0 {
+					// 	apps = "any"
+					// }
 
 					e := security.Entry{
 						Name:                            rule[0],
-						Type:                            ruletype,
+						Type:                            rule[1],
 						Description:                     rule[2],
 						Tags:                            stringToSlice(rule[3]),
 						SourceZones:                     stringToSlice(rule[4]),
@@ -309,7 +309,7 @@ var policyImportCmd = &cobra.Command{
 						DestinationZones:                stringToSlice(rule[9]),
 						DestinationAddresses:            stringToSlice(rule[10]),
 						NegateDestination:               boolopt[rule[11]],
-						Applications:                    stringToSlice(apps),
+						Applications:                    stringToSlice(rule[12]),
 						Services:                        stringToSlice(rule[13]),
 						Categories:                      stringToSlice(rule[14]),
 						Action:                          rule[15],
@@ -330,9 +330,9 @@ var policyImportCmd = &cobra.Command{
 						DataFiltering:                   rule[30],
 					}
 
-					err = c.Policies.Security.Set(dg, l, e)
+					err = c.Policies.Security.Edit(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create security rule: %s", i+1, err)
+						log.Printf("Line %d - failed to modify security rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -347,7 +347,7 @@ var policyImportCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Importing/modifying %d NAT rules", rc)
+				log.Printf("Modifying %d NAT rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -363,15 +363,15 @@ var policyImportCmd = &cobra.Command{
 						log.Printf("Line %d - only NAT type 'ipv4' is supported", i+1)
 					}
 
-					ruletype := rule[1]
+					// ruletype := rule[1]
 
-					if len(ruletype) <= 0 {
-						ruletype = "universal"
-					}
+					// if len(ruletype) <= 0 {
+					// 	ruletype = "universal"
+					// }
 
 					e := nat.Entry{
 						Name:                           rule[0],
-						Type:                           ruletype,
+						Type:                           rule[1],
 						Description:                    rule[2],
 						Tags:                           stringToSlice(rule[3]),
 						SourceZones:                    stringToSlice(rule[4]),
@@ -399,9 +399,9 @@ var policyImportCmd = &cobra.Command{
 						Disabled:                       boolopt[rule[26]],
 					}
 
-					err = c.Policies.Nat.Set(dg, l, e)
+					err = c.Policies.Nat.Edit(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
+						log.Printf("Line %d - failed to modify NAT rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -416,7 +416,7 @@ var policyImportCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Importing/modifying %d Policy-Based Forwarding rules", rc)
+				log.Printf("Modifying %d Policy-Based Forwarding rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -456,9 +456,9 @@ var policyImportCmd = &cobra.Command{
 						Uuid:                               rule[26],
 					}
 
-					err = c.Policies.PolicyBasedForwarding.Set(dg, l, e)
+					err = c.Policies.PolicyBasedForwarding.Edit(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
+						log.Printf("Line %d - failed to modify Policy-Based Forwarding rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -469,20 +469,20 @@ var policyImportCmd = &cobra.Command{
 }
 
 func init() {
-	policyCmd.AddCommand(policyImportCmd)
+	policyCmd.AddCommand(policyModifyCmd)
 
-	policyImportCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	// policyImportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
-	policyImportCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
-	policyImportCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to export to")
-	policyImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when importing to Panorama")
-	policyImportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when importing to a firewall")
-	policyImportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import - <security|nat|pbf>")
-	policyImportCmd.Flags().StringVarP(&l, "location", "l", "pre", "Location of the rulebase - <pre|post>")
-	policyImportCmd.MarkFlagRequired("user")
-	// policyImportCmd.MarkFlagRequired("pass")
-	policyImportCmd.MarkFlagRequired("device")
-	policyImportCmd.MarkFlagRequired("file")
-	policyImportCmd.MarkFlagRequired("type")
-	// policyImportCmd.MarkFlagRequired("location")
+	policyModifyCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
+	// policyModifyCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	policyModifyCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
+	policyModifyCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to export to")
+	policyModifyCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when importing to Panorama")
+	policyModifyCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when importing to a firewall")
+	policyModifyCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import - <security|nat|pbf>")
+	policyModifyCmd.Flags().StringVarP(&l, "location", "l", "pre", "Location of the rulebase - <pre|post>")
+	policyModifyCmd.MarkFlagRequired("user")
+	// policyModifyCmd.MarkFlagRequired("pass")
+	policyModifyCmd.MarkFlagRequired("device")
+	policyModifyCmd.MarkFlagRequired("file")
+	policyModifyCmd.MarkFlagRequired("type")
+	// policyModifyCmd.MarkFlagRequired("location")
 }

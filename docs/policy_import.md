@@ -26,4 +26,4 @@ to them. You can create/modify the following types of policies at this time:
 
 Please use the below link as a guide on how to structure your CSV file when importing rules:
 
-[CSV Structure - Policies](https://panco.dev/csvPolicy.html)
+[CSV Structure - Policies](https://panco.dev/csv_policy.html)

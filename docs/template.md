@@ -15,5 +15,5 @@ The `template` command generates CSV files which can be used as a guide (templat
 
 For more information regarding the CSV file structure, please see the following:
 
-* [CSV Structure - Objects](https://panco.dev/csvObjects.html)
-* [CSV Structure - Policies](https://panco.dev/csvPolicy.html)
+* [CSV Structure - Objects](https://panco.dev/csv_objects.html)
+* [CSV Structure - Policies](https://panco.dev/csv_policy.html)
