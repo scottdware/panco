@@ -3,7 +3,7 @@
 This guide will help show you the way to structure your CSV file(s) for use when working with the various
 policy actions - importing or modifying rules, exporting rules, moving rules, grouping rules by tags.
 
-## Importing (modify) A Security Policy
+## Importing A Security Policy
 
 When importing a CSV file to create security rules or modify them, the file **_MUST_** have the following fields in this order:
 
@@ -21,7 +21,7 @@ Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,Dat
 panco policy export --type security --file <file-to-output>
 ```
 
->*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
+> *NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
 > this is the "post" rulebase.
 
 When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty.
@@ -32,7 +32,7 @@ Any field that you want to add or modify you need to have a value there, but at 
 Name,Type,Action
 ```
 
-## Importing (modify) A NAT Policy
+## Importing A NAT Policy
 
 When importing a CSV file to create NAT rules or modify them, the file **_MUST_** have the following columns in this order:
 
@@ -62,7 +62,7 @@ Any field that you want to add or modify you need to have a value there, but at 
 Name,Type,ToInterface
 ```
 
-## Import (modify) A Policy-Based Forwarding Policy
+## Import A Policy-Based Forwarding Policy
 
 When importing a CSV file to create policy-based forwarding rules or modify them, the file **_MUST_** have the following columns in this order:
 
