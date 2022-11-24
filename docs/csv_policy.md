@@ -18,11 +18,11 @@ Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,Dat
 > and then modifying the output file. For example:
 
 ```
-panco policy export --type security --file <file-to-output>
+panco policy export -d firewall -u admin -g "Device-Group" --type security --file <file-to-output>
 ```
 
 > *NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
-> this is the "post" rulebase.
+> this is the "pre" rulebase.
 
 When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty.
 
@@ -48,7 +48,7 @@ DatPort,DatDynamicDistribution,Disabled
 > and then modifying the output file. For example:
 
 ```
-panco policy export --type nat --file <file-to-output>
+panco policy export -d firewall -u admin -g "Device-Group" --type nat --file <file-to-output>
 ```
 
 >*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
@@ -78,11 +78,30 @@ SymmetricReturnAddresses,ActiveActiveDeviceBinding,NegateTarget,Uuid
 and then modifying the output file. For example:
 
 ```
-panco policy export --type pbf --file <file-to-output>
+panco policy export -d firewall -u admin -g "Device-Group" --type pbf --file <file-to-output>
 ```
 
->*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
+> *NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
 > this is the "post" rulebase.
+
+## Modifying A Security, NAT or Policy-Based Forwarding Policy/Rules -- IMPORTANT
+
+When you modify (edit) rules using the `panco policy modify` command, there are a few things to be aware of.  The `modify` command uses the Palo Alto API `edit` action, instead of the `set` action that is used when using the `import` command. You can read more about the differences of the `edit` and `set` [here](edit-set)
+
+Set and edit actions differ in two important ways:
+* Set actions add, update, or merge configuration nodes, while **_edit actions replace configuration nodes_**.
+* Set actions are non-destructive and are only additive, while **_edit actions can be destructive_**.
+
+> **_IMPORTANT_**: Please read and understand the above actions when using the `panco policy modify` command vs `panco policy import`.
+
+Using the `modify` command will ultimately be the best way to make changes to rules, such as adding/removing address objects, applications, services, etc.. Similar to the `import` command, the best way to preserve the current state of the rule(s) you are modifying, is to first export the policy/rules you need to modify using the below command:
+
+```
+panco policy export -d firewall -u admin -g "Device-Group" --type security --file <file-to-output>
+```
+
+Once you have exported the rules, then you can add/remove values from the different fields as needed, before then running the `panco policy modify` command on the CSV file you just edited.
+
 
 ## Moving Rules
 
@@ -117,3 +136,5 @@ If you want to do this on an existing rulebase, the easiest way is to first expo
 ```
 panco policy group --file <name-of-CSV-file> --type <security|nat>
 ```
+
+[edit-set]: https://docs.paloaltonetworks.com/pan-os/10-2/pan-os-panorama-api/pan-os-xml-api-request-types/pan-os-xml-api-request-types-and-actions/configuration-actions/actions-for-modifying-a-configuration#id44705ad2-4f22-4b6c-bb94-caea78a6d510
