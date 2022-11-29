@@ -34,15 +34,13 @@ Check out the [About panco](https://panco.dev/about.html) page for more info.
 You can install `panco` by clicking on the below link and downloading the binary for your specific OS
 (Windows, Mac OS and Linux are supported). Links are available on the main [Github repo](https://github.com/scottdware/panco) page as well.
 
-* [Download panco!](https://github.com/scottdware/panco/releases)
+* [Download the latest release of panco](https://github.com/scottdware/panco/releases)
 
 Once you download the binary, place it in your `PATH` environment variable, or run it from it's current location.
 
 ## Documentation
 
-Access the full package documentation below!
-
-* [panco Documentation](https://panco.dev/docs.html)
+[Access the full panco documentation](https://panco.dev/docs.html)
 
 ## About
 
