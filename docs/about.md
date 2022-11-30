@@ -15,23 +15,13 @@ the device. When modifying existing rules, the `panco policy modify` command doe
 
 The last bullet point is important! Please use caution when running the `modify` command against policy. More information on this can be found on the [modify](https://panco.dev/policy_modify.html) command page. 
 
-Now, 99.9% of the time, you will not see anything out of the ordinary when using `panco` to add or modify
-objects or rules. Examples where you might see strange behavior are:
-
-* If you want to modify a rule, and the rule name is incorrect (typo) - it might create a completely
-new rule with only the tag or modification you were trying to do.
-* If you are trying to tag rules and specify the wrong rule location on Panorama (e.g. "pre" or "post" rules), you
-will end up creating rules in said location with just the tag.
-
-During my testing, those are the only cases where I've seen "oddities" happen. But in all cases, **_NOTHING_** is
-deleted or removed fromt the configuration (unless you choose to remove something).
-
 For more infomation on these actions, please refer to the following guide from Palo Alto:
 
 [Actions for Modifying a Configuration](https://docs.paloaltonetworks.com/pan-os/9-0/pan-os-panorama-api/pan-os-xml-api-request-types/pan-os-xml-api-request-types-and-actions/configuration-actions/actions-for-modifying-a-configuration.html)
 
-If you run into issues, or need assistance, please submit an issue on the [main Github repository](https://github.com/scottdware/panco),
-or drop me a line on Twitter [@scottdware](https://twitter.com/scottdware).
+## Contact Me
+
+If you run into issues, or need assistance, please submit an issue on the [main Github repository](https://github.com/scottdware/panco).
 
 ## References
 
