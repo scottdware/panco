@@ -29,7 +29,7 @@ Please use the below links to the CSV structure as a guide when using the import
 
 Click on any one of the available commands to view the full documentation and usage.
 
-## Available Commands
+## Command Documentation
 
 * [objects](objects.html)
 * [policy](policy.html)
