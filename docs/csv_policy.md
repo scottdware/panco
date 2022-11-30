@@ -86,7 +86,8 @@ panco policy export -d firewall -u admin -g "Device-Group" --type pbf --file <fi
 
 ## Modifying A Security, NAT or Policy-Based Forwarding Policy/Rules -- IMPORTANT
 
-When you modify (edit) rules using the `panco policy modify` command, there are a few things to be aware of.  The `modify` command uses the Palo Alto API `edit` action, instead of the `set` action that is used when using the `import` command. You can read more about the differences of the `edit` and `set` [here](https://docs.paloaltonetworks.com/pan-os/10-2/pan-os-panorama-api/pan-os-xml-api-request-types/pan-os-xml-api-request-types-and-actions/configuration-actions/actions-for-modifying-a-configuration#id44705ad2-4f22-4b6c-bb94-caea78a6d510)
+When you modify (edit) rules using the `panco policy modify` command, there are a few things to be aware of.  The `modify` command uses the Palo Alto API `edit` action, instead of the `set` action that is used when using the `import` command. You can read more about the differences of the `edit` and `set` on [Palo Alto's API request types documentation](https://docs.paloaltonetworks.com/pan-os/10-2/pan-os-panorama-api/pan-os-xml-api-request-types/pan-os-xml-api-request-types-and-actions/configuration-actions/actions-for-modifying-a-configuration#id44705ad2-4f22-4b6c-bb94-caea78a6d510) page.
+
 
 Set and edit actions differ in two important ways:
 * Set actions add, update, or merge configuration nodes, while **_edit actions replace configuration nodes_**.
