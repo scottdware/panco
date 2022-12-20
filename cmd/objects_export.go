@@ -61,35 +61,35 @@ var objectsExportCmd = &cobra.Command{
 			}
 
 			f = strings.TrimSuffix(f, ".csv")
-			addrFile := fmt.Sprintf("%s-Addr.csv", f)
-			addrgrpFile := fmt.Sprintf("%s-Addrgrp.csv", f)
-			srvcFile := fmt.Sprintf("%s-Srvc.csv", f)
-			srvcgrpFile := fmt.Sprintf("%s-Srvcgrp.csv", f)
-			tagFile := fmt.Sprintf("%s-Tags.csv", f)
+			// addrFile := fmt.Sprintf("%s-Addr.csv", f)
+			// addrgrpFile := fmt.Sprintf("%s-Addrgrp.csv", f)
+			// srvcFile := fmt.Sprintf("%s-Srvc.csv", f)
+			// srvcgrpFile := fmt.Sprintf("%s-Srvcgrp.csv", f)
+			// tagFile := fmt.Sprintf("%s-Tags.csv", f)
 
 			// Address objects
 			if t == "address" || t == "all" {
-				getFwAddr(c, addrFile)
+				getFwAddr(c, f)
 			}
 
 			// Address groups
 			if t == "addressgroup" || t == "all" {
-				getFwAddrGrp(c, addrgrpFile)
+				getFwAddrGrp(c, f)
 			}
 
 			// Service objects
 			if t == "service" || t == "all" {
-				getFwSrvc(c, srvcFile)
+				getFwSrvc(c, f)
 			}
 
 			// Service groups
 			if t == "servicegroup" || t == "all" {
-				getFwSrvcGrp(c, srvcgrpFile)
+				getFwSrvcGrp(c, f)
 			}
 
 			// Tags
 			if t == "tags" || t == "all" {
-				getFwTags(c, tagFile)
+				getFwTags(c, f)
 			}
 		case *pango.Panorama:
 			if dg == "" {
@@ -97,35 +97,35 @@ var objectsExportCmd = &cobra.Command{
 			}
 
 			f = strings.TrimSuffix(f, ".csv")
-			addrFile := fmt.Sprintf("%s-Addr.csv", f)
-			addrgrpFile := fmt.Sprintf("%s-Addrgrp.csv", f)
-			srvcFile := fmt.Sprintf("%s-Srvc.csv", f)
-			srvcgrpFile := fmt.Sprintf("%s-Srvcgrp.csv", f)
-			tagFile := fmt.Sprintf("%s-Tags.csv", f)
+			// addrFile := fmt.Sprintf("%s-Addr.csv", f)
+			// addrgrpFile := fmt.Sprintf("%s-Addrgrp.csv", f)
+			// srvcFile := fmt.Sprintf("%s-Srvc.csv", f)
+			// srvcgrpFile := fmt.Sprintf("%s-Srvcgrp.csv", f)
+			// tagFile := fmt.Sprintf("%s-Tags.csv", f)
 
 			// Address objects
 			if t == "address" || t == "all" {
-				getPanoAddr(c, addrFile)
+				getPanoAddr(c, f)
 			}
 
 			// Address groups
 			if t == "addressgroup" || t == "all" {
-				getPanoAddrGrp(c, addrgrpFile)
+				getPanoAddrGrp(c, f)
 			}
 
 			// Service objects
 			if t == "service" || t == "all" {
-				getPanoSrvc(c, srvcFile)
+				getPanoSrvc(c, f)
 			}
 
 			// Service groups
 			if t == "servicegroup" || t == "all" {
-				getPanoSrvcGrp(c, srvcgrpFile)
+				getPanoSrvcGrp(c, f)
 			}
 
 			// Tags
 			if t == "tags" || t == "all" {
-				getPanoTags(c, tagFile)
+				getPanoTags(c, f)
 			}
 		}
 	},
@@ -158,6 +158,7 @@ func getFwAddr(c *pango.Firewall, file string) {
 
 	numobjs := len(addrs)
 	if numobjs <= 0 {
+		log.Printf("No address objects to export\n")
 		return
 	}
 
@@ -194,6 +195,7 @@ func getFwAddrGrp(c *pango.Firewall, file string) {
 
 	numobjs := len(addrgrps)
 	if numobjs <= 0 {
+		log.Printf("No address group objects to export")
 		return
 	}
 
@@ -241,6 +243,7 @@ func getFwSrvc(c *pango.Firewall, file string) {
 
 	numobjs := len(srvcs)
 	if numobjs <= 0 {
+		log.Printf("No service objects to export")
 		return
 	}
 
@@ -277,6 +280,7 @@ func getFwSrvcGrp(c *pango.Firewall, file string) {
 
 	numobjs := len(srvcgrps)
 	if numobjs <= 0 {
+		log.Printf("No service group objects to export")
 		return
 	}
 
@@ -313,6 +317,7 @@ func getFwTags(c *pango.Firewall, file string) {
 
 	numobjs := len(tags)
 	if numobjs <= 0 {
+		log.Printf("No tag objects to export")
 		return
 	}
 
@@ -349,6 +354,7 @@ func getPanoAddr(c *pango.Panorama, file string) {
 
 	numobjs := len(addrs)
 	if numobjs <= 0 {
+		log.Printf("No address objects to export")
 		return
 	}
 
@@ -385,6 +391,7 @@ func getPanoAddrGrp(c *pango.Panorama, file string) {
 
 	numobjs := len(addrgrps)
 	if numobjs <= 0 {
+		log.Printf("No address group objects to export")
 		return
 	}
 
@@ -432,6 +439,7 @@ func getPanoSrvc(c *pango.Panorama, file string) {
 
 	numobjs := len(srvcs)
 	if numobjs <= 0 {
+		log.Printf("No service objects to export")
 		return
 	}
 
@@ -468,6 +476,7 @@ func getPanoSrvcGrp(c *pango.Panorama, file string) {
 
 	numobjs := len(srvcgrps)
 	if numobjs <= 0 {
+		log.Printf("No service group objects to export")
 		return
 	}
 
@@ -504,6 +513,7 @@ func getPanoTags(c *pango.Panorama, file string) {
 
 	numobjs := len(tags)
 	if numobjs <= 0 {
+		log.Printf("No tag objects to export")
 		return
 	}
 
