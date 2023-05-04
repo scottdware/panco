@@ -19,7 +19,7 @@ var templateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		switch t {
 		case "objects":
-			output, err := easycsv.NewCSV("Objects.csv")
+			output, err := easycsv.NewCSV("panco-Objects_Template.csv")
 			if err != nil {
 				log.Printf("Error creating CSV file - %s", err)
 				os.Exit(1)
@@ -48,7 +48,7 @@ var templateCmd = &cobra.Command{
 			output.Write("Object_to_Tag,ip,10.1.1.1,,Servers,Some_Device_Group\n")
 			output.End()
 		case "policy":
-			output, err := easycsv.NewCSV("Policy.csv")
+			output, err := easycsv.NewCSV("panco-Policy_Template.csv")
 			if err != nil {
 				log.Printf("Error creating CSV file - %s", err)
 				os.Exit(1)
@@ -57,7 +57,7 @@ var templateCmd = &cobra.Command{
 			output.Write(",universal,,,,,FALSE,any,,,,FALSE,any,,any,allow,default,FALSE,TRUE,FALSE,,FALSE,FALSE,,,,,,,,\n")
 			output.End()
 		case "all":
-			obj, err := easycsv.NewCSV("Objects.csv")
+			obj, err := easycsv.NewCSV("panco-Objects_Template.csv")
 			if err != nil {
 				log.Printf("Error creating CSV file - %s", err)
 				os.Exit(1)
@@ -86,7 +86,7 @@ var templateCmd = &cobra.Command{
 			obj.Write("Object_to_Tag,ip,10.1.1.1,,Servers,Some_Device_Group\n")
 			obj.End()
 
-			pol, err := easycsv.NewCSV("Policy.csv")
+			pol, err := easycsv.NewCSV("panco-Policy_Template.csv")
 			if err != nil {
 				log.Printf("Error creating CSV file - %s", err)
 				os.Exit(1)

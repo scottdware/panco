@@ -61,35 +61,50 @@ var objectsExportCmd = &cobra.Command{
 			}
 
 			f = strings.TrimSuffix(f, ".csv")
-			// addrFile := fmt.Sprintf("%s-Addr.csv", f)
-			// addrgrpFile := fmt.Sprintf("%s-Addrgrp.csv", f)
-			// srvcFile := fmt.Sprintf("%s-Srvc.csv", f)
-			// srvcgrpFile := fmt.Sprintf("%s-Srvcgrp.csv", f)
-			// tagFile := fmt.Sprintf("%s-Tags.csv", f)
 
 			// Address objects
-			if t == "address" || t == "all" {
-				getFwAddr(c, f)
+			if t == "address" {
+				getFwAddr(c, fmt.Sprintf("%s.csv", f))
+			}
+
+			if t == "all" {
+				getFwAddr(c, fmt.Sprintf("%s_Addrs.csv", f))
 			}
 
 			// Address groups
-			if t == "addressgroup" || t == "all" {
-				getFwAddrGrp(c, f)
+			if t == "addressgroup" {
+				getFwAddrGrp(c, fmt.Sprintf("%s.csv", f))
+			}
+
+			if t == "all" {
+				getFwAddrGrp(c, fmt.Sprintf("%s_AddrGroups.csv", f))
 			}
 
 			// Service objects
-			if t == "service" || t == "all" {
-				getFwSrvc(c, f)
+			if t == "service" {
+				getFwSrvc(c, fmt.Sprintf("%s.csv", f))
+			}
+
+			if t == "all" {
+				getFwSrvc(c, fmt.Sprintf("%s_Svcs.csv", f))
 			}
 
 			// Service groups
-			if t == "servicegroup" || t == "all" {
-				getFwSrvcGrp(c, f)
+			if t == "servicegroup" {
+				getFwSrvcGrp(c, fmt.Sprintf("%s.csv", f))
+			}
+
+			if t == "all" {
+				getFwSrvcGrp(c, fmt.Sprintf("%s_SvcGroups.csv", f))
 			}
 
 			// Tags
-			if t == "tags" || t == "all" {
-				getFwTags(c, f)
+			if t == "tags" {
+				getFwTags(c, fmt.Sprintf("%s.csv", f))
+			}
+
+			if t == "all" {
+				getFwTags(c, fmt.Sprintf("%s_Tags.csv", f))
 			}
 		case *pango.Panorama:
 			if dg == "" {
@@ -97,35 +112,50 @@ var objectsExportCmd = &cobra.Command{
 			}
 
 			f = strings.TrimSuffix(f, ".csv")
-			// addrFile := fmt.Sprintf("%s-Addr.csv", f)
-			// addrgrpFile := fmt.Sprintf("%s-Addrgrp.csv", f)
-			// srvcFile := fmt.Sprintf("%s-Srvc.csv", f)
-			// srvcgrpFile := fmt.Sprintf("%s-Srvcgrp.csv", f)
-			// tagFile := fmt.Sprintf("%s-Tags.csv", f)
 
 			// Address objects
-			if t == "address" || t == "all" {
-				getPanoAddr(c, f)
+			if t == "address" {
+				getPanoAddr(c, fmt.Sprintf("%s.csv", f))
+			}
+
+			if t == "all" {
+				getPanoAddr(c, fmt.Sprintf("%s_Addrs.csv", f))
 			}
 
 			// Address groups
-			if t == "addressgroup" || t == "all" {
-				getPanoAddrGrp(c, f)
+			if t == "addressgroup" {
+				getPanoAddrGrp(c, fmt.Sprintf("%s.csv", f))
+			}
+
+			if t == "all" {
+				getPanoAddrGrp(c, fmt.Sprintf("%s_AddrGroups.csv", f))
 			}
 
 			// Service objects
-			if t == "service" || t == "all" {
-				getPanoSrvc(c, f)
+			if t == "service" {
+				getPanoSrvc(c, fmt.Sprintf("%s.csv", f))
+			}
+
+			if t == "all" {
+				getPanoSrvc(c, fmt.Sprintf("%s_Svcs.csv", f))
 			}
 
 			// Service groups
-			if t == "servicegroup" || t == "all" {
-				getPanoSrvcGrp(c, f)
+			if t == "servicegroup" {
+				getPanoSrvcGrp(c, fmt.Sprintf("%s.csv", f))
+			}
+
+			if t == "all" {
+				getPanoSrvcGrp(c, fmt.Sprintf("%s_SvcGroups.csv", f))
 			}
 
 			// Tags
-			if t == "tags" || t == "all" {
-				getPanoTags(c, f)
+			if t == "tags" {
+				getPanoTags(c, fmt.Sprintf("%s.csv", f))
+			}
+
+			if t == "all" {
+				getPanoTags(c, fmt.Sprintf("%s_Tags.csv", f))
 			}
 		}
 	},

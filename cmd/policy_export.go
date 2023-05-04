@@ -57,18 +57,30 @@ var policyExportCmd = &cobra.Command{
 		switch c := con.(type) {
 		case *pango.Firewall:
 			// Security policy
-			if t == "security" || t == "all" {
+			if t == "security" {
 				getFwSecPol(c, f, hit)
 			}
 
+			if t == "all" {
+				getFwSecPol(c, fmt.Sprintf("%s_Security", f), hit)
+			}
+
 			// NAT policy
-			if t == "nat" || t == "all" {
+			if t == "nat" {
 				getFwNatPol(c, f, hit)
 			}
 
+			if t == "all" {
+				getFwNatPol(c, fmt.Sprintf("%s_NAT", f), hit)
+			}
+
 			// Policy-Based Forwarding policy
-			if t == "pbf" || t == "all" {
+			if t == "pbf" {
 				getFwPbfPol(c, f, hit)
+			}
+
+			if t == "all" {
+				getFwPbfPol(c, fmt.Sprintf("%s_PBF", f), hit)
 			}
 		case *pango.Panorama:
 			switch l {
@@ -81,18 +93,30 @@ var policyExportCmd = &cobra.Command{
 			}
 
 			// Security policy
-			if t == "security" || t == "all" {
+			if t == "security" {
 				getPanoSecPol(c, f, hit)
 			}
 
+			if t == "all" {
+				getPanoSecPol(c, fmt.Sprintf("%s_Security", f), hit)
+			}
+
 			// NAT policy
-			if t == "nat" || t == "all" {
+			if t == "nat" {
 				getPanoNatPol(c, f, hit)
 			}
 
+			if t == "all" {
+				getPanoNatPol(c, fmt.Sprintf("%s_NAT", f), hit)
+			}
+
 			// Policy-Based Forwarding policy
-			if t == "pbf" || t == "all" {
+			if t == "pbf" {
 				getPanoPbfPol(c, f, hit)
+			}
+
+			if t == "all" {
+				getPanoPbfPol(c, fmt.Sprintf("%s_PBF", f), hit)
 			}
 		}
 	},

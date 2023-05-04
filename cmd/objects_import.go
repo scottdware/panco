@@ -362,7 +362,13 @@ var objectsImportCmd = &cobra.Command{
 				case "urladd":
 					var xpath, xmlBody string
 
-					xmlBody = fmt.Sprintf("<member>%s</member>", value)
+					urls := stringToSlice(value)
+
+					for _, url := range urls {
+						xmlBody += fmt.Sprintf("<member>%s</member>", url)
+					}
+
+					// xmlBody = fmt.Sprintf("<member>%s</member>", value)
 					xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list", vsys, name)
 
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
@@ -748,13 +754,23 @@ var objectsImportCmd = &cobra.Command{
 				case "urladd":
 					var xpath, xmlBody string
 
+					urls := stringToSlice(value)
+
 					if dgroup == "shared" {
-						xmlBody = fmt.Sprintf("<member>%s</member>", value)
+						for _, url := range urls {
+							xmlBody += fmt.Sprintf("<member>%s</member>", url)
+						}
+
+						// xmlBody = fmt.Sprintf("<member>%s</member>", value)
 						xpath = fmt.Sprintf("/config/shared/profiles/custom-url-category/entry[@name='%s']/list", name)
 					}
 
 					if dgroup != "shared" {
-						xmlBody = fmt.Sprintf("<member>%s</member>", value)
+						for _, url := range urls {
+							xmlBody += fmt.Sprintf("<member>%s</member>", url)
+						}
+
+						// xmlBody = fmt.Sprintf("<member>%s</member>", value)
 						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list", dgroup, name)
 					}
 
