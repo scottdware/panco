@@ -21,6 +21,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/PaloAltoNetworks/pango"
@@ -90,7 +91,7 @@ var policyImportCmd = &cobra.Command{
 					// }
 
 					e := security.Entry{
-						Name:                            rule[0],
+						Name:                            strings.TrimSpace(rule[0]),
 						Type:                            rule[1],
 						Description:                     rule[2],
 						Tags:                            stringToSlice(rule[3]),
@@ -163,7 +164,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					e := nat.Entry{
-						Name:                           rule[0],
+						Name:                           strings.TrimSpace(rule[0]),
 						Type:                           ruletype,
 						Description:                    rule[2],
 						Tags:                           stringToSlice(rule[3]),
@@ -220,7 +221,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					e := pbf.Entry{
-						Name:                               rule[0],
+						Name:                               strings.TrimSpace(rule[0]),
 						Description:                        rule[1],
 						Tags:                               stringToSlice(rule[2]),
 						FromType:                           rule[3],
@@ -297,7 +298,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					e := security.Entry{
-						Name:                            rule[0],
+						Name:                            strings.TrimSpace(rule[0]),
 						Type:                            ruletype,
 						Description:                     rule[2],
 						Tags:                            stringToSlice(rule[3]),
@@ -370,7 +371,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					e := nat.Entry{
-						Name:                           rule[0],
+						Name:                           strings.TrimSpace(rule[0]),
 						Type:                           ruletype,
 						Description:                    rule[2],
 						Tags:                           stringToSlice(rule[3]),
@@ -427,7 +428,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					e := pbf.Entry{
-						Name:                               rule[0],
+						Name:                               strings.TrimSpace(rule[0]),
 						Description:                        rule[1],
 						Tags:                               stringToSlice(rule[2]),
 						FromType:                           rule[3],
