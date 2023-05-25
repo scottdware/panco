@@ -334,46 +334,19 @@ var objectsImportCmd = &cobra.Command{
 				case "urlcreate":
 					var xpath, xmlBody string
 
-					// if dgroup == "shared" {
-					// 	xpath = fmt.Sprintf("/config/shared/profiles/custom-url-category/entry[@name='%s']", name)
-					// }
+					xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']", vsys, name)
 
-					// if dgroup != "shared" {
-					// 	xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']", dgroup, name)
-					// }
+					xmlBody += "<list>"
+					for _, m := range stringToSlice(value) {
+						xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
+					}
+					xmlBody += "</list>"
+					xmlBody = "<type>URL List</type>"
 
-					xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list", vsys, name)
-
-					if len(value) <= 0 {
-						log.Printf("Line %d - URL list must not be empty when creating a category", i+1)
-
-						return
-						// xmlBody = fmt.Sprintf("<type>URL List</type><list><member>%s</member></list>", value)
-
-						// _, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
-						// if err != nil {
-						// 	formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						// 	log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
-						// }
-					} else {
-						xmlBody = "<type>URL List</type>"
-						// urls := stringToSlice(value)
-
-						// for _, url := range urls {
-						// 	xmlBody += fmt.Sprintf("<member>%s</member>", url)
-						// }
-
-						xmlBody += "<list>"
-						for _, m := range stringToSlice(value) {
-							xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
-						}
-						xmlBody += "</list>"
-
-						_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&&key=%s", device, xpath, c.ApiKey))
-						if err != nil {
-							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-							log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
-						}
+					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&&key=%s", device, xpath, c.ApiKey))
+					if err != nil {
+						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+						log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
 					}
 				case "urladd":
 					var xpath, xmlBody string
@@ -384,7 +357,6 @@ var objectsImportCmd = &cobra.Command{
 						xmlBody += fmt.Sprintf("<member>%s</member>", url)
 					}
 
-					// xmlBody = fmt.Sprintf("<member>%s</member>", value)
 					xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list", vsys, name)
 
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
@@ -736,41 +708,12 @@ var objectsImportCmd = &cobra.Command{
 						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']", dgroup, name)
 					}
 
-					// xmlBody = "<type>URL List</type>"
-
-					// if desc != "" {
-					// 	xmlBody += fmt.Sprintf("<description>%s</description>", desc)
-					// }
-
-					// xmlBody += "<list>"
-					// for _, m := range stringToSlice(value) {
-					// 	xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
-					// }
-					// xmlBody += "</list>"
-
-					// _, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
-					// if err != nil {
-					// 	formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-					// 	log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
-					// }
-
-					xmlBody = "<type>URL List</type>"
-
-					// if desc != "" {
-					// 	xmlBody += fmt.Sprintf("<description>%s</description>", desc)
-					// }
-
-					// urls := stringToSlice(value)
-
 					xmlBody += "<list>"
 					for _, m := range stringToSlice(value) {
 						xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
 					}
 					xmlBody += "</list>"
-
-					// for _, url := range urls {
-					// 	xmlBody += fmt.Sprintf("<member>%s</member>", url)
-					// }
+					xmlBody = "<type>URL List</type>"
 
 					_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
 					if err != nil {
@@ -787,7 +730,6 @@ var objectsImportCmd = &cobra.Command{
 							xmlBody += fmt.Sprintf("<member>%s</member>", url)
 						}
 
-						// xmlBody = fmt.Sprintf("<member>%s</member>", value)
 						xpath = fmt.Sprintf("/config/shared/profiles/custom-url-category/entry[@name='%s']/list", name)
 					}
 
@@ -796,7 +738,6 @@ var objectsImportCmd = &cobra.Command{
 							xmlBody += fmt.Sprintf("<member>%s</member>", url)
 						}
 
-						// xmlBody = fmt.Sprintf("<member>%s</member>", value)
 						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list", dgroup, name)
 					}
 
