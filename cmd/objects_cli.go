@@ -608,10 +608,13 @@ var objectsCliCmd = &cobra.Command{
 
 				switch devtype {
 				case "vsys1":
+					// command = fmt.Printf("set profiles custom-url-category type \"URL List\"\n")
 					command = fmt.Sprintf("set profiles custom-url-category %s list [ %s ]\n", name, strings.TrimRight(cmdBody, " "))
 				case "shared":
+					// command = fmt.Printf("set shared profiles custom-url-category type \"URL List\"\n")
 					command = fmt.Sprintf("set shared profiles custom-url-category %s list [ %s ]\n", name, strings.TrimRight(cmdBody, " "))
 				default:
+					// command = fmt.Sprintf("set device-group %s profiles custom-url-category type \"URL List\"\n", name)
 					command = fmt.Sprintf("set device-group %s profiles custom-url-category %s list [ %s ]\n", devtype, name, strings.TrimRight(cmdBody, " "))
 				}
 
