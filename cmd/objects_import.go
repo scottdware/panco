@@ -331,25 +331,25 @@ var objectsImportCmd = &cobra.Command{
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 					}
-				// case "urlcreate":
-				// 	var xpath, xmlBody string
+				case "urlcreate":
+					var xpath, xmlBody string
 
-				// 	xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']", vsys, name)
+					xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']", vsys, name)
 
-				// 	xmlBody += "<list>"
-				// 	for _, m := range stringToSlice(value) {
-				// 		xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
-				// 	}
-				// 	xmlBody += "</list>"
-				// 	xmlBody = "<type>URL List</type>"
+					xmlBody += "<list>"
+					for _, m := range stringToSlice(value) {
+						xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
+					}
+					xmlBody += "</list>"
+					xmlBody = "<type>URL List</type>"
 
-				// 	fmt.Printf("%+v\n", xmlBody)
+					fmt.Printf("%+v\n", xmlBody)
 
-				// 	_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&&key=%s", device, xpath, c.ApiKey))
-				// 	if err != nil {
-				// 		formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-				// 		log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
-				// 	}
+					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
+					if err != nil {
+						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+						log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
+					}
 				case "urladd":
 					var xpath, xmlBody string
 
@@ -700,29 +700,30 @@ var objectsImportCmd = &cobra.Command{
 						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 					}
 				case "urlcreate":
-					// var xpath, xmlBody string
+					var xpath, xmlBody string
 
-					// xpath = "/config/shared/profiles/custom-url-category"
-					// if dgroup == "shared" {
-					// 	xpath = fmt.Sprintf("/config/shared/profiles/custom-url-category/entry[@name='%s']", name)
-					// }
+					xpath = "/config/shared/profiles/custom-url-category"
 
-					// if dgroup != "shared" {
-					// 	xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']", dgroup, name)
-					// }
+					if dgroup == "shared" {
+						xpath = fmt.Sprintf("/config/shared/profiles/custom-url-category/entry[@name='%s']", name)
+					}
 
-					// xmlBody += fmt.Sprintf("<entry name=\"%s\"><list>", name)
-					// for _, m := range stringToSlice(value) {
-					// 	xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
-					// }
-					// xmlBody += "</list>"
-					// xmlBody = "<type>URL List</type></entry>"
+					if dgroup != "shared" {
+						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']", dgroup, name)
+					}
 
-					// _, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
-					// if err != nil {
-					// 	formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-					// 	log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
-					// }
+					xmlBody += "<list>"
+					for _, m := range stringToSlice(value) {
+						xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
+					}
+					xmlBody += "</list>"
+					xmlBody += "<type>URL List</type>"
+
+					_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
+					if err != nil {
+						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+						log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
+					}
 				case "urladd":
 					var xpath, xmlBody string
 
