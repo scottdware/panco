@@ -206,6 +206,17 @@ func stringToSlice(str string) []string {
 	return slice
 }
 
+func urlStringToSlice(str string) []string {
+	var slice []string
+
+	list := strings.FieldsFunc(str, func(r rune) bool { return strings.ContainsRune(",;\r\n ", r) })
+	for _, item := range list {
+		slice = append(slice, strings.TrimSpace(item))
+	}
+
+	return slice
+}
+
 func userSliceToString(slice []string) string {
 	var str string
 

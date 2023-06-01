@@ -331,51 +331,51 @@ var objectsImportCmd = &cobra.Command{
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 					}
-				case "urlcreate":
-					var xpath, xmlBody string
+				// case "urlcreate":
+				// 	var xpath, xmlBody string
 
-					xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']", vsys, name)
+				// 	xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']", vsys, name)
 
-					xmlBody += "<list>"
-					for _, m := range stringToSlice(value) {
-						xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
-					}
-					xmlBody += "</list>"
-					xmlBody = "<type>URL List</type>"
+				// 	xmlBody = "<list>"
+				// 	for _, m := range urlStringToSlice(value) {
+				// 		xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
+				// 	}
+				// 	xmlBody += "</list>"
+				// 	xmlBody += "<type>URL List</type>"
 
-					fmt.Printf("%+v\n", xmlBody)
+				// 	fmt.Printf("%+v\n", xmlBody)
 
-					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
-					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
-					}
-				case "urladd":
-					var xpath, xmlBody string
+				// 	_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
+				// 	if err != nil {
+				// 		formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+				// 		log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
+				// 	}
+				// case "urladd":
+				// 	var xpath, xmlBody string
 
-					urls := stringToSlice(value)
+				// 	urls := urlStringToSlice(value)
 
-					for _, url := range urls {
-						xmlBody += fmt.Sprintf("<member>%s</member>", url)
-					}
+				// 	for _, url := range urls {
+				// 		xmlBody += fmt.Sprintf("<member>%s</member>", url)
+				// 	}
 
-					xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list", vsys, name)
+				// 	xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list", vsys, name)
 
-					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
-					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to add URL to custom category %s: %s", i+1, name, formatkey)
-					}
-				case "urlremove":
-					var xpath string
+				// 	_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
+				// 	if err != nil {
+				// 		formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+				// 		log.Printf("Line %d - failed to add URL to custom category %s: %s", i+1, name, formatkey)
+				// 	}
+				// case "urlremove":
+				// 	var xpath string
 
-					xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list/member[text()='%s']", vsys, name, value)
+				// 	xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list/member[text()='%s']", vsys, name, value)
 
-					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=delete&xpath=%s&key=%s", device, xpath, c.ApiKey))
-					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to remove URL from custom category %s: %s", i+1, name, formatkey)
-					}
+				// 	_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=delete&xpath=%s&key=%s", device, xpath, c.ApiKey))
+				// 	if err != nil {
+				// 		formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+				// 		log.Printf("Line %d - failed to remove URL from custom category %s: %s", i+1, name, formatkey)
+				// 	}
 				case "tag":
 					if value == "delete" {
 						err = c.Objects.Tags.Delete(v, name)
@@ -699,73 +699,78 @@ var objectsImportCmd = &cobra.Command{
 						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
 					}
-				case "urlcreate":
-					var xpath, xmlBody string
+				// case "urlcreate":
+				// 	var xpath, xmlBody string
 
-					xpath = "/config/shared/profiles/custom-url-category"
+				// 	// xpath = "/config/shared/profiles/custom-url-category"
 
-					if dgroup == "shared" {
-						xpath = fmt.Sprintf("/config/shared/profiles/custom-url-category/entry[@name='%s']", name)
-					}
+				// 	if dgroup == "shared" {
+				// 		xpath = fmt.Sprintf("/config/shared/profiles/custom-url-category/entry[@name='%s']", name)
+				// 	}
 
-					if dgroup != "shared" {
-						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']", dgroup, name)
-					}
+				// 	if dgroup != "shared" {
+				// 		xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']", dgroup, name)
+				// 	}
 
-					xmlBody += "<list>"
-					for _, m := range stringToSlice(value) {
-						xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
-					}
-					xmlBody += "</list>"
-					xmlBody += "<type>URL List</type>"
+				// 	// xmlBody = fmt.Sprintf("<entry name=\"%s\">", name)
+				// 	// xmlBody += "<list>"
+				// 	// for _, m := range urlStringToSlice(value) {
+				// 	// 	xmlBody += fmt.Sprintf("<member>%s</member>", strings.TrimSpace(m))
+				// 	// }
+				// 	// xmlBody += "</list>"
+				// 	xmlBody = "<type>URL List</type>"
 
-					_, err := resty.R().Post(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
-					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
-					}
-				case "urladd":
-					var xpath, xmlBody string
+				// 	// fmt.Printf("xpath: %s\n", xpath)
+				// 	// fmt.Printf("element: %s\n", xmlBody)
+				// 	// fmt.Printf("API string: https://%s/api/?type=config&action=edit&xpath=%s&element=%s&key=********\n", device, xpath, xmlBody)
 
-					urls := stringToSlice(value)
+				// 	_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
+				// 	if err != nil {
+				// 		formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+				// 		log.Printf("Line %d - failed to create custom URL category %s: %s", i+1, name, formatkey)
+				// 	}
+				// case "urladd":
+				// 	var xpath, xmlBody string
 
-					if dgroup == "shared" {
-						for _, url := range urls {
-							xmlBody += fmt.Sprintf("<member>%s</member>", url)
-						}
+				// 	urls := urlStringToSlice(value)
 
-						xpath = fmt.Sprintf("/config/shared/profiles/custom-url-category/entry[@name='%s']/list", name)
-					}
+				// 	if dgroup == "shared" {
+				// 		for _, url := range urls {
+				// 			xmlBody += fmt.Sprintf("<member>%s</member>", url)
+				// 		}
 
-					if dgroup != "shared" {
-						for _, url := range urls {
-							xmlBody += fmt.Sprintf("<member>%s</member>", url)
-						}
+				// 		xpath = fmt.Sprintf("/config/shared/profiles/custom-url-category/entry[@name='%s']/list", name)
+				// 	}
 
-						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list", dgroup, name)
-					}
+				// 	if dgroup != "shared" {
+				// 		for _, url := range urls {
+				// 			xmlBody += fmt.Sprintf("<member>%s</member>", url)
+				// 		}
 
-					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
-					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to add URL to custom category %s: %s", i+1, name, formatkey)
-					}
-				case "urlremove":
-					var xpath string
+				// 		xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list", dgroup, name)
+				// 	}
 
-					if dgroup == "shared" {
-						xpath = fmt.Sprintf("/config/shared/profiles/custom-url-category/entry[@name='%s']/list/member[text()='%s']", name, value)
-					}
+				// 	_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=set&xpath=%s&element=%s&key=%s", device, xpath, xmlBody, c.ApiKey))
+				// 	if err != nil {
+				// 		formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+				// 		log.Printf("Line %d - failed to add URL to custom category %s: %s", i+1, name, formatkey)
+				// 	}
+				// case "urlremove":
+				// 	var xpath string
 
-					if dgroup != "shared" {
-						xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list/member[text()='%s']", dgroup, name, value)
-					}
+				// 	if dgroup == "shared" {
+				// 		xpath = fmt.Sprintf("/config/shared/profiles/custom-url-category/entry[@name='%s']/list/member[text()='%s']", name, value)
+				// 	}
 
-					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=delete&xpath=%s&key=%s", device, xpath, c.ApiKey))
-					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to remove URL from custom category %s: %s", i+1, name, formatkey)
-					}
+				// 	if dgroup != "shared" {
+				// 		xpath = fmt.Sprintf("/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/profiles/custom-url-category/entry[@name='%s']/list/member[text()='%s']", dgroup, name, value)
+				// 	}
+
+				// 	_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=delete&xpath=%s&key=%s", device, xpath, c.ApiKey))
+				// 	if err != nil {
+				// 		formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+				// 		log.Printf("Line %d - failed to remove URL from custom category %s: %s", i+1, name, formatkey)
+				// 	}
 				case "tag":
 					if value == "delete" {
 						err = c.Objects.Tags.Delete(dgroup, name)

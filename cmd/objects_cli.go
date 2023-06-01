@@ -597,49 +597,49 @@ var objectsCliCmd = &cobra.Command{
 				if err != nil {
 					log.Printf("Failed to write to TXT file - %s", err)
 				}
-			case "urladd":
-				var cmdBody string
+				// case "urladd":
+				// 	var cmdBody string
 
-				urls := stringToSlice(value)
+				// 	urls := stringToSlice(value)
 
-				for _, url := range urls {
-					cmdBody += fmt.Sprintf("%s ", url)
-				}
+				// 	for _, url := range urls {
+				// 		cmdBody += fmt.Sprintf("%s ", url)
+				// 	}
 
-				switch devtype {
-				case "vsys1":
-					// command = fmt.Printf("set profiles custom-url-category type \"URL List\"\n")
-					command = fmt.Sprintf("set profiles custom-url-category %s list [ %s ]\n", name, strings.TrimRight(cmdBody, " "))
-				case "shared":
-					// command = fmt.Printf("set shared profiles custom-url-category type \"URL List\"\n")
-					command = fmt.Sprintf("set shared profiles custom-url-category %s list [ %s ]\n", name, strings.TrimRight(cmdBody, " "))
-				default:
-					// command = fmt.Sprintf("set device-group %s profiles custom-url-category type \"URL List\"\n", name)
-					command = fmt.Sprintf("set device-group %s profiles custom-url-category %s list [ %s ]\n", devtype, name, strings.TrimRight(cmdBody, " "))
-				}
+				// 	switch devtype {
+				// 	case "vsys1":
+				// 		// command = fmt.Printf("set profiles custom-url-category type \"URL List\"\n")
+				// 		command = fmt.Sprintf("set profiles custom-url-category %s list [ %s ]\n", name, strings.TrimRight(cmdBody, " "))
+				// 	case "shared":
+				// 		// command = fmt.Printf("set shared profiles custom-url-category type \"URL List\"\n")
+				// 		command = fmt.Sprintf("set shared profiles custom-url-category %s list [ %s ]\n", name, strings.TrimRight(cmdBody, " "))
+				// 	default:
+				// 		// command = fmt.Sprintf("set device-group %s profiles custom-url-category type \"URL List\"\n", name)
+				// 		command = fmt.Sprintf("set device-group %s profiles custom-url-category %s list [ %s ]\n", devtype, name, strings.TrimRight(cmdBody, " "))
+				// 	}
 
-				// fmt.Printf("%s", command)
-				_, err = io.WriteString(txtfile, command)
+				// 	// fmt.Printf("%s", command)
+				// 	_, err = io.WriteString(txtfile, command)
 
-				if err != nil {
-					log.Printf("Failed to write to TXT file - %s", err)
-				}
-			case "urlremove":
-				switch devtype {
-				case "vsys1":
-					command = fmt.Sprintf("delete profiles custom-url-category %s list %s\n", name, value)
-				case "shared":
-					command = fmt.Sprintf("delete shared profiles custom-url-category %s list %s\n", name, value)
-				default:
-					command = fmt.Sprintf("delete device-group %s profiles custom-url-category %s list %s\n", devtype, name, value)
-				}
+				// 	if err != nil {
+				// 		log.Printf("Failed to write to TXT file - %s", err)
+				// 	}
+				// case "urlremove":
+				// 	switch devtype {
+				// 	case "vsys1":
+				// 		command = fmt.Sprintf("delete profiles custom-url-category %s list %s\n", name, value)
+				// 	case "shared":
+				// 		command = fmt.Sprintf("delete shared profiles custom-url-category %s list %s\n", name, value)
+				// 	default:
+				// 		command = fmt.Sprintf("delete device-group %s profiles custom-url-category %s list %s\n", devtype, name, value)
+				// 	}
 
-				// fmt.Printf("%s", command)
-				_, err = io.WriteString(txtfile, command)
+				// 	// fmt.Printf("%s", command)
+				// 	_, err = io.WriteString(txtfile, command)
 
-				if err != nil {
-					log.Printf("Failed to write to TXT file - %s", err)
-				}
+				// 	if err != nil {
+				// 		log.Printf("Failed to write to TXT file - %s", err)
+				// 	}
 			}
 
 			txtfile.Sync()
