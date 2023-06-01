@@ -10,7 +10,6 @@ Abilities include:
 * Creating address, service and tag objects
 * Renaming address, service and tag objects
 * Adding or removing objects from address and service groups
-<!-- * Adding or removing URL entries from a custom URL category -->
 * Finding duplicate address and service objects
 * Tag multiple objects
 * Deleting objects
@@ -54,7 +53,7 @@ Usage:
 
 Available Commands:
   help        Help about any command
-  objects     Commands to work with address, service, custom URL and tag objects
+  objects     Commands to work with address, service and tag objects
   policy      Commands to work with security, NAT and Policy-Based Forwarding policies
   userid      Commands to interact with User-ID functions
   version     Version information for panco
