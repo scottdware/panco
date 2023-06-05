@@ -6,14 +6,14 @@
 ## How It Works
 
 When `panco` creates or modifies an object, it uses the "set" API action against
-the device. When modifying existing rules, the `panco policy modify` command does use the "edit" API action. There are very important differences between
+the device. When modifying existing rules, the `panco policy edit` command does use the "edit" API action. There are very important differences between
  the two as described below.
 
 > _Set and edit actions differ in two important ways:_
 > * _Set actions add, update, or merge configuration nodes, while **edit actions replace configuration nodes**._
 > * _Set actions are **non-destructive and are only additive**, while **edit actions can be destructive**._
 
-The last bullet point is important! Please use caution when running the `modify` command against policy. More information on this can be found on the [modify](https://panco.dev/policy_modify.html) command page. 
+The last bullet point is important! Please use caution when running the `edit` command against policy. More information on this can be found on the [edit](https://panco.dev/policy_edit.html) command page. 
 
 For more infomation on these actions, please refer to the following guide from Palo Alto:
 

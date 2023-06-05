@@ -30,9 +30,9 @@ on how to structure your CSV files when importing, grouping or moving rules.
 
 Click on any one of the available commands to view the full documentation and usage:
 
+* [edit](https://panco.dev/policy_edit.html)
 * [export](https://panco.dev/policy_export.html)
 * [group](https://panco.dev/policy_group.html)
 * [hitcount](https://panco.dev/policy_hitcount.html)
 * [import](https://panco.dev/policy_import.html)
-* [edit](https://panco.dev/policy_edit.html)
 * [move](https://panco.dev/policy_move.html)

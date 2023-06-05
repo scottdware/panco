@@ -15,9 +15,9 @@ and Panorama, which normally would be cumbersome having to do them one-by-one. F
 * Finding duplicate address and service objects
 * Tag multiple objects
 * Deleting objects
-* Exporting a security, NAT or Policy-Based Forwarding (PBF) policy
-* Creating security, NAT or Policy-Based Forwarding (PBF) rules
-* Modifying security, NAT or Policy-Based Forwarding (PBF) rules - e.g. adding a Log Profile to all rules
+* Exporting a security, NAT, Decryption or Policy-Based Forwarding (PBF) policy
+* Creating security, NAT, Decryption or Policy-Based Forwarding (PBF) rules
+* Editing security, NAT, Decryption or Policy-Based Forwarding (PBF) rules - e.g. adding a Log Profile to all rules
 * Group security or NAT rules by tags
 * Move multiple security, NAT or Policy-Based Forwarding (PBF) rules at a time
 * Get the hit count data on security, NAT or Policy-Based Forwarding (PBF) rules

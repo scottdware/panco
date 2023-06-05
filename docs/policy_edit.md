@@ -1,4 +1,4 @@
-# Modifying/Editing A Policy
+# Editing A Policy
 
 ```
 Edit a security, NAT, Decryption or Policy-Based Forwarding policy

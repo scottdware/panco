@@ -7,7 +7,7 @@ Usage:
 Available Commands:
   help        Help about any command
   objects     Commands to work with address, service and tag objects
-  policy      Commands to work with security, NAT and Policy-Based Forwarding policies
+  policy      Commands to work with security, NAT, Decryption and Policy-Based Forwarding policies
   template    Generate CSV templates for object and policy importing
   userid      Commands to interact with User-ID functions
   version     Version information for panco
