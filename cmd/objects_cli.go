@@ -474,11 +474,11 @@ var objectsCliCmd = &cobra.Command{
 			case "rename-address":
 				switch devtype {
 				case "vsys1":
-					command = fmt.Sprintf("\nrename address %s to %s\n", name, value)
+					command = fmt.Sprintf("rename address %s to %s\n", name, value)
 				case "shared":
-					command = fmt.Sprintf("\nrename shared address %s to %s\n", name, value)
+					command = fmt.Sprintf("rename shared address %s to %s\n", name, value)
 				default:
-					command = fmt.Sprintf("\nrename device-group %s address %s to %s\n", devtype, name, value)
+					command = fmt.Sprintf("rename device-group %s address %s to %s\n", devtype, name, value)
 				}
 
 				// fmt.Printf("%s", command)
@@ -490,11 +490,11 @@ var objectsCliCmd = &cobra.Command{
 			case "rename-addressgroup":
 				switch devtype {
 				case "vsys1":
-					command = fmt.Sprintf("\nrename address-group %s to %s\n", name, value)
+					command = fmt.Sprintf("rename address-group %s to %s\n", name, value)
 				case "shared":
-					command = fmt.Sprintf("\nrename shared address-group %s to %s\n", name, value)
+					command = fmt.Sprintf("rename shared address-group %s to %s\n", name, value)
 				default:
-					command = fmt.Sprintf("\nrename device-group %s address-group %s to %s\n", devtype, name, value)
+					command = fmt.Sprintf("rename device-group %s address-group %s to %s\n", devtype, name, value)
 				}
 
 				// fmt.Printf("%s", command)
@@ -506,11 +506,11 @@ var objectsCliCmd = &cobra.Command{
 			case "rename-service":
 				switch devtype {
 				case "vsys1":
-					command = fmt.Sprintf("\nrename service %s to %s\n", name, value)
+					command = fmt.Sprintf("rename service %s to %s\n", name, value)
 				case "shared":
-					command = fmt.Sprintf("\nrename shared service %s to %s\n", name, value)
+					command = fmt.Sprintf("rename shared service %s to %s\n", name, value)
 				default:
-					command = fmt.Sprintf("\nrename device-group %s service %s to %s\n", devtype, name, value)
+					command = fmt.Sprintf("rename device-group %s service %s to %s\n", devtype, name, value)
 				}
 
 				// fmt.Printf("%s", command)
@@ -522,11 +522,80 @@ var objectsCliCmd = &cobra.Command{
 			case "rename-servicegroup":
 				switch devtype {
 				case "vsys1":
-					command = fmt.Sprintf("\nrename service-group %s to %s\n", name, value)
+					command = fmt.Sprintf("rename service-group %s to %s\n", name, value)
 				case "shared":
-					command = fmt.Sprintf("\nrename shared service-group %s to %s\n", name, value)
+					command = fmt.Sprintf("rename shared service-group %s to %s\n", name, value)
 				default:
-					command = fmt.Sprintf("\nrename device-group %s service-group %s to %s\n", devtype, name, value)
+					command = fmt.Sprintf("rename device-group %s service-group %s to %s\n", devtype, name, value)
+				}
+
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
+			case "urlcreate":
+				switch devtype {
+				case "vsys1":
+					command = fmt.Sprintf("set profiles custom-url-category %s type \"URL List\"\n", name)
+					members := urlStringToSlice(value)
+					command += fmt.Sprintf("set profiles custom-url-category %s list [ %s ]\n", name, strings.Join(members, " "))
+				case "shared":
+					command = fmt.Sprintf("set shared profiles custom-url-category %s type \"URL List\"\n", name)
+					members := urlStringToSlice(value)
+					command += fmt.Sprintf("set shared profiles custom-url-category %s list [ %s ]\n", name, strings.Join(members, " "))
+				default:
+					command = fmt.Sprintf("set device-group %s profiles custom-url-category %s type \"URL List\"\n", devtype, name)
+					members := urlStringToSlice(value)
+					command += fmt.Sprintf("set device-group %s profiles custom-url-category %s list [ %s ]\n", devtype, name, strings.Join(members, " "))
+				}
+
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
+			case "urladd":
+				switch devtype {
+				case "vsys1":
+					members := urlStringToSlice(value)
+					command = fmt.Sprintf("set profiles custom-url-category %s list [ %s ]\n", name, strings.Join(members, " "))
+				case "shared":
+					members := urlStringToSlice(value)
+					command = fmt.Sprintf("set shared profiles custom-url-category %s list [ %s ]\n", name, strings.Join(members, " "))
+				default:
+					members := urlStringToSlice(value)
+					command = fmt.Sprintf("set device-group %s profiles custom-url-category %s list [ %s ]\n", devtype, name, strings.Join(members, " "))
+				}
+
+				// fmt.Printf("%s", command)
+				_, err = io.WriteString(txtfile, command)
+
+				if err != nil {
+					log.Printf("Failed to write to TXT file - %s", err)
+				}
+			case "urlremove":
+				switch devtype {
+				case "vsys1":
+					members := urlStringToSlice(value)
+
+					for _, url := range members {
+						command = fmt.Sprintf("delete profiles custom-url-category %s list %s\n", name, url)
+					}
+				case "shared":
+					members := urlStringToSlice(value)
+
+					for _, url := range members {
+						command = fmt.Sprintf("delete shared profiles custom-url-category %s list %s\n", name, url)
+					}
+				default:
+					members := urlStringToSlice(value)
+
+					for _, url := range members {
+						command = fmt.Sprintf("delete device-group %s profiles custom-url-category %s list %s\n", devtype, name, url)
+					}
 				}
 
 				// fmt.Printf("%s", command)
