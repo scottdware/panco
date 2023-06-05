@@ -9,7 +9,7 @@ Available Commands:
   cli         Generate CLI set commands from a CSV file
   duplicates  Find duplicate address and service objects
   export      Export address, service and tag objects
-  import      Import (create, modify) address, service and tag objects
+  import      Import (create, modify) address, service, custom URL and tag objects
 
 Flags:
   -h, --help   help for objects

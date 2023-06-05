@@ -27,7 +27,7 @@ import (
 // objectsCmd represents the objects command
 var objectsCmd = &cobra.Command{
 	Use:   "objects",
-	Short: "Commands to work with address, service and tag objects",
+	Short: "Commands to work with address, service, custom URL and tag objects",
 	Long:  `See https://panco.dev for complete documentation`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Objects

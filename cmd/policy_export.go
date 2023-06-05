@@ -32,7 +32,7 @@ import (
 // policyExportCmd represents the policy export command
 var policyExportCmd = &cobra.Command{
 	Use:   "export",
-	Short: "Export a security, NAT or Policy-Based Forwarding policy",
+	Short: "Export a Security, NAT, Decryption or Policy-Based Forwarding policy",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
@@ -82,6 +82,15 @@ var policyExportCmd = &cobra.Command{
 			if t == "all" {
 				getFwPbfPol(c, fmt.Sprintf("%s_PBF", f), hit)
 			}
+
+			// Decryption policy
+			if t == "decrypt" {
+				getFwDecryptPol(c, f, hit)
+			}
+
+			if t == "all" {
+				getFwDecryptPol(c, fmt.Sprintf("%s_Decrypt", f), hit)
+			}
 		case *pango.Panorama:
 			switch l {
 			case "pre":
@@ -118,6 +127,15 @@ var policyExportCmd = &cobra.Command{
 			if t == "all" {
 				getPanoPbfPol(c, fmt.Sprintf("%s_PBF", f), hit)
 			}
+
+			// Decryption policy
+			if t == "decrypt" {
+				getPanoDecryptPol(c, f, hit)
+			}
+
+			if t == "all" {
+				getPanoDecryptPol(c, fmt.Sprintf("%s_Decrypt", f), hit)
+			}
 		}
 	},
 }
@@ -131,7 +149,7 @@ func init() {
 	policyExportCmd.Flags().StringVarP(&f, "file", "f", "PaloAltoPolicy", "Name of the CSV file you'd like to export to")
 	policyExportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
 	policyExportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when exporting from a firewall")
-	policyExportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to export - <security|nat|pbf|all>")
+	policyExportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to export - <security|nat|pbf|decrypt|all>")
 	policyExportCmd.Flags().StringVarP(&l, "location", "l", "pre", "Location of the rulebase - <pre|post>")
 	policyExportCmd.Flags().StringVarP(&onlyrules, "rules", "r", "", "[OPTIONAL] Only export these specific rules in referenced text file")
 	policyExportCmd.MarkFlagRequired("user")
@@ -417,6 +435,82 @@ func getFwPbfPol(c *pango.Firewall, file string, hitcount bool) {
 	cfh.End()
 }
 
+// getFwDecryptPol is used to export the Decryption policy on a firewall
+func getFwDecryptPol(c *pango.Firewall, file string, hitcount bool) {
+	rules, err := c.Policies.Decryption.GetList(v)
+	if err != nil {
+		log.Printf("Failed to retrieve the list of Decryption rules: %s", err)
+		return
+	}
+
+	rc := len(rules)
+	if rc <= 0 {
+		log.Printf("There are 0 Decryption rules for '%s' - no policy was exported", v)
+		return
+	}
+
+	decryptfile := fmt.Sprintf("%s.csv", file)
+
+	cfh, err := easycsv.NewCSV(decryptfile)
+	if err != nil {
+		log.Printf("CSV file error - %s", err)
+		return
+	}
+
+	cfh.Write("#Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones,DestinationAddresses,NegateDestination,")
+	cfh.Write("Tags,Disabled,Services,UrlCategories,Action,DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,")
+	cfh.Write("ForwardingProfile,Uuid,GroupTag,SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates\n")
+
+	if len(onlyrules) > 0 {
+		inclrules, err := txtToSlice(onlyrules)
+		if err != nil {
+			log.Printf("%s", err)
+		}
+
+		log.Printf("Exporting %d Decryption rules", len(inclrules))
+
+		for _, rule := range rules {
+			for _, orule := range inclrules {
+				if rule == orule {
+					r, err := c.Policies.Decryption.Get(v, rule)
+					if err != nil {
+						log.Printf("Failed to retrieve Decryption rule data: %s", err)
+					}
+
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",%t,", r.Name, formatDesc(r.Description),
+						sliceToString(r.SourceZones), sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination))
+					cfh.Write(fmt.Sprintf("\"%s\",%t,\"%s\",\"%s\",%s,%s,%s,%s,%t,", sliceToString(r.Tags), r.Disabled,
+						sliceToString(r.Services), sliceToString(r.UrlCategories), r.Action, r.DecryptionType, r.SslCertificate, r.DecryptionProfile, r.NegateTarget))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.Uuid, r.GroupTag,
+						sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
+
+					time.Sleep(100 * time.Millisecond)
+				}
+			}
+		}
+	} else {
+		log.Printf("Exporting %d Decryption rules", rc)
+
+		for _, rule := range rules {
+			r, err := c.Policies.Decryption.Get(v, rule)
+			if err != nil {
+				log.Printf("Failed to retrieve Decryption rule data: %s", err)
+			}
+
+			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",%t,", r.Name, formatDesc(r.Description),
+				sliceToString(r.SourceZones), sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination))
+			cfh.Write(fmt.Sprintf("\"%s\",%t,\"%s\",\"%s\",%s,%s,%s,%s,%t,", sliceToString(r.Tags), r.Disabled,
+				sliceToString(r.Services), sliceToString(r.UrlCategories), r.Action, r.DecryptionType, r.SslCertificate, r.DecryptionProfile, r.NegateTarget))
+			cfh.Write(fmt.Sprintf("%s,%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.Uuid, r.GroupTag,
+				sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
+
+			time.Sleep(100 * time.Millisecond)
+		}
+	}
+
+	cfh.End()
+}
+
 // getPanoSecPol is used to export the Security policy from Panorama
 func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
 	rules, err := c.Policies.Security.GetList(dg, l)
@@ -684,6 +778,82 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
 				r.ForwardMonitorDisableIfUnreachable))
 			cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 				r.NegateTarget, r.Uuid))
+
+			time.Sleep(100 * time.Millisecond)
+		}
+	}
+
+	cfh.End()
+}
+
+// getPanoDecryptPol is used to export the Decryption policy from Panorama
+func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool) {
+	rules, err := c.Policies.Decryption.GetList(dg, l)
+	if err != nil {
+		log.Printf("Failed to retrieve the list of Decryption rules: %s", err)
+		return
+	}
+
+	rc := len(rules)
+	if rc <= 0 {
+		log.Printf("There are 0 Decryption rules for '%s' - no policy was exported", dg)
+		return
+	}
+
+	decryptfile := fmt.Sprintf("%s.csv", file)
+
+	cfh, err := easycsv.NewCSV(decryptfile)
+	if err != nil {
+		log.Printf("CSV file error - %s", err)
+		return
+	}
+
+	cfh.Write("#Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones,DestinationAddresses,NegateDestination,")
+	cfh.Write("Tags,Disabled,Services,UrlCategories,Action,DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,")
+	cfh.Write("ForwardingProfile,Uuid,GroupTag,SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates\n")
+
+	if len(onlyrules) > 0 {
+		inclrules, err := txtToSlice(onlyrules)
+		if err != nil {
+			log.Printf("%s", err)
+		}
+
+		log.Printf("Exporting %d Decryption rules", len(inclrules))
+
+		for _, rule := range rules {
+			for _, orule := range inclrules {
+				if rule == orule {
+					r, err := c.Policies.Decryption.Get(dg, l, orule)
+					if err != nil {
+						log.Printf("Failed to retrieve Decryption rule data: %s", err)
+					}
+
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",%t,", r.Name, formatDesc(r.Description),
+						sliceToString(r.SourceZones), sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination))
+					cfh.Write(fmt.Sprintf("\"%s\",%t,\"%s\",\"%s\",%s,%s,%s,%s,%t,", sliceToString(r.Tags), r.Disabled,
+						sliceToString(r.Services), sliceToString(r.UrlCategories), r.Action, r.DecryptionType, r.SslCertificate, r.DecryptionProfile, r.NegateTarget))
+					cfh.Write(fmt.Sprintf("%s,%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.Uuid, r.GroupTag,
+						sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
+
+					time.Sleep(100 * time.Millisecond)
+				}
+			}
+		}
+	} else {
+		log.Printf("Exporting %d Decryption rules", rc)
+
+		for _, rule := range rules {
+			r, err := c.Policies.Decryption.Get(dg, l, rule)
+			if err != nil {
+				log.Printf("Failed to retrieve Decryption rule data: %s", err)
+			}
+
+			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",%t,", r.Name, formatDesc(r.Description),
+				sliceToString(r.SourceZones), sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination))
+			cfh.Write(fmt.Sprintf("\"%s\",%t,\"%s\",\"%s\",%s,%s,%s,%s,%t,", sliceToString(r.Tags), r.Disabled,
+				sliceToString(r.Services), sliceToString(r.UrlCategories), r.Action, r.DecryptionType, r.SslCertificate, r.DecryptionProfile, r.NegateTarget))
+			cfh.Write(fmt.Sprintf("%s,%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.Uuid, r.GroupTag,
+				sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
 			time.Sleep(100 * time.Millisecond)
 		}

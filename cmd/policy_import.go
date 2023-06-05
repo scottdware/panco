@@ -25,6 +25,7 @@ import (
 	"time"
 
 	"github.com/PaloAltoNetworks/pango"
+	"github.com/PaloAltoNetworks/pango/poli/decryption"
 	"github.com/PaloAltoNetworks/pango/poli/nat"
 	"github.com/PaloAltoNetworks/pango/poli/pbf"
 	"github.com/PaloAltoNetworks/pango/poli/security"
@@ -38,7 +39,7 @@ import (
 // importCmd represents the import command
 var policyImportCmd = &cobra.Command{
 	Use:   "import",
-	Short: "Import (create) a security, NAT or Policy-Based Forwarding policy",
+	Short: "Import (create) a Security, NAT, Decryption or Policy-Based Forwarding policy",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
@@ -258,6 +259,62 @@ var policyImportCmd = &cobra.Command{
 					time.Sleep(100 * time.Millisecond)
 				}
 			}
+
+			if t == "decrypt" {
+				rules, err := easycsv.Open(f)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				rc := len(rules)
+				log.Printf("Importing/modifying %d Decryption rules", rc)
+
+				for i, rule := range rules {
+					boolopt := map[string]bool{
+						"TRUE":  true,
+						"true":  true,
+						"FALSE": false,
+						"false": false,
+					}
+
+					e := decryption.Entry{
+						Name:                       strings.TrimSpace(rule[0]),
+						Description:                rule[1],
+						SourceZones:                stringToSlice(rule[2]),
+						SourceAddresses:            stringToSlice(rule[3]),
+						NegateSource:               boolopt[rule[4]],
+						SourceUsers:                userStringToSlice(rule[5]),
+						DestinationZones:           stringToSlice(rule[6]),
+						DestinationAddresses:       stringToSlice(rule[7]),
+						NegateDestination:          boolopt[rule[8]],
+						Tags:                       stringToSlice(rule[9]),
+						Disabled:                   boolopt[rule[10]],
+						Services:                   stringToSlice(rule[11]),
+						UrlCategories:              stringToSlice(rule[12]),
+						Action:                     rule[13],
+						DecryptionType:             rule[14],
+						SslCertificate:             rule[15],
+						DecryptionProfile:          rule[16],
+						NegateTarget:               boolopt[rule[17]],
+						ForwardingProfile:          rule[18],
+						GroupTag:                   rule[19],
+						SourceHips:                 stringToSlice(rule[20]),
+						DestinationHips:            stringToSlice(rule[21]),
+						LogSuccessfulTlsHandshakes: boolopt[rule[22]],
+						LogFailedTlsHandshakes:     boolopt[rule[23]],
+						LogSetting:                 rule[24],
+						SslCertificates:            stringToSlice(rule[25]),
+					}
+
+					err = c.Policies.Decryption.Set(v, e)
+					if err != nil {
+						log.Printf("Line %d - failed to create Decryption rule: %s", i+1, err)
+					}
+
+					time.Sleep(100 * time.Millisecond)
+				}
+			}
 		case *pango.Panorama:
 			switch l {
 			case "pre":
@@ -465,6 +522,62 @@ var policyImportCmd = &cobra.Command{
 					time.Sleep(100 * time.Millisecond)
 				}
 			}
+
+			if t == "decrypt" {
+				rules, err := easycsv.Open(f)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				rc := len(rules)
+				log.Printf("Importing/modifying %d Policy-Based Forwarding rules", rc)
+
+				for i, rule := range rules {
+					boolopt := map[string]bool{
+						"TRUE":  true,
+						"true":  true,
+						"FALSE": false,
+						"false": false,
+					}
+
+					e := decryption.Entry{
+						Name:                       strings.TrimSpace(rule[0]),
+						Description:                rule[1],
+						SourceZones:                stringToSlice(rule[2]),
+						SourceAddresses:            stringToSlice(rule[3]),
+						NegateSource:               boolopt[rule[4]],
+						SourceUsers:                userStringToSlice(rule[5]),
+						DestinationZones:           stringToSlice(rule[6]),
+						DestinationAddresses:       stringToSlice(rule[7]),
+						NegateDestination:          boolopt[rule[8]],
+						Tags:                       stringToSlice(rule[9]),
+						Disabled:                   boolopt[rule[10]],
+						Services:                   stringToSlice(rule[11]),
+						UrlCategories:              stringToSlice(rule[12]),
+						Action:                     rule[13],
+						DecryptionType:             rule[14],
+						SslCertificate:             rule[15],
+						DecryptionProfile:          rule[16],
+						NegateTarget:               boolopt[rule[17]],
+						ForwardingProfile:          rule[18],
+						GroupTag:                   rule[19],
+						SourceHips:                 stringToSlice(rule[20]),
+						DestinationHips:            stringToSlice(rule[21]),
+						LogSuccessfulTlsHandshakes: boolopt[rule[22]],
+						LogFailedTlsHandshakes:     boolopt[rule[23]],
+						LogSetting:                 rule[24],
+						SslCertificates:            stringToSlice(rule[25]),
+					}
+
+					err = c.Policies.Decryption.Set(dg, l, e)
+					if err != nil {
+						log.Printf("Line %d - failed to create Decryption rule: %s", i+1, err)
+					}
+
+					time.Sleep(100 * time.Millisecond)
+				}
+			}
 		}
 	},
 }
@@ -478,7 +591,7 @@ func init() {
 	policyImportCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to export to")
 	policyImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when importing to Panorama")
 	policyImportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when importing to a firewall")
-	policyImportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import - <security|nat|pbf>")
+	policyImportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import - <security|nat|pbf|decrypt>")
 	policyImportCmd.Flags().StringVarP(&l, "location", "l", "pre", "Location of the rulebase - <pre|post>")
 	policyImportCmd.MarkFlagRequired("user")
 	// policyImportCmd.MarkFlagRequired("pass")

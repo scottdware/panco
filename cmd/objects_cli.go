@@ -29,7 +29,7 @@ import (
 // cliCmd represents the cli command
 var objectsCliCmd = &cobra.Command{
 	Use:   "cli",
-	Short: "Generate CLI set commands from a CSV file",
+	Short: "Generate CLI set commands from a CSV file for object import/modification",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		lines, err := easycsv.Open(f)

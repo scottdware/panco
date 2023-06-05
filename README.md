@@ -10,6 +10,7 @@ Abilities include:
 * Creating address, service and tag objects
 * Renaming address, service and tag objects
 * Adding or removing objects from address and service groups
+* Creating, adding or removing URL entries from a custom URL category
 * Finding duplicate address and service objects
 * Tag multiple objects
 * Deleting objects

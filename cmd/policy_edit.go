@@ -21,9 +21,11 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/PaloAltoNetworks/pango"
+	"github.com/PaloAltoNetworks/pango/poli/decryption"
 	"github.com/PaloAltoNetworks/pango/poli/nat"
 	"github.com/PaloAltoNetworks/pango/poli/pbf"
 	"github.com/PaloAltoNetworks/pango/poli/security"
@@ -35,9 +37,9 @@ import (
 )
 
 // modifyCmd represents the import command
-var policyModifyCmd = &cobra.Command{
-	Use:   "modify",
-	Short: "Modify (edit) a security, NAT or Policy-Based Forwarding policy",
+var policyEditCmd = &cobra.Command{
+	Use:   "edit",
+	Short: "Edit a Security, NAT, Decryption or Policy-Based Forwarding policy",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
@@ -68,7 +70,7 @@ var policyModifyCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Modifying %d Security rules", rc)
+				log.Printf("Editing %d Security rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -125,7 +127,7 @@ var policyModifyCmd = &cobra.Command{
 
 					err = c.Policies.Security.Edit(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to modify Security rule: %s", i+1, err)
+						log.Printf("Line %d - failed to edit Security rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -140,7 +142,7 @@ var policyModifyCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Modifying %d NAT rules", rc)
+				log.Printf("Editing %d NAT rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -194,7 +196,7 @@ var policyModifyCmd = &cobra.Command{
 
 					err = c.Policies.Nat.Edit(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to modify NAT rule: %s", i+1, err)
+						log.Printf("Line %d - failed to edit NAT rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -209,7 +211,7 @@ var policyModifyCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Modifying %d Policy-Based Forwarding rules", rc)
+				log.Printf("Editing %d Policy-Based Forwarding rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -251,7 +253,63 @@ var policyModifyCmd = &cobra.Command{
 
 					err = c.Policies.PolicyBasedForwarding.Edit(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to modify Policy-Based Forwarding rule: %s", i+1, err)
+						log.Printf("Line %d - failed to edit Policy-Based Forwarding rule: %s", i+1, err)
+					}
+
+					time.Sleep(100 * time.Millisecond)
+				}
+			}
+
+			if t == "decrypt" {
+				rules, err := easycsv.Open(f)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				rc := len(rules)
+				log.Printf("Editing %d Decryption rules", rc)
+
+				for i, rule := range rules {
+					boolopt := map[string]bool{
+						"TRUE":  true,
+						"true":  true,
+						"FALSE": false,
+						"false": false,
+					}
+
+					e := decryption.Entry{
+						Name:                       strings.TrimSpace(rule[0]),
+						Description:                rule[1],
+						SourceZones:                stringToSlice(rule[2]),
+						SourceAddresses:            stringToSlice(rule[3]),
+						NegateSource:               boolopt[rule[4]],
+						SourceUsers:                userStringToSlice(rule[5]),
+						DestinationZones:           stringToSlice(rule[6]),
+						DestinationAddresses:       stringToSlice(rule[7]),
+						NegateDestination:          boolopt[rule[8]],
+						Tags:                       stringToSlice(rule[9]),
+						Disabled:                   boolopt[rule[10]],
+						Services:                   stringToSlice(rule[11]),
+						UrlCategories:              stringToSlice(rule[12]),
+						Action:                     rule[13],
+						DecryptionType:             rule[14],
+						SslCertificate:             rule[15],
+						DecryptionProfile:          rule[16],
+						NegateTarget:               boolopt[rule[17]],
+						ForwardingProfile:          rule[18],
+						GroupTag:                   rule[19],
+						SourceHips:                 stringToSlice(rule[20]),
+						DestinationHips:            stringToSlice(rule[21]),
+						LogSuccessfulTlsHandshakes: boolopt[rule[22]],
+						LogFailedTlsHandshakes:     boolopt[rule[23]],
+						LogSetting:                 rule[24],
+						SslCertificates:            stringToSlice(rule[25]),
+					}
+
+					err = c.Policies.Decryption.Edit(v, e)
+					if err != nil {
+						log.Printf("Line %d - failed to edit Decryption rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -275,7 +333,7 @@ var policyModifyCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Modifying %d Security rules", rc)
+				log.Printf("Editing %d Security rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -332,7 +390,7 @@ var policyModifyCmd = &cobra.Command{
 
 					err = c.Policies.Security.Edit(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to modify security rule: %s", i+1, err)
+						log.Printf("Line %d - failed to edit security rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -347,7 +405,7 @@ var policyModifyCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Modifying %d NAT rules", rc)
+				log.Printf("Editing %d NAT rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -401,7 +459,7 @@ var policyModifyCmd = &cobra.Command{
 
 					err = c.Policies.Nat.Edit(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to modify NAT rule: %s", i+1, err)
+						log.Printf("Line %d - failed to edit NAT rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -416,7 +474,7 @@ var policyModifyCmd = &cobra.Command{
 				}
 
 				rc := len(rules)
-				log.Printf("Modifying %d Policy-Based Forwarding rules", rc)
+				log.Printf("Editing %d Policy-Based Forwarding rules", rc)
 
 				for i, rule := range rules {
 					boolopt := map[string]bool{
@@ -458,7 +516,63 @@ var policyModifyCmd = &cobra.Command{
 
 					err = c.Policies.PolicyBasedForwarding.Edit(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to modify Policy-Based Forwarding rule: %s", i+1, err)
+						log.Printf("Line %d - failed to edit Policy-Based Forwarding rule: %s", i+1, err)
+					}
+
+					time.Sleep(100 * time.Millisecond)
+				}
+			}
+
+			if t == "decrypt" {
+				rules, err := easycsv.Open(f)
+				if err != nil {
+					log.Printf("CSV file error - %s", err)
+					os.Exit(1)
+				}
+
+				rc := len(rules)
+				log.Printf("Editing %d Decryption rules", rc)
+
+				for i, rule := range rules {
+					boolopt := map[string]bool{
+						"TRUE":  true,
+						"true":  true,
+						"FALSE": false,
+						"false": false,
+					}
+
+					e := decryption.Entry{
+						Name:                       strings.TrimSpace(rule[0]),
+						Description:                rule[1],
+						SourceZones:                stringToSlice(rule[2]),
+						SourceAddresses:            stringToSlice(rule[3]),
+						NegateSource:               boolopt[rule[4]],
+						SourceUsers:                userStringToSlice(rule[5]),
+						DestinationZones:           stringToSlice(rule[6]),
+						DestinationAddresses:       stringToSlice(rule[7]),
+						NegateDestination:          boolopt[rule[8]],
+						Tags:                       stringToSlice(rule[9]),
+						Disabled:                   boolopt[rule[10]],
+						Services:                   stringToSlice(rule[11]),
+						UrlCategories:              stringToSlice(rule[12]),
+						Action:                     rule[13],
+						DecryptionType:             rule[14],
+						SslCertificate:             rule[15],
+						DecryptionProfile:          rule[16],
+						NegateTarget:               boolopt[rule[17]],
+						ForwardingProfile:          rule[18],
+						GroupTag:                   rule[19],
+						SourceHips:                 stringToSlice(rule[20]),
+						DestinationHips:            stringToSlice(rule[21]),
+						LogSuccessfulTlsHandshakes: boolopt[rule[22]],
+						LogFailedTlsHandshakes:     boolopt[rule[23]],
+						LogSetting:                 rule[24],
+						SslCertificates:            stringToSlice(rule[25]),
+					}
+
+					err = c.Policies.Decryption.Edit(dg, l, e)
+					if err != nil {
+						log.Printf("Line %d - failed to edit Decryption rule: %s", i+1, err)
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -469,20 +583,20 @@ var policyModifyCmd = &cobra.Command{
 }
 
 func init() {
-	policyCmd.AddCommand(policyModifyCmd)
+	policyCmd.AddCommand(policyEditCmd)
 
-	policyModifyCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
+	policyEditCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
 	// policyModifyCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
-	policyModifyCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
-	policyModifyCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to export to")
-	policyModifyCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when importing to Panorama")
-	policyModifyCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when importing to a firewall")
-	policyModifyCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import - <security|nat|pbf>")
-	policyModifyCmd.Flags().StringVarP(&l, "location", "l", "pre", "Location of the rulebase - <pre|post>")
-	policyModifyCmd.MarkFlagRequired("user")
+	policyEditCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
+	policyEditCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to export to")
+	policyEditCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when importing to Panorama")
+	policyEditCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when importing to a firewall")
+	policyEditCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import - <security|nat|pbf>")
+	policyEditCmd.Flags().StringVarP(&l, "location", "l", "pre", "Location of the rulebase - <pre|post>")
+	policyEditCmd.MarkFlagRequired("user")
 	// policyModifyCmd.MarkFlagRequired("pass")
-	policyModifyCmd.MarkFlagRequired("device")
-	policyModifyCmd.MarkFlagRequired("file")
-	policyModifyCmd.MarkFlagRequired("type")
+	policyEditCmd.MarkFlagRequired("device")
+	policyEditCmd.MarkFlagRequired("file")
+	policyEditCmd.MarkFlagRequired("type")
 	// policyModifyCmd.MarkFlagRequired("location")
 }

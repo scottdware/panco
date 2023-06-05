@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1
-	github.com/PaloAltoNetworks/pango v0.4.0
+	github.com/PaloAltoNetworks/pango v0.10.2
 	github.com/Songmu/prompter v0.5.0
 	github.com/kr/text v0.2.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0

@@ -162,16 +162,27 @@ Description | Not used for rename - leave blank.
 Tags | Not used for rename - leave blank.
 Device Group/Vsys | Name of the device-group/vsys, or **shared** if renaming a shared object.
 
-<!-- ## Adding or Removing URL Entries from a Custom Category -->
+## Creating a Custom URL Category
 
-<!-- Column | Description -->
-<!-- :--- | :--- -->
-<!-- Name | Name of the custom URL category you wish to add or remove URL's. -->
-<!-- Type | `urladd` to add, `urlremove` to remove -->
-<!-- Value | Single URL to add or remove, e.g.: `bing.com/` or `*.bing.com/` -->
-<!-- Description | Not used - leave blank. -->
-<!-- Tags | Not used - leave blank. -->
-<!-- Device Group/Vsys | Name of the device-group, or **shared** if modifying a shared object. -->
+Column | Description
+:--- | :---
+Name | Name of the custom URL category you wish to create.
+Type | `urlcreate`
+Value | Single URL or multiple URLs (separated by a comma) to add, e.g.: `bing.com/` or `*.bing.com/, google.com/, *.google.com/`
+Description | Description of the URL category (optional) 
+Tags | Not used - leave blank.
+Device Group/Vsys | Name of the device-group, vsys. **shared** if modifying a shared object on Panorama.
+
+## Adding or Removing URL Entries from a Custom Category
+
+Column | Description
+:--- | :---
+Name | Name of the custom URL category you wish to add or remove URL's.
+Type | `urladd` to add, `urlremove` to remove
+Value | Single URL or multiple URLs (separated by a comma) to add or remove, e.g.: `bing.com/` or `*.bing.com/, google.com/, *.google.com/`
+Description | Not used - leave blank.
+Tags | Not used - leave blank.
+Device Group/Vsys | Name of the device-group, vsys. **shared** if modifying a shared object on Panorama.
 
 ## Tagging Objects
 

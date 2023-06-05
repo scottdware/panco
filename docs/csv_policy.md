@@ -62,6 +62,34 @@ Any field that you want to add or modify you need to have a value there, but at 
 Name,Type,ToInterface
 ```
 
+## Importing A Decryption Policy
+
+When importing a CSV file to create Decryption rules or modify them, the file **_MUST_** have the following columns in this order:
+
+```
+Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones
+DestinationAddresses,NegateDestination,Tags,Disabled,Services,UrlCategories,Action
+DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,ForwardingProfile,GroupTag
+SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates
+```
+
+> **_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the NAT policy first (using the `panco policy export` command),
+> and then modifying the output file. For example:
+
+```
+panco policy export -d firewall -u admin -g "Device-Group" --type decrypt --file <file-to-output>
+```
+
+>*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
+> this is the "post" rulebase.
+
+When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty.
+
+<!-- Any field that you want to add or modify you need to have a value there, but at the very least, you **_MUST_** have values in the following fields: -->
+
+<!-- ``` -->
+<!-- ``` -->
+
 ## Import A Policy-Based Forwarding Policy
 
 When importing a CSV file to create policy-based forwarding rules or modify them, the file **_MUST_** have the following columns in this order:
@@ -84,18 +112,18 @@ panco policy export -d firewall -u admin -g "Device-Group" --type pbf --file <fi
 > *NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
 > this is the "post" rulebase.
 
-## Modifying A Security, NAT or Policy-Based Forwarding Policy/Rules -- IMPORTANT
+## Editing A Security, NAT, Decryption or Policy-Based Forwarding Policy/Rules -- IMPORTANT
 
-When you modify (edit) rules using the `panco policy modify` command, there are a few things to be aware of.  The `modify` command uses the Palo Alto API `edit` action, instead of the `set` action that is used when using the `import` command. You can read more about the differences of the `edit` and `set` on [Palo Alto's API request types documentation](https://docs.paloaltonetworks.com/pan-os/10-2/pan-os-panorama-api/pan-os-xml-api-request-types/pan-os-xml-api-request-types-and-actions/configuration-actions/actions-for-modifying-a-configuration#id44705ad2-4f22-4b6c-bb94-caea78a6d510) page.
+When you edit rules using the `panco policy edit` command, there are a few things to be aware of.  The `edit` command uses the Palo Alto API `edit` action, instead of the `set` action that is used when using the `import` command. You can read more about the differences of the `edit` and `set` on [Palo Alto's API request types documentation](https://docs.paloaltonetworks.com/pan-os/10-2/pan-os-panorama-api/pan-os-xml-api-request-types/pan-os-xml-api-request-types-and-actions/configuration-actions/actions-for-modifying-a-configuration#id44705ad2-4f22-4b6c-bb94-caea78a6d510) page.
 
 
 Set and edit actions differ in two important ways:
 * Set actions add, update, or merge configuration nodes, while **_edit actions replace configuration nodes_**.
 * Set actions are non-destructive and are only additive, while **_edit actions can be destructive_**.
 
-> **_IMPORTANT_**: Please read and understand the above actions when using the `panco policy modify` command vs `panco policy import`.
+> **_IMPORTANT_**: Please read and understand the above actions when using the `panco policy edit` command vs `panco policy import`.
 
-Using the `modify` command will ultimately be the best way to make changes to rules, such as adding/removing address objects, applications, services, etc.. Similar to the `import` command, the best way to preserve the current state of the rule(s) you are modifying, is to first export the policy/rules you need to modify using the below command:
+Using the `edit` command will ultimately be the best way to make changes to rules, such as adding/removing address objects, applications, services, etc.. Similar to the `import` command, the best way to preserve the current state of the rule(s) you are modifying, is to first export the policy/rules you need to modify using the below command:
 
 ```
 panco policy export -d firewall -u admin -g "Device-Group" --type security --file <file-to-output>
