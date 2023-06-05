@@ -459,7 +459,7 @@ func getFwDecryptPol(c *pango.Firewall, file string, hitcount bool) {
 
 	cfh.Write("#Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones,DestinationAddresses,NegateDestination,")
 	cfh.Write("Tags,Disabled,Services,UrlCategories,Action,DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,")
-	cfh.Write("ForwardingProfile,Uuid,GroupTag,SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates\n")
+	cfh.Write("ForwardingProfile,GroupTag,SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates\n")
 
 	if len(onlyrules) > 0 {
 		inclrules, err := txtToSlice(onlyrules)
@@ -481,7 +481,7 @@ func getFwDecryptPol(c *pango.Firewall, file string, hitcount bool) {
 						sliceToString(r.SourceZones), sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination))
 					cfh.Write(fmt.Sprintf("\"%s\",%t,\"%s\",\"%s\",%s,%s,%s,%s,%t,", sliceToString(r.Tags), r.Disabled,
 						sliceToString(r.Services), sliceToString(r.UrlCategories), r.Action, r.DecryptionType, r.SslCertificate, r.DecryptionProfile, r.NegateTarget))
-					cfh.Write(fmt.Sprintf("%s,%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.Uuid, r.GroupTag,
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 						sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
 					time.Sleep(100 * time.Millisecond)
@@ -501,7 +501,7 @@ func getFwDecryptPol(c *pango.Firewall, file string, hitcount bool) {
 				sliceToString(r.SourceZones), sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination))
 			cfh.Write(fmt.Sprintf("\"%s\",%t,\"%s\",\"%s\",%s,%s,%s,%s,%t,", sliceToString(r.Tags), r.Disabled,
 				sliceToString(r.Services), sliceToString(r.UrlCategories), r.Action, r.DecryptionType, r.SslCertificate, r.DecryptionProfile, r.NegateTarget))
-			cfh.Write(fmt.Sprintf("%s,%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.Uuid, r.GroupTag,
+			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 				sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
 			time.Sleep(100 * time.Millisecond)
@@ -810,7 +810,7 @@ func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool) {
 
 	cfh.Write("#Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones,DestinationAddresses,NegateDestination,")
 	cfh.Write("Tags,Disabled,Services,UrlCategories,Action,DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,")
-	cfh.Write("ForwardingProfile,Uuid,GroupTag,SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates\n")
+	cfh.Write("ForwardingProfile,GroupTag,SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates\n")
 
 	if len(onlyrules) > 0 {
 		inclrules, err := txtToSlice(onlyrules)
@@ -832,7 +832,7 @@ func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool) {
 						sliceToString(r.SourceZones), sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination))
 					cfh.Write(fmt.Sprintf("\"%s\",%t,\"%s\",\"%s\",%s,%s,%s,%s,%t,", sliceToString(r.Tags), r.Disabled,
 						sliceToString(r.Services), sliceToString(r.UrlCategories), r.Action, r.DecryptionType, r.SslCertificate, r.DecryptionProfile, r.NegateTarget))
-					cfh.Write(fmt.Sprintf("%s,%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.Uuid, r.GroupTag,
+					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 						sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
 					time.Sleep(100 * time.Millisecond)
@@ -852,7 +852,7 @@ func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool) {
 				sliceToString(r.SourceZones), sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination))
 			cfh.Write(fmt.Sprintf("\"%s\",%t,\"%s\",\"%s\",%s,%s,%s,%s,%t,", sliceToString(r.Tags), r.Disabled,
 				sliceToString(r.Services), sliceToString(r.UrlCategories), r.Action, r.DecryptionType, r.SslCertificate, r.DecryptionProfile, r.NegateTarget))
-			cfh.Write(fmt.Sprintf("%s,%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.Uuid, r.GroupTag,
+			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 				sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
 			time.Sleep(100 * time.Millisecond)
