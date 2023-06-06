@@ -1,4 +1,4 @@
-[Home](https://panco.dev)
+[panco.dev](https://panco.dev) | [Documentation Home](https://panco.dev/docs.html) 
 
 # Policy Command
 

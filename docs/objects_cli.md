@@ -1,4 +1,4 @@
-[Home](https://panco.dev) > [Objects Command](https://panco.dev/objects.html)
+[panco.dev](https://panco.dev) | [Documentation Home](https://panco.dev/docs.html) | [Objects Command](https://panco.dev/objects.html)
 
 # Generate CLI Commands from a CSV File
 
