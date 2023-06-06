@@ -1,4 +1,4 @@
-[panco.dev](https://panco.dev) | [Documentation Home](https://panco.dev/docs.html) | [Objects Command](https://panco.dev/objects.html)
+[panco.dev](https://panco.dev) \| [Documentation Home](https://panco.dev/docs.html) \| [Objects Command](https://panco.dev/objects.html)
 
 # CSV Structure - Objects
 
