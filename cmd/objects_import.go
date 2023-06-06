@@ -73,6 +73,9 @@ var objectsImportCmd = &cobra.Command{
 			lc := len(lines)
 			log.Printf("Running actions on %d lines - this might take a few of minutes if you have a lot of objects", lc)
 
+			timeoutCount := 0
+			timeoutData := []string{}
+
 			for i, line := range lines {
 				var vsys string
 				llen := len(line)
@@ -93,7 +96,12 @@ var objectsImportCmd = &cobra.Command{
 					if value == "delete" {
 						err = c.Objects.Address.Delete(vsys, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := addr.Entry{
@@ -106,14 +114,24 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.Address.Set(vsys, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "range", "IP Range", "ip-range":
 					if value == "delete" {
 						err = c.Objects.Address.Delete(vsys, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := addr.Entry{
@@ -126,14 +144,24 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.Address.Set(vsys, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "fqdn", "FQDN", "Fqdn":
 					if value == "delete" {
 						err = c.Objects.Address.Delete(vsys, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := addr.Entry{
@@ -146,14 +174,24 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.Address.Set(vsys, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "tcp", "udp":
 					if value == "delete" {
 						err = c.Objects.Services.Delete(vsys, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := srvc.Entry{
@@ -166,14 +204,24 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.Services.Set(vsys, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "service":
 					if value == "delete" {
 						err = c.Objects.ServiceGroup.Delete(vsys, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := srvcgrp.Entry{
@@ -184,14 +232,24 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.ServiceGroup.Set(vsys, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "static":
 					if value == "delete" {
 						err = c.Objects.AddressGroup.Delete(vsys, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						groupLen := len(stringToSlice(value))
@@ -205,9 +263,14 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.AddressGroup.Set(vsys, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
-							if groupLen > 40 {
-								log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+								if groupLen > 40 {
+									log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+								}
 							}
 						}
 					}
@@ -215,7 +278,12 @@ var objectsImportCmd = &cobra.Command{
 					if value == "delete" {
 						err = c.Objects.AddressGroup.Delete(vsys, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := addrgrp.Entry{
@@ -227,7 +295,12 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.AddressGroup.Set(vsys, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "remove-address":
@@ -259,7 +332,12 @@ var objectsImportCmd = &cobra.Command{
 
 					err = c.Objects.AddressGroup.Edit(vsys, e)
 					if err != nil {
-						log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+						}
 					}
 				case "remove-service":
 					if len(value) <= 0 {
@@ -290,7 +368,12 @@ var objectsImportCmd = &cobra.Command{
 
 					err = c.Objects.ServiceGroup.Edit(vsys, e)
 					if err != nil {
-						log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+						}
 					}
 				case "rename-address":
 					var xpath string
@@ -299,8 +382,13 @@ var objectsImportCmd = &cobra.Command{
 
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						}
 					}
 				case "rename-addressgroup":
 					var xpath string
@@ -309,8 +397,13 @@ var objectsImportCmd = &cobra.Command{
 
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						}
 					}
 				case "rename-service":
 					var xpath string
@@ -319,8 +412,13 @@ var objectsImportCmd = &cobra.Command{
 
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						}
 					}
 				case "rename-servicegroup":
 					var xpath string
@@ -329,8 +427,13 @@ var objectsImportCmd = &cobra.Command{
 
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						}
 					}
 				case "urlcreate":
 					e := url.Entry{
@@ -342,7 +445,12 @@ var objectsImportCmd = &cobra.Command{
 
 					err = c.Objects.CustomUrlCategory.Set(vsys, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
+						}
 					}
 				case "urladd":
 					e := url.Entry{
@@ -354,7 +462,12 @@ var objectsImportCmd = &cobra.Command{
 
 					err = c.Objects.CustomUrlCategory.Set(vsys, e)
 					if err != nil {
-						log.Printf("Line %d - failed to update URL category %s: %s", i+1, name, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							log.Printf("Line %d - failed to update URL category %s: %s", i+1, name, err)
+						}
 					}
 
 					// err = c.Objects.CustomUrlCategory.SetSite(vsys, name, value)
@@ -367,14 +480,24 @@ var objectsImportCmd = &cobra.Command{
 					for _, url := range urls {
 						err = c.Objects.CustomUrlCategory.DeleteSite(vsys, name, url)
 						if err != nil {
-							log.Printf("Line %d - failed to remove %s from %s: %s", i+1, value, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to remove %s from %s: %s", i+1, value, name, err)
+							}
 						}
 					}
 				case "tag":
 					if value == "delete" {
 						err = c.Objects.Tags.Delete(v, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := tags.Entry{}
@@ -393,12 +516,25 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.Tags.Set(v, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				}
 
 				time.Sleep(100 * time.Millisecond)
+			}
+
+			if timeoutCount > 0 {
+				log.Printf("There were %d API timeout errors during import. Please verify the following have been imported/deleted/modified:\n\n", timeoutCount)
+				for _, data := range timeoutData {
+					info := strings.Split(data, ":")
+					fmt.Printf("Line %s: Host/URL %s\n", info[0], info[1])
+				}
 			}
 		case *pango.Panorama:
 			lines, err := easycsv.Open(f)
@@ -409,6 +545,9 @@ var objectsImportCmd = &cobra.Command{
 
 			lc := len(lines)
 			log.Printf("Running actions on %d lines - this might take a few of minutes if you have a lot of objects", lc)
+
+			timeoutCount := 0
+			timeoutData := []string{}
 
 			for i, line := range lines {
 				var dgroup string
@@ -430,7 +569,12 @@ var objectsImportCmd = &cobra.Command{
 					if value == "delete" {
 						err = c.Objects.Address.Delete(dgroup, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := addr.Entry{
@@ -443,14 +587,24 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.Address.Set(dgroup, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "range", "IP Range", "ip-range":
 					if value == "delete" {
 						err = c.Objects.Address.Delete(dgroup, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := addr.Entry{
@@ -463,14 +617,24 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.Address.Set(dgroup, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "fqdn", "FQDN", "Fqdn":
 					if value == "delete" {
 						err = c.Objects.Address.Delete(dgroup, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := addr.Entry{
@@ -483,14 +647,24 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.Address.Set(dgroup, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "tcp", "udp":
 					if value == "delete" {
 						err = c.Objects.Services.Delete(dgroup, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := srvc.Entry{
@@ -503,14 +677,24 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.Services.Set(dgroup, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "service":
 					if value == "delete" {
 						err = c.Objects.ServiceGroup.Delete(dgroup, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := srvcgrp.Entry{
@@ -521,14 +705,24 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.ServiceGroup.Set(dgroup, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "static":
 					if value == "delete" {
 						err = c.Objects.AddressGroup.Delete(dgroup, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						groupLen := len(stringToSlice(value))
@@ -542,9 +736,14 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.AddressGroup.Set(dgroup, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
-							if groupLen > 40 {
-								log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+								if groupLen > 40 {
+									log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+								}
 							}
 						}
 					}
@@ -552,7 +751,12 @@ var objectsImportCmd = &cobra.Command{
 					if value == "delete" {
 						err = c.Objects.AddressGroup.Delete(dgroup, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := addrgrp.Entry{
@@ -564,7 +768,12 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.AddressGroup.Set(dgroup, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "remove-address":
@@ -596,7 +805,12 @@ var objectsImportCmd = &cobra.Command{
 
 					err = c.Objects.AddressGroup.Edit(dgroup, e)
 					if err != nil {
-						log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+						}
 					}
 				case "remove-service":
 					if len(value) <= 0 {
@@ -627,7 +841,12 @@ var objectsImportCmd = &cobra.Command{
 
 					err = c.Objects.ServiceGroup.Edit(dgroup, e)
 					if err != nil {
-						log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+						}
 					}
 				case "rename-address":
 					var xpath string
@@ -642,8 +861,13 @@ var objectsImportCmd = &cobra.Command{
 
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						}
 					}
 				case "rename-addressgroup":
 					var xpath string
@@ -658,8 +882,13 @@ var objectsImportCmd = &cobra.Command{
 
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						}
 					}
 				case "rename-service":
 					var xpath string
@@ -674,8 +903,13 @@ var objectsImportCmd = &cobra.Command{
 
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						}
 					}
 				case "rename-servicegroup":
 					var xpath string
@@ -690,8 +924,13 @@ var objectsImportCmd = &cobra.Command{
 
 					_, err := resty.R().Get(fmt.Sprintf("https://%s/api/?type=config&action=rename&xpath=%s&newname=%s&key=%s", device, xpath, value, c.ApiKey))
 					if err != nil {
-						formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-						log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
+							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+						}
 					}
 				case "urlcreate":
 					e := url.Entry{
@@ -703,7 +942,12 @@ var objectsImportCmd = &cobra.Command{
 
 					err = c.Objects.CustomUrlCategory.Set(dgroup, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
+						}
 					}
 				case "urladd":
 					e := url.Entry{
@@ -715,7 +959,12 @@ var objectsImportCmd = &cobra.Command{
 
 					err = c.Objects.CustomUrlCategory.Set(dgroup, e)
 					if err != nil {
-						log.Printf("Line %d - failed to update URL category %s: %s", i+1, name, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+						} else {
+							log.Printf("Line %d - failed to update URL category %s: %s", i+1, name, err)
+						}
 					}
 
 					// err = c.Objects.CustomUrlCategory.SetSite(dgroup, name, value)
@@ -728,14 +977,24 @@ var objectsImportCmd = &cobra.Command{
 					for _, url := range urls {
 						err = c.Objects.CustomUrlCategory.DeleteSite(dgroup, name, url)
 						if err != nil {
-							log.Printf("Line %d - failed to remove %s from %s: %s", i+1, value, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to remove %s from %s: %s", i+1, value, name, err)
+							}
 						}
 					}
 				case "tag":
 					if value == "delete" {
 						err = c.Objects.Tags.Delete(dgroup, name)
 						if err != nil {
-							log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+							}
 						}
 					} else {
 						e := tags.Entry{}
@@ -754,12 +1013,25 @@ var objectsImportCmd = &cobra.Command{
 
 						err = c.Objects.Tags.Set(dgroup, e)
 						if err != nil {
-							log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							}
 						}
 					}
 				}
 
 				time.Sleep(100 * time.Millisecond)
+			}
+
+			if timeoutCount > 0 {
+				log.Printf("There were %d API timeout errors during import. Please verify the following have been imported/deleted/modified:\n\n", timeoutCount)
+				for _, data := range timeoutData {
+					info := strings.Split(data, ":")
+					fmt.Printf("Line %s: Host/URL %s\n", info[0], info[1])
+				}
 			}
 		}
 	},

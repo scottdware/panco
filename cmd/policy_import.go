@@ -62,6 +62,9 @@ var policyImportCmd = &cobra.Command{
 
 		switch c := con.(type) {
 		case *pango.Firewall:
+			timeoutCount := 0
+			timeoutData := []string{}
+
 			if t == "security" {
 				rules, err := easycsv.Open(f)
 				if err != nil {
@@ -127,7 +130,12 @@ var policyImportCmd = &cobra.Command{
 
 					err = c.Policies.Security.Set(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create Security rule: %s", i+1, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+						} else {
+							log.Printf("Line %d - failed to create Security rule: %s", i+1, err)
+						}
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -196,7 +204,12 @@ var policyImportCmd = &cobra.Command{
 
 					err = c.Policies.Nat.Set(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+						} else {
+							log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
+						}
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -253,7 +266,12 @@ var policyImportCmd = &cobra.Command{
 
 					err = c.Policies.PolicyBasedForwarding.Set(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+						} else {
+							log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
+						}
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -309,10 +327,23 @@ var policyImportCmd = &cobra.Command{
 
 					err = c.Policies.Decryption.Set(v, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create Decryption rule: %s", i+1, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+						} else {
+							log.Printf("Line %d - failed to create Decryption rule: %s", i+1, err)
+						}
 					}
 
 					time.Sleep(100 * time.Millisecond)
+				}
+			}
+
+			if timeoutCount > 0 {
+				log.Printf("There were %d API timeout errors during import. Please verify the following have been imported/modified:\n\n", timeoutCount)
+				for _, data := range timeoutData {
+					info := strings.Split(data, ":")
+					fmt.Printf("Line %s: Rule \"%s\"\n", info[0], info[1])
 				}
 			}
 		case *pango.Panorama:
@@ -324,6 +355,9 @@ var policyImportCmd = &cobra.Command{
 			default:
 				l = util.PreRulebase
 			}
+
+			timeoutCount := 0
+			timeoutData := []string{}
 
 			if t == "security" {
 				rules, err := easycsv.Open(f)
@@ -390,7 +424,12 @@ var policyImportCmd = &cobra.Command{
 
 					err = c.Policies.Security.Set(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create security rule: %s", i+1, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+						} else {
+							log.Printf("Line %d - failed to create security rule: %s", i+1, err)
+						}
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -459,7 +498,12 @@ var policyImportCmd = &cobra.Command{
 
 					err = c.Policies.Nat.Set(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+						} else {
+							log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
+						}
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -516,7 +560,12 @@ var policyImportCmd = &cobra.Command{
 
 					err = c.Policies.PolicyBasedForwarding.Set(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+						} else {
+							log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
+						}
 					}
 
 					time.Sleep(100 * time.Millisecond)
@@ -572,10 +621,23 @@ var policyImportCmd = &cobra.Command{
 
 					err = c.Policies.Decryption.Set(dg, l, e)
 					if err != nil {
-						log.Printf("Line %d - failed to create Decryption rule: %s", i+1, err)
+						if strings.Contains(err.Error(), "Client.Timeout") {
+							timeoutCount++
+							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+						} else {
+							log.Printf("Line %d - failed to create Decryption rule: %s", i+1, err)
+						}
 					}
 
 					time.Sleep(100 * time.Millisecond)
+				}
+			}
+
+			if timeoutCount > 0 {
+				log.Printf("There were %d API timeout errors during import. Please verify the following have been imported/modified:\n\n", timeoutCount)
+				for _, data := range timeoutData {
+					info := strings.Split(data, ":")
+					fmt.Printf("Line %s: Rule \"%s\"\n", info[0], info[1])
 				}
 			}
 		}
