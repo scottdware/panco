@@ -127,7 +127,7 @@ Using the `edit` command will ultimately be the best way to make changes to rule
 panco policy export -d firewall -u admin -g "Device-Group" --type security --file <file-to-output>
 ```
 
-Once you have exported the rules, then you can add/remove values from the different fields as needed, before then running the `panco policy modify` command on the CSV file you just edited.
+Once you have exported the rules, then you can add/remove values from the different fields as needed, before then running the `panco policy edit` command on the CSV file you just edited.
 
 
 <!-- ## Moving Rules -->
