@@ -12,7 +12,7 @@ Flags:
   -f, --file string          Name of the CSV file to export to
   -h, --help                 help for modify
   -l, --location string      Location of the rulebase - <pre|post> (default "pre")
-  -t, --type string          Type of policy to import - <security|nat|pbf>
+  -t, --type string          Type of policy to import - <security|nat|decrypt|pbf>
   -u, --user string          User to connect to the device as
   -v, --vsys string          Vsys name when importing to a firewall (default "vsys1")
 ```

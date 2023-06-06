@@ -591,7 +591,7 @@ func init() {
 	policyEditCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to export to")
 	policyEditCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when importing to Panorama")
 	policyEditCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when importing to a firewall")
-	policyEditCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import - <security|nat|pbf>")
+	policyEditCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import - <security|nat|decrypt|pbf>")
 	policyEditCmd.Flags().StringVarP(&l, "location", "l", "pre", "Location of the rulebase - <pre|post>")
 	policyEditCmd.MarkFlagRequired("user")
 	// policyModifyCmd.MarkFlagRequired("pass")
