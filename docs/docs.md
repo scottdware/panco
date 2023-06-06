@@ -33,4 +33,3 @@ Click on any one of the available commands to view the full documentation and us
 * [objects](objects.html)
 * [policy](policy.html)
 * [template](template.html)
-<!-- * [userid](userid.html) -->

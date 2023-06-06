@@ -11,17 +11,11 @@ Abilities include:
 * Renaming address, service and tag objects
 * Adding or removing objects from address and service groups
 * Creating, adding or removing URL entries from a custom URL category
-<!-- * Finding duplicate address and service objects -->
 * Tag multiple objects
 * Deleting objects
 * Exporting a security, NAT, Decryption or Policy-Based Forwarding (PBF) policy
 * Creating security, NAT, Decryption or Policy-Based Forwarding (PBF) rules
 * Editing security, NAT, Decryption or Policy-Based Forwarding (PBF) rules - e.g. adding a Log Profile to all rules
-<!-- * Group security or NAT rules by tags -->
-<!-- * Move multiple security, NAT or Policy-Based Forwarding (PBF) rules at a time -->
-<!-- * Get the hit count data on security, NAT or Policy-Based Forwarding (PBF) rules -->
-* Tag/untag IP addresses for use in dynamic address groups
-<!-- * Manually login/logout a user and map them to an IP address -->
 * Generate CLI set commands from a CSV file used for object actions
 
 ## Installation
