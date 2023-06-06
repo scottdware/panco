@@ -642,7 +642,7 @@ var objectsDuplicatesCmd = &cobra.Command{
 }
 
 func init() {
-	objectsCmd.AddCommand(objectsDuplicatesCmd)
+	// objectsCmd.AddCommand(objectsDuplicatesCmd)
 
 	// objectsDuplicatesCmd.Flags().StringVarP(&dupfind, "find", "s", "", "Object type to run duplicate actions against")
 	// objectsDuplicatesCmd.Flags().StringVarP(&dupremove, "remove", "r", "", "Object type to remove duplicates for")

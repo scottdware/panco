@@ -257,7 +257,7 @@ var policyGroupCmd = &cobra.Command{
 }
 
 func init() {
-	policyCmd.AddCommand(policyGroupCmd)
+	// policyCmd.AddCommand(policyGroupCmd)
 
 	policyGroupCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
 	// policyGroupCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")

@@ -119,7 +119,7 @@ var policyHitCountCmd = &cobra.Command{
 }
 
 func init() {
-	policyCmd.AddCommand(policyHitCountCmd)
+	// policyCmd.AddCommand(policyHitCountCmd)
 
 	policyHitCountCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
 	// policyHitCountCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")

@@ -11,7 +11,7 @@ Flags:
   -h, --help                 help for export
   -l, --location string      Location of the rulebase - <pre|post> (default "pre")
   -r, --rules string         [OPTIONAL] Only export these specific rules - specify text file
-  -t, --type string          Type of policy to export - <security|nat|pbf|all>
+  -t, --type string          Type of policy to export - <security|nat|pbf|decrypt|all>
   -u, --user string          User to connect to the device as
   -v, --vsys string          Vsys name when exporting from a firewall (default "vsys1")
 ```

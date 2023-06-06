@@ -27,7 +27,7 @@ import (
 // policyCmd represents the policy command
 var policyCmd = &cobra.Command{
 	Use:   "policy",
-	Short: "Commands to work with security, NAT and Policy-Based Forwarding policies",
+	Short: "Commands to work with security, NAT, Decryption and Policy-Based Forwarding policies",
 	Long:  `See https://panco.dev for complete documentation`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Policy

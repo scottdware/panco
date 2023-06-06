@@ -39,7 +39,7 @@ import (
 // importCmd represents the import command
 var policyImportCmd = &cobra.Command{
 	Use:   "import",
-	Short: "Import (create) a Security, NAT, Decryption or Policy-Based Forwarding policy",
+	Short: "Import (create, modify) a Security, NAT, Decryption or Policy-Based Forwarding policy",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error

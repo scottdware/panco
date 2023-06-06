@@ -46,6 +46,9 @@ var templateCmd = &cobra.Command{
 			output.Write("Change_Me_Service,rename-service,New_Service_Name,,,vsys1\n")
 			output.Write("Change_Me_ServiceGroup,rename-servicegroup,New_ServiceGroup_Name,,,vsys1\n")
 			output.Write("Object_to_Tag,ip,10.1.1.1,,Servers,Some_Device_Group\n")
+			output.Write("Allowed_Sites,urlcreate,\"google.com/, *.google.com/, youtube.com/, *.youtube.com/\",,,shared\n")
+			output.Write("Allowed_Sites,urladd,\"bing.com/, *.bing.com/\",,,shared\n")
+			output.Write("Allowed_Sites,urlremove,\"bing.com/, *.bing.com/\",,,shared\n")
 			output.End()
 		case "policy":
 			output, err := easycsv.NewCSV("panco-Policy_Template.csv")
@@ -84,6 +87,9 @@ var templateCmd = &cobra.Command{
 			obj.Write("Change_Me_Service,rename-service,New_Service_Name,,,vsys1\n")
 			obj.Write("Change_Me_ServiceGroup,rename-servicegroup,New_ServiceGroup_Name,,,vsys1\n")
 			obj.Write("Object_to_Tag,ip,10.1.1.1,,Servers,Some_Device_Group\n")
+			obj.Write("Allowed_Sites,urlcreate,\"google.com/, *.google.com/, youtube.com/, *.youtube.com/\",,,shared\n")
+			obj.Write("Allowed_Sites,urladd,\"bing.com/, *.bing.com/\",,,shared\n")
+			obj.Write("Allowed_Sites,urlremove,\"bing.com/, *.bing.com/\",,,shared\n")
 			obj.End()
 
 			pol, err := easycsv.NewCSV("panco-Policy_Template.csv")

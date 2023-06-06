@@ -188,7 +188,7 @@ var policyMoveCmd = &cobra.Command{
 }
 
 func init() {
-	policyCmd.AddCommand(policyMoveCmd)
+	// policyCmd.AddCommand(policyMoveCmd)
 
 	policyMoveCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file")
 	policyMoveCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
