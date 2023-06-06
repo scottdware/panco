@@ -54,7 +54,7 @@ panco policy export -d firewall -u admin -g "Device-Group" --type nat --file <fi
 ```
 
 >*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
-> this is the "post" rulebase.
+> this is the "pre" rulebase.
 
 When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty.
 
@@ -63,34 +63,6 @@ Any field that you want to add or modify you need to have a value there, but at 
 ```
 Name,Type,ToInterface
 ```
-
-## Importing A Decryption Policy
-
-When importing a CSV file to create Decryption rules or modify them, the file **_MUST_** have the following columns in this order:
-
-```
-Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones
-DestinationAddresses,NegateDestination,Tags,Disabled,Services,UrlCategories,Action
-DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,ForwardingProfile,GroupTag
-SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates
-```
-
-> **_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the NAT policy first (using the `panco policy export` command),
-> and then modifying the output file. For example:
-
-```
-panco policy export -d firewall -u admin -g "Device-Group" --type decrypt --file <file-to-output>
-```
-
->*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
-> this is the "post" rulebase.
-
-When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty.
-
-<!-- Any field that you want to add or modify you need to have a value there, but at the very least, you **_MUST_** have values in the following fields: -->
-
-<!-- ``` -->
-<!-- ``` -->
 
 ## Import A Policy-Based Forwarding Policy
 
@@ -104,7 +76,7 @@ ForwardMonitorIpAddress,ForwardMonitorDisableIfUnreachable,EnableEnforceSymmetri
 SymmetricReturnAddresses,ActiveActiveDeviceBinding,NegateTarget,Uuid
 ```
 
-**_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the NAT policy first (using the `panco policy export` command),
+**_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the PBF policy first (using the `panco policy export` command),
 and then modifying the output file. For example:
 
 ```
@@ -112,7 +84,31 @@ panco policy export -d firewall -u admin -g "Device-Group" --type pbf --file <fi
 ```
 
 > *NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
-> this is the "post" rulebase.
+> this is the "pre" rulebase.
+
+## Importing A Decryption Policy
+
+When importing a CSV file to create Decryption rules or modify them, the file **_MUST_** have the following columns in this order:
+
+```
+Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones
+DestinationAddresses,NegateDestination,Tags,Disabled,Services,UrlCategories,Action
+DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,ForwardingProfile,GroupTag
+SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates
+```
+
+> **_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the decryption policy first (using the `panco policy export` command),
+> and then modifying the output file. For example:
+
+```
+panco policy export -d firewall -u admin -g "Device-Group" --type decrypt --file <file-to-output>
+```
+
+>*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
+> this is the "pre" rulebase.
+
+When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty.
+
 
 ## Editing A Security, NAT, Decryption or Policy-Based Forwarding Policy/Rules -- IMPORTANT
 
@@ -134,38 +130,38 @@ panco policy export -d firewall -u admin -g "Device-Group" --type security --fil
 Once you have exported the rules, then you can add/remove values from the different fields as needed, before then running the `panco policy modify` command on the CSV file you just edited.
 
 
-## Moving Rules
+<!-- ## Moving Rules -->
 
-When using the `panco policy move` command, here is the format that the CSV file must adhere to:
+<!-- When using the `panco policy move` command, here is the format that the CSV file must adhere to: -->
 
-Column | Description
-:--- | :---
-Rule Type | Type of rule - `security`, `nat` or `pbf`
-Location | ** Only used when ran against Panorama (`pre` or `post`); leave blank otherwise.
-Rule Name | Name of the rule you wish to move.
-Destination | Where to move the rule - `after`, `before`, `top` or `bottom`
-Target Rule | Target rule where `Destination` is referencing.
-Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall).
+<!-- Column | Description -->
+<!-- :--- | :--- -->
+<!-- Rule Type | Type of rule - `security`, `nat` or `pbf` -->
+<!-- Location | ** Only used when ran against Panorama (`pre` or `post`); leave blank otherwise. -->
+<!-- Rule Name | Name of the rule you wish to move. -->
+<!-- Destination | Where to move the rule - `after`, `before`, `top` or `bottom` -->
+<!-- Target Rule | Target rule where `Destination` is referencing. -->
+<!-- Device Group/Vsys | Name of the Device Group or Vsys (defaults are: `shared` for Panorama, `vsys1` for a firewall). -->
 
-Once you have specified what rules you need to move, you can execute it with the following command:
+<!-- Once you have specified what rules you need to move, you can execute it with the following command: -->
 
-```
-panco policy move --file <name-of-CSV-file>
-```
+<!-- ``` -->
+<!-- panco policy move --file <name-of-CSV-file> -->
+<!-- ``` -->
 
-## Group Rules By Tags
+<!-- ## Group Rules By Tags -->
 
-You can group multiple rules by tags, which allow you to "View the Rulebase as Groups" as shown in Panorama and on the firewall Policy tab. To do so, you need to structure your CSV file with the following two columns:
+<!-- You can group multiple rules by tags, which allow you to "View the Rulebase as Groups" as shown in Panorama and on the firewall Policy tab. To do so, you need to structure your CSV file with the following two columns: -->
 
-Column | Description
-:--- | :---
-Rule Name | Name of the rule you wish to order-by tag.
-Tag | Name of the tag you wish to group rules by - MUST be pre-existing on the device.
+<!-- Column | Description -->
+<!-- :--- | :--- -->
+<!-- Rule Name | Name of the rule you wish to order-by tag. -->
+<!-- Tag | Name of the tag you wish to group rules by - MUST be pre-existing on the device. -->
 
-If you want to do this on an existing rulebase, the easiest way is to first export the policy that you want, then, remove all of the other columns outside of the `Name` and `Tag` columns and then add in what tags you want applied to each rule to group them by. Once you have your file all set, run the following command:
+<!-- If you want to do this on an existing rulebase, the easiest way is to first export the policy that you want, then, remove all of the other columns outside of the `Name` and `Tag` columns and then add in what tags you want applied to each rule to group them by. Once you have your file all set, run the following command: -->
 
-```
-panco policy group --file <name-of-CSV-file> --type <security|nat>
-```
+<!-- ``` -->
+<!-- panco policy group --file <name-of-CSV-file> --type <security|nat> -->
+<!-- ``` -->
 
 [edit-set](https://docs.paloaltonetworks.com/pan-os/10-2/pan-os-panorama-api/pan-os-xml-api-request-types/pan-os-xml-api-request-types-and-actions/configuration-actions/actions-for-modifying-a-configuration#id44705ad2-4f22-4b6c-bb94-caea78a6d510)
