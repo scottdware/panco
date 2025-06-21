@@ -198,7 +198,7 @@ func sliceToString(slice []string) string {
 func stringToSlice(str string) []string {
 	var slice []string
 
-	list := strings.FieldsFunc(str, func(r rune) bool { return strings.ContainsRune(",;.\r\n ", r) })
+	list := strings.FieldsFunc(str, func(r rune) bool { return strings.ContainsRune(",;\r\n ", r) })
 	for _, item := range list {
 		slice = append(slice, strings.TrimSpace(item))
 	}
@@ -268,22 +268,22 @@ func formatDesc(str string) string {
 }
 
 func txtToSlice(file string) ([]string, error) {
-	var rules []string
+	var lines []string
 	f, err := os.Open(file)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to open rules text file - %s", err)
+		return nil, fmt.Errorf("Failed to open text file - %s", err)
 	}
 
 	defer f.Close()
 
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		rules = append(rules, scanner.Text())
+		lines = append(lines, scanner.Text())
 	}
 
 	if err := scanner.Err(); err != nil {
 		return nil, fmt.Errorf("Error reading file contents - %s", err)
 	}
 
-	return rules, nil
+	return lines, nil
 }

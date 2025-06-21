@@ -104,21 +104,25 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := addr.Entry{
-							Name:        name,
-							Value:       strings.TrimSpace(value),
-							Type:        addr.IpNetmask,
-							Description: desc,
-							Tags:        stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := addr.Entry{
+								Name:        name,
+								Value:       strings.TrimSpace(value),
+								Type:        addr.IpNetmask,
+								Description: desc,
+								Tags:        stringToSlice(tg),
+							}
 
-						err = c.Objects.Address.Set(vsys, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							err = c.Objects.Address.Set(vsys, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -134,21 +138,25 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := addr.Entry{
-							Name:        name,
-							Value:       strings.TrimSpace(value),
-							Type:        addr.IpRange,
-							Description: desc,
-							Tags:        stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := addr.Entry{
+								Name:        name,
+								Value:       strings.TrimSpace(value),
+								Type:        addr.IpRange,
+								Description: desc,
+								Tags:        stringToSlice(tg),
+							}
 
-						err = c.Objects.Address.Set(vsys, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							err = c.Objects.Address.Set(vsys, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -164,21 +172,25 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := addr.Entry{
-							Name:        name,
-							Value:       strings.TrimSpace(value),
-							Type:        addr.Fqdn,
-							Description: desc,
-							Tags:        stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := addr.Entry{
+								Name:        name,
+								Value:       strings.TrimSpace(value),
+								Type:        addr.Fqdn,
+								Description: desc,
+								Tags:        stringToSlice(tg),
+							}
 
-						err = c.Objects.Address.Set(vsys, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							err = c.Objects.Address.Set(vsys, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -194,21 +206,25 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := srvc.Entry{
-							Name:            name,
-							Description:     desc,
-							Protocol:        otype,
-							DestinationPort: strings.TrimSpace(value),
-							Tags:            stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := srvc.Entry{
+								Name:            name,
+								Description:     desc,
+								Protocol:        otype,
+								DestinationPort: strings.TrimSpace(value),
+								Tags:            stringToSlice(tg),
+							}
 
-						err = c.Objects.Services.Set(vsys, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							err = c.Objects.Services.Set(vsys, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -224,19 +240,23 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := srvcgrp.Entry{
-							Name:     name,
-							Services: stringToSlice(value),
-							Tags:     stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := srvcgrp.Entry{
+								Name:     name,
+								Services: stringToSlice(value),
+								Tags:     stringToSlice(tg),
+							}
 
-						err = c.Objects.ServiceGroup.Set(vsys, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+							err = c.Objects.ServiceGroup.Set(vsys, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -252,24 +272,28 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						groupLen := len(stringToSlice(value))
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							groupLen := len(stringToSlice(value))
 
-						e := addrgrp.Entry{
-							Name:            name,
-							Description:     desc,
-							StaticAddresses: stringToSlice(value),
-							Tags:            stringToSlice(tg),
-						}
+							e := addrgrp.Entry{
+								Name:            name,
+								Description:     desc,
+								StaticAddresses: stringToSlice(value),
+								Tags:            stringToSlice(tg),
+							}
 
-						err = c.Objects.AddressGroup.Set(vsys, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
-								if groupLen > 40 {
-									log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+							err = c.Objects.AddressGroup.Set(vsys, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+									if groupLen > 40 {
+										log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+									}
 								}
 							}
 						}
@@ -286,20 +310,24 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := addrgrp.Entry{
-							Name:         name,
-							Description:  desc,
-							DynamicMatch: value,
-							Tags:         stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := addrgrp.Entry{
+								Name:         name,
+								Description:  desc,
+								DynamicMatch: value,
+								Tags:         stringToSlice(tg),
+							}
 
-						err = c.Objects.AddressGroup.Set(vsys, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							err = c.Objects.AddressGroup.Set(vsys, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -436,20 +464,24 @@ var objectsImportCmd = &cobra.Command{
 						}
 					}
 				case "urlcreate":
-					e := url.Entry{
-						Name:        name,
-						Description: desc,
-						Sites:       urlStringToSlice(value),
-						Type:        "URL List",
-					}
+					if len(name) > 31 {
+						log.Printf("Line %d - failed to create %s: name is over the max 31 characters", i+1, name)
+					} else {
+						e := url.Entry{
+							Name:        name,
+							Description: desc,
+							Sites:       urlStringToSlice(value),
+							Type:        "URL List",
+						}
 
-					err = c.Objects.CustomUrlCategory.Set(vsys, e)
-					if err != nil {
-						if strings.Contains(err.Error(), "Client.Timeout") {
-							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-						} else {
-							log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
+						err = c.Objects.CustomUrlCategory.Set(vsys, e)
+						if err != nil {
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "urladd":
@@ -500,27 +532,31 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := tags.Entry{}
-						if value == "None" || value == "none" || value == "color0" || value == "" {
-							e = tags.Entry{
-								Name:    name,
-								Comment: desc,
-							}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
 						} else {
-							e = tags.Entry{
-								Name:    name,
-								Color:   tag2color[value],
-								Comment: desc,
-							}
-						}
-
-						err = c.Objects.Tags.Set(v, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							e := tags.Entry{}
+							if value == "None" || value == "none" || value == "color0" || value == "" {
+								e = tags.Entry{
+									Name:    name,
+									Comment: desc,
+								}
 							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								e = tags.Entry{
+									Name:    name,
+									Color:   tag2color[value],
+									Comment: desc,
+								}
+							}
+
+							err = c.Objects.Tags.Set(v, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -577,21 +613,25 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := addr.Entry{
-							Name:        name,
-							Value:       strings.TrimSpace(value),
-							Type:        addr.IpNetmask,
-							Description: desc,
-							Tags:        stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := addr.Entry{
+								Name:        name,
+								Value:       strings.TrimSpace(value),
+								Type:        addr.IpNetmask,
+								Description: desc,
+								Tags:        stringToSlice(tg),
+							}
 
-						err = c.Objects.Address.Set(dgroup, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							err = c.Objects.Address.Set(dgroup, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -607,21 +647,25 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := addr.Entry{
-							Name:        name,
-							Value:       strings.TrimSpace(value),
-							Type:        addr.IpRange,
-							Description: desc,
-							Tags:        stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := addr.Entry{
+								Name:        name,
+								Value:       strings.TrimSpace(value),
+								Type:        addr.IpRange,
+								Description: desc,
+								Tags:        stringToSlice(tg),
+							}
 
-						err = c.Objects.Address.Set(dgroup, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							err = c.Objects.Address.Set(dgroup, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -637,21 +681,25 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := addr.Entry{
-							Name:        name,
-							Value:       strings.TrimSpace(value),
-							Type:        addr.Fqdn,
-							Description: desc,
-							Tags:        stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := addr.Entry{
+								Name:        name,
+								Value:       strings.TrimSpace(value),
+								Type:        addr.Fqdn,
+								Description: desc,
+								Tags:        stringToSlice(tg),
+							}
 
-						err = c.Objects.Address.Set(dgroup, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							err = c.Objects.Address.Set(dgroup, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -667,21 +715,25 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := srvc.Entry{
-							Name:            name,
-							Description:     desc,
-							Protocol:        otype,
-							DestinationPort: strings.TrimSpace(value),
-							Tags:            stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := srvc.Entry{
+								Name:            name,
+								Description:     desc,
+								Protocol:        otype,
+								DestinationPort: strings.TrimSpace(value),
+								Tags:            stringToSlice(tg),
+							}
 
-						err = c.Objects.Services.Set(dgroup, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							err = c.Objects.Services.Set(dgroup, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -697,19 +749,23 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := srvcgrp.Entry{
-							Name:     name,
-							Services: stringToSlice(value),
-							Tags:     stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := srvcgrp.Entry{
+								Name:     name,
+								Services: stringToSlice(value),
+								Tags:     stringToSlice(tg),
+							}
 
-						err = c.Objects.ServiceGroup.Set(dgroup, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+							err = c.Objects.ServiceGroup.Set(dgroup, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -725,24 +781,28 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						groupLen := len(stringToSlice(value))
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							groupLen := len(stringToSlice(value))
 
-						e := addrgrp.Entry{
-							Name:            name,
-							Description:     desc,
-							StaticAddresses: stringToSlice(value),
-							Tags:            stringToSlice(tg),
-						}
+							e := addrgrp.Entry{
+								Name:            name,
+								Description:     desc,
+								StaticAddresses: stringToSlice(value),
+								Tags:            stringToSlice(tg),
+							}
 
-						err = c.Objects.AddressGroup.Set(dgroup, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
-								if groupLen > 40 {
-									log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+							err = c.Objects.AddressGroup.Set(dgroup, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+									if groupLen > 40 {
+										log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+									}
 								}
 							}
 						}
@@ -759,20 +819,24 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := addrgrp.Entry{
-							Name:         name,
-							Description:  desc,
-							DynamicMatch: value,
-							Tags:         stringToSlice(tg),
-						}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+						} else {
+							e := addrgrp.Entry{
+								Name:         name,
+								Description:  desc,
+								DynamicMatch: value,
+								Tags:         stringToSlice(tg),
+							}
 
-						err = c.Objects.AddressGroup.Set(dgroup, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+							err = c.Objects.AddressGroup.Set(dgroup, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}
@@ -933,20 +997,24 @@ var objectsImportCmd = &cobra.Command{
 						}
 					}
 				case "urlcreate":
-					e := url.Entry{
-						Name:        name,
-						Description: desc,
-						Sites:       urlStringToSlice(value),
-						Type:        "URL List",
-					}
+					if len(name) > 31 {
+						log.Printf("Line %d - failed to create %s: name is over the max 31 characters", i+1, name)
+					} else {
+						e := url.Entry{
+							Name:        name,
+							Description: desc,
+							Sites:       urlStringToSlice(value),
+							Type:        "URL List",
+						}
 
-					err = c.Objects.CustomUrlCategory.Set(dgroup, e)
-					if err != nil {
-						if strings.Contains(err.Error(), "Client.Timeout") {
-							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
-						} else {
-							log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
+						err = c.Objects.CustomUrlCategory.Set(dgroup, e)
+						if err != nil {
+							if strings.Contains(err.Error(), "Client.Timeout") {
+								timeoutCount++
+								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							} else {
+								log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
+							}
 						}
 					}
 				case "urladd":
@@ -997,27 +1065,31 @@ var objectsImportCmd = &cobra.Command{
 							}
 						}
 					} else {
-						e := tags.Entry{}
-						if value == "None" || value == "none" || value == "color0" || value == "" {
-							e = tags.Entry{
-								Name:    name,
-								Comment: desc,
-							}
+						if len(name) > 63 {
+							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
 						} else {
-							e = tags.Entry{
-								Name:    name,
-								Color:   tag2color[value],
-								Comment: desc,
-							}
-						}
-
-						err = c.Objects.Tags.Set(dgroup, e)
-						if err != nil {
-							if strings.Contains(err.Error(), "Client.Timeout") {
-								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							e := tags.Entry{}
+							if value == "None" || value == "none" || value == "color0" || value == "" {
+								e = tags.Entry{
+									Name:    name,
+									Comment: desc,
+								}
 							} else {
-								log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								e = tags.Entry{
+									Name:    name,
+									Color:   tag2color[value],
+									Comment: desc,
+								}
+							}
+
+							err = c.Objects.Tags.Set(dgroup, e)
+							if err != nil {
+								if strings.Contains(err.Error(), "Client.Timeout") {
+									timeoutCount++
+									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								} else {
+									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+								}
 							}
 						}
 					}

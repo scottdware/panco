@@ -56,8 +56,8 @@ var templateCmd = &cobra.Command{
 				log.Printf("Error creating CSV file - %s", err)
 				os.Exit(1)
 			}
-			output.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
-			output.Write(",universal,,,,,FALSE,any,,,,FALSE,any,,any,allow,default,FALSE,TRUE,FALSE,,FALSE,FALSE,,,,,,,,\n")
+			output.Write("#DeviceGroup/vsys,Location,Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
+			output.Write("Test-DG,pre,Test-Rule,universal,,,,,FALSE,any,,,,FALSE,any,,any,allow,default,FALSE,TRUE,FALSE,,FALSE,FALSE,,,,,,,,\n")
 			output.End()
 		case "all":
 			obj, err := easycsv.NewCSV("panco-Objects_Template.csv")
@@ -97,8 +97,8 @@ var templateCmd = &cobra.Command{
 				log.Printf("Error creating CSV file - %s", err)
 				os.Exit(1)
 			}
-			pol.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
-			pol.Write(",universal,,,,,FALSE,any,,,,FALSE,any,,any,allow,default,FALSE,TRUE,FALSE,,FALSE,FALSE,,,,,,,,\n")
+			pol.Write("#DeviceGroup/vsys,Location,Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
+			pol.Write("Test-DG,pre,Test-Rule,universal,,,,,FALSE,any,,,,FALSE,any,,any,allow,default,FALSE,TRUE,FALSE,,FALSE,FALSE,,,,,,,,\n")
 			pol.End()
 		}
 	},

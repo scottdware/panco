@@ -533,7 +533,7 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
 		return
 	}
 
-	cfh.Write("#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
+	cfh.Write("#DeviceGroup,Location,Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,")
 	cfh.Write("DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,")
 	cfh.Write("Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,")
 	cfh.Write("Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering\n")
@@ -566,7 +566,7 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
 						rtype = "universal"
 					}
 
-					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, rtype, formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", dg, strings.TrimSuffix(l, "-rulebase"), r.Name, rtype, formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
 						sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
 					cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
 						sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
@@ -600,7 +600,7 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
 				rtype = "universal"
 			}
 
-			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", r.Name, rtype, formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%t,\"%s\",\"%s\",", dg, strings.TrimSuffix(l, "-rulebase"), r.Name, rtype, formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
 				sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.HipProfiles)))
 			cfh.Write(fmt.Sprintf("\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",", sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination,
 				sliceToString(r.Applications), sliceToString(r.Services), sliceToString(r.Categories)))
@@ -638,7 +638,7 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool) {
 		return
 	}
 
-	cfh.Write("#Name,Type,Description,Tags,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,")
+	cfh.Write("#DeviceGroup,Location,Name,Type,Description,Tags,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,")
 	cfh.Write("SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,")
 	cfh.Write("SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,")
 	cfh.Write("DatAddress,DatPort,DatDynamicDistribution,Disabled\n")
@@ -665,7 +665,7 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool) {
 						toint = "any"
 					}
 
-					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, "ipv4", formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,\"%s\",\"%s\",\"%s\",%s,%s,%s,\"%s\",\"%s\",", dg, strings.TrimSuffix(l, "-rulebase"), r.Name, "ipv4", formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
 						r.DestinationZone, toint, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
 					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
 						r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
@@ -691,7 +691,7 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool) {
 				toint = "any"
 			}
 
-			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s,%s,%s,\"%s\",\"%s\",", r.Name, "ipv4", formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
+			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,\"%s\",\"%s\",\"%s\",%s,%s,%s,\"%s\",\"%s\",", dg, strings.TrimSuffix(l, "-rulebase"), r.Name, "ipv4", formatDesc(r.Description), sliceToString(r.Tags), sliceToString(r.SourceZones),
 				r.DestinationZone, toint, r.Service, sliceToString(r.SourceAddresses), sliceToString(r.DestinationAddresses)))
 			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",%s,%s,%s,\"%s\",%s,", r.SatType, r.SatAddressType, sliceToString(r.SatTranslatedAddresses), r.SatInterface,
 				r.SatIpAddress, r.SatFallbackType, sliceToString(r.SatFallbackTranslatedAddresses), r.SatFallbackInterface))
@@ -727,7 +727,7 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
 		return
 	}
 
-	cfh.Write("#Name,Description,Tags,FromType,FromValues,SourceAddresses,SourceUsers,NegateSource,DestinationAddresses,")
+	cfh.Write("#DeviceGroup,Location,Name,Description,Tags,FromType,FromValues,SourceAddresses,SourceUsers,NegateSource,DestinationAddresses,")
 	cfh.Write("NegateDestination,Applications,Services,Schedule,Disabled,Action,ForwardVsys,ForwardEgressInterface,")
 	cfh.Write("ForwardNextHopType,ForwardNextHopValue,ForwardMonitorProfile,ForwardMonitorIpAddress,ForwardMonitorDisableIfUnreachable,")
 	cfh.Write("EnableEnforceSymmetricReturn,SymmetricReturnAddresses,ActiveActiveDeviceBinding,NegateTarget,Uuid\n")
@@ -748,7 +748,7 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
 						log.Printf("Failed to retrieve Policy-Based Forwarding rule data: %s", err)
 					}
 
-					cfh.Write(fmt.Sprintf("%s,\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",%t,\"%s\",", r.Name, formatDesc(r.Description), sliceToString(r.Tags), r.FromType,
+					cfh.Write(fmt.Sprintf("%s,%s,%s,\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",%t,\"%s\",", dg, strings.TrimSuffix(l, "-rulebase"), r.Name, formatDesc(r.Description), sliceToString(r.Tags), r.FromType,
 						sliceToString(r.FromValues), sliceToString(r.SourceAddresses), userSliceToString(r.SourceUsers), r.NegateSource, sliceToString(r.DestinationAddresses)))
 					cfh.Write(fmt.Sprintf("%t,\"%s\",\"%s\",%s,%t,%s,%s,%s,", r.NegateDestination, sliceToString(r.Applications), sliceToString(r.Services), r.Schedule,
 						r.Disabled, r.Action, r.ForwardVsys, r.ForwardEgressInterface))
@@ -770,7 +770,7 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
 				log.Printf("Failed to retrieve Policy-Based Forwarding rule data: %s", err)
 			}
 
-			cfh.Write(fmt.Sprintf("%s,\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",%t,\"%s\",", r.Name, formatDesc(r.Description), sliceToString(r.Tags), r.FromType,
+			cfh.Write(fmt.Sprintf("%s,%s,%s,\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",%t,\"%s\",", dg, strings.TrimSuffix(l, "-rulebase"), r.Name, formatDesc(r.Description), sliceToString(r.Tags), r.FromType,
 				sliceToString(r.FromValues), sliceToString(r.SourceAddresses), userSliceToString(r.SourceUsers), r.NegateSource, sliceToString(r.DestinationAddresses)))
 			cfh.Write(fmt.Sprintf("%t,\"%s\",\"%s\",%s,%t,%s,%s,%s,", r.NegateDestination, sliceToString(r.Applications), sliceToString(r.Services), r.Schedule,
 				r.Disabled, r.Action, r.ForwardVsys, r.ForwardEgressInterface))
@@ -808,7 +808,7 @@ func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool) {
 		return
 	}
 
-	cfh.Write("#Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones,DestinationAddresses,NegateDestination,")
+	cfh.Write("#DeviceGroup,Location,Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones,DestinationAddresses,NegateDestination,")
 	cfh.Write("Tags,Disabled,Services,UrlCategories,Action,DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,")
 	cfh.Write("ForwardingProfile,GroupTag,SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates\n")
 
@@ -828,7 +828,7 @@ func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool) {
 						log.Printf("Failed to retrieve Decryption rule data: %s", err)
 					}
 
-					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",%t,", r.Name, formatDesc(r.Description),
+					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",%t,", dg, strings.TrimSuffix(l, "-rulebase"), r.Name, formatDesc(r.Description),
 						sliceToString(r.SourceZones), sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination))
 					cfh.Write(fmt.Sprintf("\"%s\",%t,\"%s\",\"%s\",%s,%s,%s,%s,%t,", sliceToString(r.Tags), r.Disabled,
 						sliceToString(r.Services), sliceToString(r.UrlCategories), r.Action, r.DecryptionType, r.SslCertificate, r.DecryptionProfile, r.NegateTarget))
@@ -848,7 +848,7 @@ func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool) {
 				log.Printf("Failed to retrieve Decryption rule data: %s", err)
 			}
 
-			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",%t,", r.Name, formatDesc(r.Description),
+			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,\"%s\",\"%s\",%t,\"%s\",\"%s\",\"%s\",%t,", dg, strings.TrimSuffix(l, "-rulebase"), r.Name, formatDesc(r.Description),
 				sliceToString(r.SourceZones), sliceToString(r.SourceAddresses), r.NegateSource, userSliceToString(r.SourceUsers), sliceToString(r.DestinationZones), sliceToString(r.DestinationAddresses), r.NegateDestination))
 			cfh.Write(fmt.Sprintf("\"%s\",%t,\"%s\",\"%s\",%s,%s,%s,%s,%t,", sliceToString(r.Tags), r.Disabled,
 				sliceToString(r.Services), sliceToString(r.UrlCategories), r.Action, r.DecryptionType, r.SslCertificate, r.DecryptionProfile, r.NegateTarget))
