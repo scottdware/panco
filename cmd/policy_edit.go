@@ -43,9 +43,16 @@ var policyEditCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
+        var delay time.Duration
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
 		_ = passwd
+        
+        if p == "" {
+			delay, _ = time.ParseDuration("100ms")
+		} else {
+			delay, _ = time.ParseDuration(fmt.Sprintf("%sms", p))
+		}
 
 		cl := pango.Client{
 			Hostname: device,
@@ -130,7 +137,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit Security rule: %s", i+1, err)
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time. Millisecond)
 				}
 			}
 
@@ -199,7 +206,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit NAT rule: %s", i+1, err)
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time. Millisecond)
 				}
 			}
 
@@ -256,7 +263,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit Policy-Based Forwarding rule: %s", i+1, err)
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time. Millisecond)
 				}
 			}
 
@@ -312,7 +319,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit Decryption rule: %s", i+1, err)
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time. Millisecond)
 				}
 			}
 		case *pango.Panorama:
@@ -393,7 +400,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit security rule: %s", i+1, err)
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time. Millisecond)
 				}
 			}
 
@@ -462,7 +469,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit NAT rule: %s", i+1, err)
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time. Millisecond)
 				}
 			}
 
@@ -519,7 +526,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit Policy-Based Forwarding rule: %s", i+1, err)
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time. Millisecond)
 				}
 			}
 
@@ -575,7 +582,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit Decryption rule: %s", i+1, err)
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time. Millisecond)
 				}
 			}
 		}
@@ -586,6 +593,7 @@ func init() {
 	policyCmd.AddCommand(policyEditCmd)
 
 	policyEditCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
+    policyEditCmd.Flags().StringVarP(&p, "delay", "p", "100", "Delay (in milliseconds) to pause between each API call")
 	// policyModifyCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyEditCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	policyEditCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to export to")
