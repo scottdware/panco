@@ -32,7 +32,7 @@ import (
 )
 
 var cfgFile, srcrule, mvwhere, targetrule, pass, txt, onlyrules string
-var action, dg, user, device, f, t, query, l, v, source, ostype, config string
+var action, dg, user, device, f, t, p, query, l, v, source, ostype, config string
 var load, multiple, xlate, hit bool
 
 var tag2color = map[string]string{

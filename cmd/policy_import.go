@@ -43,9 +43,16 @@ var policyImportCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
+		var delay time.Duration
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
 		_ = passwd
+
+		if p == "" {
+			delay, _ = time.ParseDuration("100ms")
+		} else {
+			delay, _ = time.ParseDuration(fmt.Sprintf("%sms", p))
+		}
 
 		cl := pango.Client{
 			Hostname: device,
@@ -144,7 +151,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 
@@ -222,7 +229,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 
@@ -288,7 +295,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 
@@ -353,7 +360,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 
@@ -466,7 +473,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 
@@ -560,7 +567,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 
@@ -638,7 +645,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 
@@ -719,7 +726,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 
@@ -738,7 +745,7 @@ func init() {
 	policyCmd.AddCommand(policyImportCmd)
 
 	policyImportCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	// policyImportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	policyImportCmd.Flags().StringVarP(&p, "delay", "p", "100", "Delay (in milliseconds) to pause between each API call")
 	policyImportCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	policyImportCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to export to")
 	// policyImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when importing to Panorama")

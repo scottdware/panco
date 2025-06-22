@@ -36,8 +36,15 @@ var policyExportCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
+		var delay time.Duration
 		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
 		_ = passwd
+
+		if p == "" {
+			delay, _ = time.ParseDuration("100ms")
+		} else {
+			delay, _ = time.ParseDuration(fmt.Sprintf("%sms", p))
+		}
 
 		cl := pango.Client{
 			Hostname: device,
@@ -144,6 +151,7 @@ func init() {
 	policyCmd.AddCommand(policyExportCmd)
 
 	policyExportCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
+	policyExportCmd.Flags().StringVarP(&p, "delay", "p", "100", "Delay (in milliseconds) to pause between each API call")
 	// policyExportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
 	policyExportCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	policyExportCmd.Flags().StringVarP(&f, "file", "f", "PaloAltoPolicy", "Name of the CSV file you'd like to export to")
@@ -224,7 +232,7 @@ func getFwSecPol(c *pango.Firewall, file string, hitcount bool) {
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 		}
@@ -258,7 +266,7 @@ func getFwSecPol(c *pango.Firewall, file string, hitcount bool) {
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 				r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
 
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(delay * time.Millisecond)
 		}
 	}
 
@@ -321,7 +329,7 @@ func getFwNatPol(c *pango.Firewall, file string, hitcount bool) {
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 		}
@@ -347,7 +355,7 @@ func getFwNatPol(c *pango.Firewall, file string, hitcount bool) {
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 				r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
 
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(delay * time.Millisecond)
 		}
 	}
 
@@ -406,7 +414,7 @@ func getFwPbfPol(c *pango.Firewall, file string, hitcount bool) {
 					cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 						r.NegateTarget, r.Uuid))
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 		}
@@ -428,7 +436,7 @@ func getFwPbfPol(c *pango.Firewall, file string, hitcount bool) {
 			cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 				r.NegateTarget, r.Uuid))
 
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(delay * time.Millisecond)
 		}
 	}
 
@@ -484,7 +492,7 @@ func getFwDecryptPol(c *pango.Firewall, file string, hitcount bool) {
 					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 						sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 		}
@@ -504,7 +512,7 @@ func getFwDecryptPol(c *pango.Firewall, file string, hitcount bool) {
 			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 				sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(delay * time.Millisecond)
 		}
 	}
 
@@ -575,7 +583,7 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 		}
@@ -609,7 +617,7 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 				r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
 
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(delay * time.Millisecond)
 		}
 	}
 
@@ -672,7 +680,7 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool) {
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 		}
@@ -698,7 +706,7 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool) {
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 				r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
 
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(delay * time.Millisecond)
 		}
 	}
 
@@ -757,7 +765,7 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
 					cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 						r.NegateTarget, r.Uuid))
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 		}
@@ -779,7 +787,7 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
 			cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 				r.NegateTarget, r.Uuid))
 
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(delay * time.Millisecond)
 		}
 	}
 
@@ -835,7 +843,7 @@ func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool) {
 					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 						sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
-					time.Sleep(100 * time.Millisecond)
+					time.Sleep(delay * time.Millisecond)
 				}
 			}
 		}
@@ -855,7 +863,7 @@ func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool) {
 			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 				sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(delay * time.Millisecond)
 		}
 	}
 

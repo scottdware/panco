@@ -44,10 +44,17 @@ var objectsImportCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
+		var delay time.Duration
 		resty.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 		keyrexp := regexp.MustCompile(`key=([0-9A-Za-z\=]+).*`)
 		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
 		_ = passwd
+
+		if p == "" {
+			delay, _ = time.ParseDuration("100ms")
+		} else {
+			delay, _ = time.ParseDuration(fmt.Sprintf("%sms", p))
+		}
 
 		cl := pango.Client{
 			Hostname: device,
@@ -562,7 +569,7 @@ var objectsImportCmd = &cobra.Command{
 					}
 				}
 
-				time.Sleep(100 * time.Millisecond)
+				time.Sleep(delay * time.Millisecond)
 			}
 
 			if timeoutCount > 0 {
@@ -1095,7 +1102,7 @@ var objectsImportCmd = &cobra.Command{
 					}
 				}
 
-				time.Sleep(100 * time.Millisecond)
+				time.Sleep(delay * time.Millisecond)
 			}
 
 			if timeoutCount > 0 {
@@ -1113,7 +1120,7 @@ func init() {
 	objectsCmd.AddCommand(objectsImportCmd)
 
 	objectsImportCmd.Flags().StringVarP(&user, "user", "u", "", "User to connect to the device as")
-	// objectsImportCmd.Flags().StringVarP(&pass, "pass", "p", "", "Password for the user account specified")
+	objectsImportCmd.Flags().StringVarP(&p, "delay", "p", "100", "Delay (in milliseconds) to pause between each API call")
 	objectsImportCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	objectsImportCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to import")
 	// objectsImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
