@@ -71,47 +71,47 @@ var objectsExportCmd = &cobra.Command{
 
 			// Address objects
 			if t == "address" {
-				getFwAddr(c, fmt.Sprintf("%s.csv", f))
+				getFwAddr(c, fmt.Sprintf("%s.csv", f), delay)
 			}
 
 			if t == "all" {
-				getFwAddr(c, fmt.Sprintf("%s_Addrs.csv", f))
+				getFwAddr(c, fmt.Sprintf("%s_Addrs.csv", f), delay)
 			}
 
 			// Address groups
 			if t == "addressgroup" {
-				getFwAddrGrp(c, fmt.Sprintf("%s.csv", f))
+				getFwAddrGrp(c, fmt.Sprintf("%s.csv", f), delay)
 			}
 
 			if t == "all" {
-				getFwAddrGrp(c, fmt.Sprintf("%s_AddrGroups.csv", f))
+				getFwAddrGrp(c, fmt.Sprintf("%s_AddrGroups.csv", f), delay)
 			}
 
 			// Service objects
 			if t == "service" {
-				getFwSrvc(c, fmt.Sprintf("%s.csv", f))
+				getFwSrvc(c, fmt.Sprintf("%s.csv", f), delay)
 			}
 
 			if t == "all" {
-				getFwSrvc(c, fmt.Sprintf("%s_Svcs.csv", f))
+				getFwSrvc(c, fmt.Sprintf("%s_Svcs.csv", f), delay)
 			}
 
 			// Service groups
 			if t == "servicegroup" {
-				getFwSrvcGrp(c, fmt.Sprintf("%s.csv", f))
+				getFwSrvcGrp(c, fmt.Sprintf("%s.csv", f), delay)
 			}
 
 			if t == "all" {
-				getFwSrvcGrp(c, fmt.Sprintf("%s_SvcGroups.csv", f))
+				getFwSrvcGrp(c, fmt.Sprintf("%s_SvcGroups.csv", f), delay)
 			}
 
 			// Tags
 			if t == "tags" {
-				getFwTags(c, fmt.Sprintf("%s.csv", f))
+				getFwTags(c, fmt.Sprintf("%s.csv", f), delay)
 			}
 
 			if t == "all" {
-				getFwTags(c, fmt.Sprintf("%s_Tags.csv", f))
+				getFwTags(c, fmt.Sprintf("%s_Tags.csv", f), delay)
 			}
 		case *pango.Panorama:
 			if dg == "" {
@@ -122,47 +122,47 @@ var objectsExportCmd = &cobra.Command{
 
 			// Address objects
 			if t == "address" {
-				getPanoAddr(c, fmt.Sprintf("%s.csv", f))
+				getPanoAddr(c, fmt.Sprintf("%s.csv", f), delay)
 			}
 
 			if t == "all" {
-				getPanoAddr(c, fmt.Sprintf("%s_Addrs.csv", f))
+				getPanoAddr(c, fmt.Sprintf("%s_Addrs.csv", f), delay)
 			}
 
 			// Address groups
 			if t == "addressgroup" {
-				getPanoAddrGrp(c, fmt.Sprintf("%s.csv", f))
+				getPanoAddrGrp(c, fmt.Sprintf("%s.csv", f), delay)
 			}
 
 			if t == "all" {
-				getPanoAddrGrp(c, fmt.Sprintf("%s_AddrGroups.csv", f))
+				getPanoAddrGrp(c, fmt.Sprintf("%s_AddrGroups.csv", f), delay)
 			}
 
 			// Service objects
 			if t == "service" {
-				getPanoSrvc(c, fmt.Sprintf("%s.csv", f))
+				getPanoSrvc(c, fmt.Sprintf("%s.csv", f), delay)
 			}
 
 			if t == "all" {
-				getPanoSrvc(c, fmt.Sprintf("%s_Svcs.csv", f))
+				getPanoSrvc(c, fmt.Sprintf("%s_Svcs.csv", f), delay)
 			}
 
 			// Service groups
 			if t == "servicegroup" {
-				getPanoSrvcGrp(c, fmt.Sprintf("%s.csv", f))
+				getPanoSrvcGrp(c, fmt.Sprintf("%s.csv", f), delay)
 			}
 
 			if t == "all" {
-				getPanoSrvcGrp(c, fmt.Sprintf("%s_SvcGroups.csv", f))
+				getPanoSrvcGrp(c, fmt.Sprintf("%s_SvcGroups.csv", f), delay)
 			}
 
 			// Tags
 			if t == "tags" {
-				getPanoTags(c, fmt.Sprintf("%s.csv", f))
+				getPanoTags(c, fmt.Sprintf("%s.csv", f), delay)
 			}
 
 			if t == "all" {
-				getPanoTags(c, fmt.Sprintf("%s_Tags.csv", f))
+				getPanoTags(c, fmt.Sprintf("%s_Tags.csv", f), delay)
 			}
 		}
 	},
@@ -187,7 +187,7 @@ func init() {
 }
 
 // getFwAddr is used to export the address objects from a firewall
-func getFwAddr(c *pango.Firewall, file string) {
+func getFwAddr(c *pango.Firewall, file string, delay time.Duration) {
 	addrs, err := c.Objects.Address.GetList(v)
 	if err != nil {
 		log.Printf("Failed to get the list of address objects: %s", err)
@@ -224,7 +224,7 @@ func getFwAddr(c *pango.Firewall, file string) {
 }
 
 // getFwAddrGrp is used to export the address group objects from a firewall
-func getFwAddrGrp(c *pango.Firewall, file string) {
+func getFwAddrGrp(c *pango.Firewall, file string, delay time.Duration) {
 	addrgrps, err := c.Objects.AddressGroup.GetList(v)
 	if err != nil {
 		log.Printf("Failed to get the list of address groups: %s", err)
@@ -272,7 +272,7 @@ func getFwAddrGrp(c *pango.Firewall, file string) {
 }
 
 // getFwSrvc is used to export the service objects from a firewall
-func getFwSrvc(c *pango.Firewall, file string) {
+func getFwSrvc(c *pango.Firewall, file string, delay time.Duration) {
 	srvcs, err := c.Objects.Services.GetList(v)
 	if err != nil {
 		log.Printf("Failed to get the list of service objects: %s", err)
@@ -309,7 +309,7 @@ func getFwSrvc(c *pango.Firewall, file string) {
 }
 
 // getFwSrvcGrp is used to export the service group objects from a firewall
-func getFwSrvcGrp(c *pango.Firewall, file string) {
+func getFwSrvcGrp(c *pango.Firewall, file string, delay time.Duration) {
 	srvcgrps, err := c.Objects.ServiceGroup.GetList(v)
 	if err != nil {
 		log.Printf("Failed to get the list of service groups: %s", err)
@@ -346,7 +346,7 @@ func getFwSrvcGrp(c *pango.Firewall, file string) {
 }
 
 // getFwTags is used to export the tag objects from a firewall
-func getFwTags(c *pango.Firewall, file string) {
+func getFwTags(c *pango.Firewall, file string, delay time.Duration) {
 	tags, err := c.Objects.Tags.GetList(v)
 	if err != nil {
 		log.Printf("Failed to get the list of tags: %s", err)
@@ -383,7 +383,7 @@ func getFwTags(c *pango.Firewall, file string) {
 }
 
 // getPanoAddr is used to export the address objects from Panorama
-func getPanoAddr(c *pango.Panorama, file string) {
+func getPanoAddr(c *pango.Panorama, file string, delay time.Duration) {
 	addrs, err := c.Objects.Address.GetList(dg)
 	if err != nil {
 		log.Printf("Failed to get the list of address objects: %s", err)
@@ -420,7 +420,7 @@ func getPanoAddr(c *pango.Panorama, file string) {
 }
 
 // getPanoAddrGrp is used to export the address group objects from Panorama
-func getPanoAddrGrp(c *pango.Panorama, file string) {
+func getPanoAddrGrp(c *pango.Panorama, file string, delay time.Duration) {
 	addrgrps, err := c.Objects.AddressGroup.GetList(dg)
 	if err != nil {
 		log.Printf("Failed to get the list of address groups: %s", err)
@@ -468,7 +468,7 @@ func getPanoAddrGrp(c *pango.Panorama, file string) {
 }
 
 // getPanoSrvc is used to export the service objects from Panorama
-func getPanoSrvc(c *pango.Panorama, file string) {
+func getPanoSrvc(c *pango.Panorama, file string, delay time.Duration) {
 	srvcs, err := c.Objects.Services.GetList(dg)
 	if err != nil {
 		log.Printf("Failed to get the list of service objects: %s", err)
@@ -505,7 +505,7 @@ func getPanoSrvc(c *pango.Panorama, file string) {
 }
 
 // getPanoSrvGrp is used to export the service group objects from Panorama
-func getPanoSrvcGrp(c *pango.Panorama, file string) {
+func getPanoSrvcGrp(c *pango.Panorama, file string, delay time.Duration) {
 	srvcgrps, err := c.Objects.ServiceGroup.GetList(dg)
 	if err != nil {
 		log.Printf("Failed to get the list of service groups: %s", err)
@@ -542,7 +542,7 @@ func getPanoSrvcGrp(c *pango.Panorama, file string) {
 }
 
 // getPanoTags is used to export the tag objects from Panorama
-func getPanoTags(c *pango.Panorama, file string) {
+func getPanoTags(c *pango.Panorama, file string, delay time.Duration) {
 	tags, err := c.Objects.Tags.GetList(dg)
 	if err != nil {
 		log.Printf("Failed to get the list of tags: %s", err)
