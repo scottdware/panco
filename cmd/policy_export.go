@@ -65,7 +65,7 @@ var policyExportCmd = &cobra.Command{
 		case *pango.Firewall:
 			// Security policy
 			if t == "security" {
-				getFwSecPol(c, f, hit)
+				getFwSecPol(c, f, hit, delay)
 			}
 
 			if t == "all" {
@@ -74,7 +74,7 @@ var policyExportCmd = &cobra.Command{
 
 			// NAT policy
 			if t == "nat" {
-				getFwNatPol(c, f, hit)
+				getFwNatPol(c, f, hit, delay)
 			}
 
 			if t == "all" {
@@ -83,7 +83,7 @@ var policyExportCmd = &cobra.Command{
 
 			// Policy-Based Forwarding policy
 			if t == "pbf" {
-				getFwPbfPol(c, f, hit)
+				getFwPbfPol(c, f, hit, delay)
 			}
 
 			if t == "all" {
