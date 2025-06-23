@@ -69,7 +69,7 @@ var policyExportCmd = &cobra.Command{
 			}
 
 			if t == "all" {
-				getFwSecPol(c, fmt.Sprintf("%s_Security", f), hit)
+				getFwSecPol(c, fmt.Sprintf("%s_Security", f), hit, delay)
 			}
 
 			// NAT policy
@@ -78,7 +78,7 @@ var policyExportCmd = &cobra.Command{
 			}
 
 			if t == "all" {
-				getFwNatPol(c, fmt.Sprintf("%s_NAT", f), hit)
+				getFwNatPol(c, fmt.Sprintf("%s_NAT", f), hit, delay)
 			}
 
 			// Policy-Based Forwarding policy
@@ -87,16 +87,16 @@ var policyExportCmd = &cobra.Command{
 			}
 
 			if t == "all" {
-				getFwPbfPol(c, fmt.Sprintf("%s_PBF", f), hit)
+				getFwPbfPol(c, fmt.Sprintf("%s_PBF", f), hit, delay)
 			}
 
 			// Decryption policy
 			if t == "decrypt" {
-				getFwDecryptPol(c, f, hit)
+				getFwDecryptPol(c, f, hit, delay)
 			}
 
 			if t == "all" {
-				getFwDecryptPol(c, fmt.Sprintf("%s_Decrypt", f), hit)
+				getFwDecryptPol(c, fmt.Sprintf("%s_Decrypt", f), hit, delay)
 			}
 		case *pango.Panorama:
 			switch l {
@@ -110,38 +110,38 @@ var policyExportCmd = &cobra.Command{
 
 			// Security policy
 			if t == "security" {
-				getPanoSecPol(c, f, hit)
+				getPanoSecPol(c, f, hit, delay)
 			}
 
 			if t == "all" {
-				getPanoSecPol(c, fmt.Sprintf("%s_Security", f), hit)
+				getPanoSecPol(c, fmt.Sprintf("%s_Security", f), hit, delay)
 			}
 
 			// NAT policy
 			if t == "nat" {
-				getPanoNatPol(c, f, hit)
+				getPanoNatPol(c, f, hit, delay)
 			}
 
 			if t == "all" {
-				getPanoNatPol(c, fmt.Sprintf("%s_NAT", f), hit)
+				getPanoNatPol(c, fmt.Sprintf("%s_NAT", f), hit, delay)
 			}
 
 			// Policy-Based Forwarding policy
 			if t == "pbf" {
-				getPanoPbfPol(c, f, hit)
+				getPanoPbfPol(c, f, hit, delay)
 			}
 
 			if t == "all" {
-				getPanoPbfPol(c, fmt.Sprintf("%s_PBF", f), hit)
+				getPanoPbfPol(c, fmt.Sprintf("%s_PBF", f), hit, delay)
 			}
 
 			// Decryption policy
 			if t == "decrypt" {
-				getPanoDecryptPol(c, f, hit)
+				getPanoDecryptPol(c, f, hit, delay)
 			}
 
 			if t == "all" {
-				getPanoDecryptPol(c, fmt.Sprintf("%s_Decrypt", f), hit)
+				getPanoDecryptPol(c, fmt.Sprintf("%s_Decrypt", f), hit, delay)
 			}
 		}
 	},
@@ -169,7 +169,7 @@ func init() {
 }
 
 // getFwSecPol is used to export the Security policy on a firewall
-func getFwSecPol(c *pango.Firewall, file string, hitcount bool) {
+func getFwSecPol(c *pango.Firewall, file string, hitcount bool, delay time.Duration) {
 	rules, err := c.Policies.Security.GetList(v)
 	if err != nil {
 		log.Printf("Failed to retrieve the list of Security rules: %s", err)
@@ -274,7 +274,7 @@ func getFwSecPol(c *pango.Firewall, file string, hitcount bool) {
 }
 
 // getFwNatPol is used to export the NAT policy on a firewall
-func getFwNatPol(c *pango.Firewall, file string, hitcount bool) {
+func getFwNatPol(c *pango.Firewall, file string, hitcount bool, delay time.Duration) {
 	rules, err := c.Policies.Nat.GetList(v)
 	if err != nil {
 		log.Printf("Failed to retrieve the list of NAT rules: %s", err)
@@ -363,7 +363,7 @@ func getFwNatPol(c *pango.Firewall, file string, hitcount bool) {
 }
 
 // getFwPbfPol is used to export the Policy-Based Forwarding policy on a firewall
-func getFwPbfPol(c *pango.Firewall, file string, hitcount bool) {
+func getFwPbfPol(c *pango.Firewall, file string, hitcount bool, delay time.Duration) {
 	rules, err := c.Policies.PolicyBasedForwarding.GetList(v)
 	if err != nil {
 		log.Printf("Failed to retrieve the list of Policy-Based Forwarding rules: %s", err)
@@ -444,7 +444,7 @@ func getFwPbfPol(c *pango.Firewall, file string, hitcount bool) {
 }
 
 // getFwDecryptPol is used to export the Decryption policy on a firewall
-func getFwDecryptPol(c *pango.Firewall, file string, hitcount bool) {
+func getFwDecryptPol(c *pango.Firewall, file string, hitcount bool, delay time.Duration) {
 	rules, err := c.Policies.Decryption.GetList(v)
 	if err != nil {
 		log.Printf("Failed to retrieve the list of Decryption rules: %s", err)
@@ -520,7 +520,7 @@ func getFwDecryptPol(c *pango.Firewall, file string, hitcount bool) {
 }
 
 // getPanoSecPol is used to export the Security policy from Panorama
-func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
+func getPanoSecPol(c *pango.Panorama, file string, hitcount bool, delay time.Duration) {
 	rules, err := c.Policies.Security.GetList(dg, l)
 	if err != nil {
 		log.Printf("Failed to retrieve the list of Security rules: %s", err)
@@ -625,7 +625,7 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool) {
 }
 
 // getPanoNatPol is used to export the NAT policy from Panorama
-func getPanoNatPol(c *pango.Panorama, file string, hitcount bool) {
+func getPanoNatPol(c *pango.Panorama, file string, hitcount bool, delay time.Duration) {
 	rules, err := c.Policies.Nat.GetList(dg, l)
 	if err != nil {
 		log.Printf("Failed to retrieve the list of NAT rules: %s", err)
@@ -714,7 +714,7 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool) {
 }
 
 // getPanoPbfPol is used to export the Policy-Based Forwarding policy from Panorama
-func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
+func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool, delay time.Duration) {
 	rules, err := c.Policies.PolicyBasedForwarding.GetList(dg, l)
 	if err != nil {
 		log.Printf("Failed to retrieve the list of Policy-Based Forwarding rules: %s", err)
@@ -795,7 +795,7 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool) {
 }
 
 // getPanoDecryptPol is used to export the Decryption policy from Panorama
-func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool) {
+func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool, delay time.Duration) {
 	rules, err := c.Policies.Decryption.GetList(dg, l)
 	if err != nil {
 		log.Printf("Failed to retrieve the list of Decryption rules: %s", err)
