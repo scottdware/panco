@@ -50,11 +50,7 @@ var objectsImportCmd = &cobra.Command{
 		passwd := prompter.Password(fmt.Sprintf("Password for %s", user))
 		_ = passwd
 
-		if p == "" {
-			delay, _ = time.ParseDuration("100ms")
-		} else {
-			delay, _ = time.ParseDuration(fmt.Sprintf("%sms", p))
-		}
+		delay, _ = time.ParseDuration(fmt.Sprintf("%sms", p))
 
 		cl := pango.Client{
 			Hostname: device,
