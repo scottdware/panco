@@ -147,7 +147,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -225,7 +225,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -291,7 +291,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -356,7 +356,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -469,7 +469,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -563,7 +563,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -641,7 +641,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -722,7 +722,7 @@ var policyImportCmd = &cobra.Command{
 						}
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 

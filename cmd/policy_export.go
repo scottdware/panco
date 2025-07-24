@@ -228,7 +228,7 @@ func getFwSecPol(c *pango.Firewall, file string, hitcount bool, delay time.Durat
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 		}
@@ -262,7 +262,7 @@ func getFwSecPol(c *pango.Firewall, file string, hitcount bool, delay time.Durat
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 				r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
 
-			time.Sleep(delay * time.Millisecond)
+			time.Sleep(delay)
 		}
 	}
 
@@ -325,7 +325,7 @@ func getFwNatPol(c *pango.Firewall, file string, hitcount bool, delay time.Durat
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 		}
@@ -351,7 +351,7 @@ func getFwNatPol(c *pango.Firewall, file string, hitcount bool, delay time.Durat
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 				r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
 
-			time.Sleep(delay * time.Millisecond)
+			time.Sleep(delay)
 		}
 	}
 
@@ -410,7 +410,7 @@ func getFwPbfPol(c *pango.Firewall, file string, hitcount bool, delay time.Durat
 					cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 						r.NegateTarget, r.Uuid))
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 		}
@@ -432,7 +432,7 @@ func getFwPbfPol(c *pango.Firewall, file string, hitcount bool, delay time.Durat
 			cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 				r.NegateTarget, r.Uuid))
 
-			time.Sleep(delay * time.Millisecond)
+			time.Sleep(delay)
 		}
 	}
 
@@ -488,7 +488,7 @@ func getFwDecryptPol(c *pango.Firewall, file string, hitcount bool, delay time.D
 					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 						sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 		}
@@ -508,7 +508,7 @@ func getFwDecryptPol(c *pango.Firewall, file string, hitcount bool, delay time.D
 			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 				sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
-			time.Sleep(delay * time.Millisecond)
+			time.Sleep(delay)
 		}
 	}
 
@@ -579,7 +579,7 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool, delay time.Dur
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 						r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 		}
@@ -613,7 +613,7 @@ func getPanoSecPol(c *pango.Panorama, file string, hitcount bool, delay time.Dur
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%s,%s,%s,%s,%s\n", r.Group, r.Virus, r.Spyware,
 				r.Vulnerability, r.UrlFiltering, r.FileBlocking, r.WildFireAnalysis, r.DataFiltering))
 
-			time.Sleep(delay * time.Millisecond)
+			time.Sleep(delay)
 		}
 	}
 
@@ -676,7 +676,7 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool, delay time.Dur
 					cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 						r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 		}
@@ -702,7 +702,7 @@ func getPanoNatPol(c *pango.Panorama, file string, hitcount bool, delay time.Dur
 			cfh.Write(fmt.Sprintf("%s,%s,%s,%t,%s,%s,%d,%s,%t\n", r.SatFallbackIpType, r.SatFallbackIpAddress, r.SatStaticTranslatedAddress,
 				r.SatStaticBiDirectional, r.DatType, r.DatAddress, r.DatPort, r.DatDynamicDistribution, r.Disabled))
 
-			time.Sleep(delay * time.Millisecond)
+			time.Sleep(delay)
 		}
 	}
 
@@ -761,7 +761,7 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool, delay time.Dur
 					cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 						r.NegateTarget, r.Uuid))
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 		}
@@ -783,7 +783,7 @@ func getPanoPbfPol(c *pango.Panorama, file string, hitcount bool, delay time.Dur
 			cfh.Write(fmt.Sprintf("%t,\"%s\",%s,%t,%s\n", r.EnableEnforceSymmetricReturn, sliceToString(r.SymmetricReturnAddresses), r.ActiveActiveDeviceBinding,
 				r.NegateTarget, r.Uuid))
 
-			time.Sleep(delay * time.Millisecond)
+			time.Sleep(delay)
 		}
 	}
 
@@ -839,7 +839,7 @@ func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool, delay time
 					cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 						sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 		}
@@ -859,7 +859,7 @@ func getPanoDecryptPol(c *pango.Panorama, file string, hitcount bool, delay time
 			cfh.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",%t,%t,%s,\"%s\"\n", r.ForwardingProfile, r.GroupTag,
 				sliceToString(r.SourceHips), sliceToString(r.DestinationHips), r.LogSuccessfulTlsHandshakes, r.LogFailedTlsHandshakes, r.LogSetting, sliceToString(r.SslCertificates)))
 
-			time.Sleep(delay * time.Millisecond)
+			time.Sleep(delay)
 		}
 	}
 

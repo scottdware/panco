@@ -213,7 +213,7 @@ func getFwAddr(c *pango.Firewall, file string, delay time.Duration) {
 
 		ac.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", a.Name, a.Type, a.Value, a.Description, sliceToString(a.Tags), v))
 
-		time.Sleep(delay * time.Millisecond)
+		time.Sleep(delay)
 	}
 
 	ac.End()
@@ -261,7 +261,7 @@ func getFwAddrGrp(c *pango.Firewall, file string, delay time.Duration) {
 
 		agc.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", a.Name, gtype, val, a.Description, sliceToString(a.Tags), v))
 
-		time.Sleep(delay * time.Millisecond)
+		time.Sleep(delay)
 	}
 
 	agc.End()
@@ -298,7 +298,7 @@ func getFwSrvc(c *pango.Firewall, file string, delay time.Duration) {
 
 		sc.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", s.Name, s.Protocol, s.DestinationPort, s.Description, sliceToString(s.Tags), v))
 
-		time.Sleep(delay * time.Millisecond)
+		time.Sleep(delay)
 	}
 
 	sc.End()
@@ -335,7 +335,7 @@ func getFwSrvcGrp(c *pango.Firewall, file string, delay time.Duration) {
 
 		sgc.Write(fmt.Sprintf("%s,service,\"%s\",,\"%s\",%s\n", sg.Name, sliceToString(sg.Services), sliceToString(sg.Tags), v))
 
-		time.Sleep(delay * time.Millisecond)
+		time.Sleep(delay)
 	}
 
 	sgc.End()
@@ -372,7 +372,7 @@ func getFwTags(c *pango.Firewall, file string, delay time.Duration) {
 
 		tc.Write(fmt.Sprintf("%s,tag,%s,\"%s\",,%s\n", t.Name, color2tag[t.Color], t.Comment, v))
 
-		time.Sleep(delay * time.Millisecond)
+		time.Sleep(delay)
 	}
 
 	tc.End()
@@ -409,7 +409,7 @@ func getPanoAddr(c *pango.Panorama, file string, delay time.Duration) {
 
 		ac.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", a.Name, a.Type, a.Value, a.Description, sliceToString(a.Tags), dg))
 
-		time.Sleep(delay * time.Millisecond)
+		time.Sleep(delay)
 	}
 
 	ac.End()
@@ -457,7 +457,7 @@ func getPanoAddrGrp(c *pango.Panorama, file string, delay time.Duration) {
 
 		agc.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", a.Name, gtype, val, a.Description, sliceToString(a.Tags), dg))
 
-		time.Sleep(delay * time.Millisecond)
+		time.Sleep(delay)
 	}
 
 	agc.End()
@@ -494,7 +494,7 @@ func getPanoSrvc(c *pango.Panorama, file string, delay time.Duration) {
 
 		sc.Write(fmt.Sprintf("%s,%s,\"%s\",\"%s\",\"%s\",%s\n", s.Name, s.Protocol, s.DestinationPort, s.Description, sliceToString(s.Tags), dg))
 
-		time.Sleep(delay * time.Millisecond)
+		time.Sleep(delay)
 	}
 
 	sc.End()
@@ -531,7 +531,7 @@ func getPanoSrvcGrp(c *pango.Panorama, file string, delay time.Duration) {
 
 		sgc.Write(fmt.Sprintf("%s,service,\"%s\",,\"%s\",%s\n", sg.Name, sliceToString(sg.Services), sliceToString(sg.Tags), dg))
 
-		time.Sleep(delay * time.Millisecond)
+		time.Sleep(delay)
 	}
 
 	sgc.End()
@@ -568,7 +568,7 @@ func getPanoTags(c *pango.Panorama, file string, delay time.Duration) {
 
 		tc.Write(fmt.Sprintf("%s,tag,%s,\"%s\",,%s\n", t.Name, color2tag[t.Color], t.Comment, dg))
 
-		time.Sleep(delay * time.Millisecond)
+		time.Sleep(delay)
 	}
 
 	tc.End()

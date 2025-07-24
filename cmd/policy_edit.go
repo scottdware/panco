@@ -133,7 +133,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit Security rule: %s", i+1, err)
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -202,7 +202,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit NAT rule: %s", i+1, err)
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -259,7 +259,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit Policy-Based Forwarding rule: %s", i+1, err)
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -315,7 +315,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit Decryption rule: %s", i+1, err)
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 		case *pango.Panorama:
@@ -396,7 +396,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit security rule: %s", i+1, err)
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -465,7 +465,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit NAT rule: %s", i+1, err)
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -522,7 +522,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit Policy-Based Forwarding rule: %s", i+1, err)
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 
@@ -578,7 +578,7 @@ var policyEditCmd = &cobra.Command{
 						log.Printf("Line %d - failed to edit Decryption rule: %s", i+1, err)
 					}
 
-					time.Sleep(delay * time.Millisecond)
+					time.Sleep(delay)
 				}
 			}
 		}

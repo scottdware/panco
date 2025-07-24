@@ -565,7 +565,7 @@ var objectsImportCmd = &cobra.Command{
 					}
 				}
 
-				time.Sleep(delay * time.Millisecond)
+				time.Sleep(delay)
 			}
 
 			if timeoutCount > 0 {
@@ -1098,7 +1098,7 @@ var objectsImportCmd = &cobra.Command{
 					}
 				}
 
-				time.Sleep(delay * time.Millisecond)
+				time.Sleep(delay)
 			}
 
 			if timeoutCount > 0 {
