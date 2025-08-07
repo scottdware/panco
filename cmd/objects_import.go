@@ -101,7 +101,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -122,7 +122,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -135,7 +135,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -156,7 +156,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -169,7 +169,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -190,7 +190,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -203,7 +203,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -224,7 +224,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -237,7 +237,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -256,7 +256,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
 								}
@@ -269,7 +269,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -291,7 +291,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
 									if groupLen > 40 {
@@ -307,7 +307,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -327,7 +327,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -365,7 +365,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
 						}
@@ -401,7 +401,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
 						}
@@ -415,7 +415,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
@@ -430,7 +430,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
@@ -445,7 +445,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
@@ -460,7 +460,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
@@ -481,7 +481,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
 							}
@@ -499,7 +499,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							log.Printf("Line %d - failed to update URL category %s: %s", i+1, name, err)
 						}
@@ -517,7 +517,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to remove %s from %s: %s", i+1, value, name, err)
 							}
@@ -529,7 +529,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -556,7 +556,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -569,11 +569,12 @@ var objectsImportCmd = &cobra.Command{
 			}
 
 			if timeoutCount > 0 {
-				log.Printf("There were %d API timeout errors during import. Please verify the following have been imported/deleted/modified:\n\n", timeoutCount)
-				for _, data := range timeoutData {
-					info := strings.Split(data, ":")
-					fmt.Printf("Line %s: Host/URL %s\n", info[0], info[1])
-				}
+				log.Printf("There were %d API timeout errors during import. Please verify the following objects have been imported, modified:\n\n", timeoutCount)
+                fmt.Printf("%s\n", sliceToString(timeoutData))
+				// for _, data := range timeoutData {
+				// 	info := strings.Split(data, ":")
+				// 	fmt.Printf("Line %s: Host/URL %s\n", info[0], info[1])
+				// }
 			}
 		case *pango.Panorama:
 			lines, err := easycsv.Open(f)
@@ -610,7 +611,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -631,7 +632,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -644,7 +645,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -665,7 +666,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -678,7 +679,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -699,7 +700,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -712,7 +713,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -733,7 +734,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -746,7 +747,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -765,7 +766,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
 								}
@@ -778,7 +779,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -800,7 +801,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
 									if groupLen > 40 {
@@ -816,7 +817,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -836,7 +837,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -874,7 +875,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
 						}
@@ -910,7 +911,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
 						}
@@ -930,7 +931,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
@@ -951,7 +952,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
@@ -972,7 +973,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
@@ -993,7 +994,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
 							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
@@ -1014,7 +1015,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
 							}
@@ -1032,7 +1033,7 @@ var objectsImportCmd = &cobra.Command{
 					if err != nil {
 						if strings.Contains(err.Error(), "Client.Timeout") {
 							timeoutCount++
-							timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+							timeoutData = append(timeoutData, name)
 						} else {
 							log.Printf("Line %d - failed to update URL category %s: %s", i+1, name, err)
 						}
@@ -1050,7 +1051,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to remove %s from %s: %s", i+1, value, name, err)
 							}
@@ -1062,7 +1063,7 @@ var objectsImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+								timeoutData = append(timeoutData, name)
 							} else {
 								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
 							}
@@ -1089,7 +1090,7 @@ var objectsImportCmd = &cobra.Command{
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
-									timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, name))
+									timeoutData = append(timeoutData, name)
 								} else {
 									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
 								}
@@ -1102,11 +1103,12 @@ var objectsImportCmd = &cobra.Command{
 			}
 
 			if timeoutCount > 0 {
-				log.Printf("There were %d API timeout errors during import. Please verify the following have been imported/deleted/modified:\n\n", timeoutCount)
-				for _, data := range timeoutData {
-					info := strings.Split(data, ":")
-					fmt.Printf("Line %s: Host/URL %s\n", info[0], info[1])
-				}
+				log.Printf("There were %d API timeout errors during import. Please verify the following objects have been imported, modified:\n\n", timeoutCount)
+                fmt.Printf("%s\n", sliceToString(timeoutData))
+				// for _, data := range timeoutData {
+				// 	info := strings.Split(data, ":")
+				// 	fmt.Printf("Line %s: Host/URL %s\n", info[0], info[1])
+				// }
 			}
 		}
 	},

@@ -140,7 +140,7 @@ var policyImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+								timeoutData = append(timeoutData, strings.TrimSpace(rule[0]))
 							} else {
 								log.Printf("Line %d - failed to create Security rule: %s", i+1, err)
 							}
@@ -218,7 +218,7 @@ var policyImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+								timeoutData = append(timeoutData, strings.TrimSpace(rule[0]))
 							} else {
 								log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
 							}
@@ -284,7 +284,7 @@ var policyImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+								timeoutData = append(timeoutData, strings.TrimSpace(rule[0]))
 							} else {
 								log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
 							}
@@ -349,7 +349,7 @@ var policyImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[0])))
+								timeoutData = append(timeoutData, strings.TrimSpace(rule[0]))
 							} else {
 								log.Printf("Line %d - failed to create Decryption rule: %s", i+1, err)
 							}
@@ -361,10 +361,10 @@ var policyImportCmd = &cobra.Command{
 			}
 
 			if timeoutCount > 0 {
-				log.Printf("There were %d API timeout errors during import. Please verify the following have been imported/modified:\n\n", timeoutCount)
+				log.Printf("There were %d API timeout errors during import. Please verify the following rules have been imported, modified:\n\n", timeoutCount)
 				for _, data := range timeoutData {
-					info := strings.Split(data, ":")
-					fmt.Printf("Line %s: Rule \"%s\"\n", info[0], info[1])
+					// info := strings.Split(data, ":")
+					fmt.Printf("Rule \"%s\"\n", data)
 				}
 			}
 		case *pango.Panorama:
@@ -462,7 +462,7 @@ var policyImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[2])))
+								timeoutData = append(timeoutData, strings.TrimSpace(rule[2]))
 							} else {
 								log.Printf("Line %d - failed to create security rule: %s", i+1, err)
 							}
@@ -556,7 +556,7 @@ var policyImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[2])))
+								timeoutData = append(timeoutData, strings.TrimSpace(rule[2]))
 							} else {
 								log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
 							}
@@ -634,7 +634,7 @@ var policyImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[2])))
+								timeoutData = append(timeoutData, strings.TrimSpace(rule[2]))
 							} else {
 								log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
 							}
@@ -715,7 +715,7 @@ var policyImportCmd = &cobra.Command{
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
-								timeoutData = append(timeoutData, fmt.Sprintf("%d:%s", i+1, strings.TrimSpace(rule[2])))
+								timeoutData = append(timeoutData, strings.TrimSpace(rule[2]))
 							} else {
 								log.Printf("Line %d - failed to create Decryption rule: %s", i+1, err)
 							}
@@ -727,10 +727,10 @@ var policyImportCmd = &cobra.Command{
 			}
 
 			if timeoutCount > 0 {
-				log.Printf("There were %d API timeout errors during import. Please verify the following have been imported/modified:\n\n", timeoutCount)
+				log.Printf("There were %d API timeout errors during import. Please verify the following rules have been imported, modified:\n\n", timeoutCount)
 				for _, data := range timeoutData {
-					info := strings.Split(data, ":")
-					fmt.Printf("Line %s: Rule \"%s\"\n", info[0], info[1])
+					// info := strings.Split(data, ":")
+					fmt.Printf("Rule \"%s\"\n", data)
 				}
 			}
 		}
