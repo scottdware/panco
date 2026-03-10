@@ -150,7 +150,7 @@ SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,Log
 When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty. -->
 
 
-## Editing A Security, NAT, Decryption or Policy-Based Forwarding Policy/Rules -- IMPORTANT
+## Editing A Security, NAT, Policy-Based Forwarding or Decryption Policy/Rules -- IMPORTANT
 
 When you edit rules using the `panco policy edit` command, there are a few things to be aware of.  The `edit` command uses the Palo Alto API `edit` action, instead of the `set` action that is used when using the `import` command. You can read more about the differences of the `edit` and `set` on [Palo Alto's API request types documentation](https://docs.paloaltonetworks.com/pan-os/10-2/pan-os-panorama-api/pan-os-xml-api-request-types/pan-os-xml-api-request-types-and-actions/configuration-actions/actions-for-modifying-a-configuration#id44705ad2-4f22-4b6c-bb94-caea78a6d510) page.
 
