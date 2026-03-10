@@ -1,0 +1,2 @@
+#Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones,DestinationAddresses,NegateDestination,Tags,Disabled,Services,UrlCategories,Action,DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,ForwardingProfile,GroupTag,SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates
+decrypt_rule_name,,"trust","10.1.1.1",false,"any","untrust","any",false,"",false,"service-https","artificial-intelligence",decrypt,ssl-forward-proxy,,default,false,,,"any","any",false,true,default,""

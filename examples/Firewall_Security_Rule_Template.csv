@@ -1,0 +1,2 @@
+#Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,Action,LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering
+internal_outbound,universal,"","","trust","10.1.1.0/24",false,"any","","trust, untrust","any",false,"any","any","any",allow,default,false,true,false,,false,false,default,,,,,,,

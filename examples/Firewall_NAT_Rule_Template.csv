@@ -1,0 +1,2 @@
+#Name,Type,Description,Tags,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,SatFallbackInterface,SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,DatAddress,DatPort,DatDynamicDistribution,Disabled
+nat_rule_name,ipv4,"","","trust",untrust,any,any,"10.1.1.0/24","any",dynamic-ip-and-port,interface-address,"",ethernet1/7,,,"",,,,,false,,,0,,false
