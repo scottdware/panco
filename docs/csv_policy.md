@@ -5,10 +5,25 @@
 This guide will help show you the way to structure your CSV file(s) for use when working with the various
 policy actions - importing or modifying rules, exporting rules, moving rules, grouping rules by tags.
 
+The CSV structure between a firewall device and Panorama is a little different, whereas the Panorama file needs to
+ have the following two fields at the beginning, along with all of the rest:
+
+ `DeviceGroup,Location`
+
+ > **_TIP_**: The easiest way to make the modifications all while adhering to the CSV format, order, is to export the policy first (using the `panco policy export` command),
+> and then modifying the output file. For example:
+
+```
+panco policy export -d firewall -u admin -g "Device-Group" --type security --file <file-to-output>
+```
+
+Sample CSV files are linked below each rule section as well.
+
 ## Importing A Security Policy
 
 When importing a CSV file to create security rules or modify them, the file **_MUST_** have the following fields in this order:
 
+### For a Firewall
 ```
 Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,
 DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,Action,
@@ -16,14 +31,19 @@ LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerRespon
 Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering
 ```
 
-> **_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the security policy first (using the `panco policy export` command),
-> and then modifying the output file. For example:
+[SAMPLE Firewall Security Rules CSV](https://github.com/scottdware/panco/blob/master/examples/Firewall_Security_Rule_Template.csv)
 
+### For Panorama
 ```
-panco policy export -d firewall -u admin -g "Device-Group" --type security --file <file-to-output>
+DeviceGroup,Location,Name,Type,Description,Tags,SourceZones,SourceAddresses,NegateSource,SourceUsers,HipProfiles,
+DestinationZones,DestinationAddresses,NegateDestination,Applications,Services,Categories,Action,
+LogSetting,LogStart,LogEnd,Disabled,Schedule,IcmpUnreachable,DisableServerResponseInspection,
+Group,Virus,Spyware,Vulnerability,UrlFiltering,FileBlocking,WildFireAnalysis,DataFiltering
 ```
 
-> *NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
+[SAMPLE Panorama Security Rules CSV](https://github.com/scottdware/panco/blob/master/examples/Panorama_Security_Rule_Template.csv)
+
+<!-- >> *NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
 > this is the "pre" rulebase.
 
 When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty.
@@ -32,12 +52,13 @@ Any field that you want to add or modify you need to have a value there, but at 
 
 ```
 Name,Type,Action
-```
+``` -->
 
 ## Importing A NAT Policy
 
 When importing a CSV file to create NAT rules or modify them, the file **_MUST_** have the following columns in this order:
 
+### For a Firewall
 ```
 Name,Type,Description,Tags,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,
 DestinationAddresses,SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,
@@ -46,14 +67,20 @@ SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,D
 DatPort,DatDynamicDistribution,Disabled
 ```
 
-> **_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the NAT policy first (using the `panco policy export` command),
-> and then modifying the output file. For example:
+[SAMPLE Firewall NAT Rules CSV](https://github.com/scottdware/panco/blob/master/examples/Firewall_NAT_Rule_Template.csv)
 
+### For Panorama
 ```
-panco policy export -d firewall -u admin -g "Device-Group" --type nat --file <file-to-output>
+DeviceGroup,Location,Name,Type,Description,Tags,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,
+DestinationAddresses,SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,
+SatFallbackType,SatFallbackTranslatedAddresses,SatFallbackInterface,SatFallbackIpType,
+SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,DatAddress,
+DatPort,DatDynamicDistribution,Disabled
 ```
 
->*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
+[SAMPLE Panorama NAT Rules CSV](https://github.com/scottdware/panco/blob/master/examples/Panorama_NAT_Rule_Template.csv)
+
+<!-- >>*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
 > this is the "pre" rulebase.
 
 When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty.
@@ -62,12 +89,13 @@ Any field that you want to add or modify you need to have a value there, but at 
 
 ```
 Name,Type,ToInterface
-```
+``` -->
 
 ## Import A Policy-Based Forwarding Policy
 
 When importing a CSV file to create policy-based forwarding rules or modify them, the file **_MUST_** have the following columns in this order:
 
+### For a Firewall
 ```
 Name,Description,Tags,FromType,FromValues,SourceAddresses,SourceUsers,NegateSource,
 DestinationAddresses,NegateDestination,Applications,Services,Schedule,Disabled,Action,
@@ -76,20 +104,27 @@ ForwardMonitorIpAddress,ForwardMonitorDisableIfUnreachable,EnableEnforceSymmetri
 SymmetricReturnAddresses,ActiveActiveDeviceBinding,NegateTarget,Uuid
 ```
 
-**_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the PBF policy first (using the `panco policy export` command),
-and then modifying the output file. For example:
+[SAMPLE Firewall PBF Rules CSV](https://github.com/scottdware/panco/blob/master/examples/Firewall_PBF_Rule_Template.csv)
 
+### For Panorama
 ```
-panco policy export -d firewall -u admin -g "Device-Group" --type pbf --file <file-to-output>
+DeviceGroup,Location,Name,Description,Tags,FromType,FromValues,SourceAddresses,SourceUsers,NegateSource,
+DestinationAddresses,NegateDestination,Applications,Services,Schedule,Disabled,Action,
+ForwardVsys,ForwardEgressInterface,ForwardNextHopType,ForwardNextHopValue,ForwardMonitorProfile,
+ForwardMonitorIpAddress,ForwardMonitorDisableIfUnreachable,EnableEnforceSymmetricReturn,
+SymmetricReturnAddresses,ActiveActiveDeviceBinding,NegateTarget,Uuid
 ```
 
-> *NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
-> this is the "pre" rulebase.
+[SAMPLE Panorama PBF Rules CSV](https://github.com/scottdware/panco/blob/master/examples/Panorama_PBF_Rule_Template.csv)
+
+<!-- >> *NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
+> this is the "pre" rulebase. -->
 
 ## Importing A Decryption Policy
 
 When importing a CSV file to create Decryption rules or modify them, the file **_MUST_** have the following columns in this order:
 
+### For a Firewall
 ```
 Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones
 DestinationAddresses,NegateDestination,Tags,Disabled,Services,UrlCategories,Action
@@ -97,17 +132,22 @@ DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,ForwardingProfile,G
 SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates
 ```
 
-> **_TIP_**: The easiest way to make the modifications all while adhering to this order, is to export the decryption policy first (using the `panco policy export` command),
-> and then modifying the output file. For example:
+[SAMPLE Firewall Decryption Rules CSV](https://github.com/scottdware/panco/blob/master/examples/Firewall_Decryption_Rule_Template.csv)
 
+### For Panorama
 ```
-panco policy export -d firewall -u admin -g "Device-Group" --type decrypt --file <file-to-output>
+DeviceGroup,Location,Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones
+DestinationAddresses,NegateDestination,Tags,Disabled,Services,UrlCategories,Action
+DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,ForwardingProfile,GroupTag
+SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates
 ```
 
->*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
+[SAMPLE Panorama Decryption Rules CSV](https://github.com/scottdware/panco/blob/master/examples/Panorama_Decryption_Rule_Template.csv)
+
+<!-- >>*NOTE:* When ran against Panorama, be sure to use the `--location` flag to specify which rulebase to import/create the rules on. By default
 > this is the "pre" rulebase.
 
-When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty.
+When you create rules, or want to modify existing values of a rule, you **_DO NOT_** need to have every column that is listed above filled out with a value. You still **_NEED_** them to be defined/listed, but they can be empty. -->
 
 
 ## Editing A Security, NAT, Decryption or Policy-Based Forwarding Policy/Rules -- IMPORTANT

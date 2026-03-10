@@ -17,8 +17,11 @@ Name,Type,Value,Description,Tags,Device Group/Vsys
 **_TIP_**: A good example is to first [export](https://panco.dev/objects_export.html) address, service or tag objects from the device.
 That way, you get a good idea of how the CSV file is laid out.
 
-Here is a sample CSV file which shows most of the below actions that can be performed
-[SAMPLE Object CSV](https://github.com/scottdware/panco/blob/master/examples/Address_Service_Objects.csv)
+### Sample CSV File
+
+Here is a sample CSV file which shows most of actions listed below that can be performed:
+
+[SAMPLE Address, Service Object CSV](https://github.com/scottdware/panco/blob/master/examples/Address_Service_Objects.csv)
 
 > **_NOTE_**: Here are a few things to keep in mind when creating objects:
 > * For the name of the object, most of them cannot be longer than 32 characters (especially URL categories), and must only include letters, numbers, spaces, hyphens, and underscores.
