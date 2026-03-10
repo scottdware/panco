@@ -49,6 +49,8 @@ var objectsCliCmd = &cobra.Command{
 		lc := len(lines)
 		log.Printf("Converting %d lines - saving results to '%s'", lc, txt)
 
+		// Iterate over each line of the CSV file, and based on the type of object, output the appropriate CLI command to
+		// the given output file.
 		for i, line := range lines {
 			var command string
 			name := line[0]
@@ -107,7 +109,6 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -161,7 +162,6 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -215,7 +215,6 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -269,7 +268,6 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -314,7 +312,6 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -371,7 +368,6 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -425,7 +421,6 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -445,7 +440,6 @@ var objectsCliCmd = &cobra.Command{
 					command = fmt.Sprintf("delete device-group %s address-group %s static %s\n", devtype, name, value)
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -465,7 +459,6 @@ var objectsCliCmd = &cobra.Command{
 					command = fmt.Sprintf("delete device-group %s service-group %s members %s\n", devtype, name, value)
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -481,7 +474,6 @@ var objectsCliCmd = &cobra.Command{
 					command = fmt.Sprintf("rename device-group %s address %s to %s\n", devtype, name, value)
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -497,7 +489,6 @@ var objectsCliCmd = &cobra.Command{
 					command = fmt.Sprintf("rename device-group %s address-group %s to %s\n", devtype, name, value)
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -513,7 +504,6 @@ var objectsCliCmd = &cobra.Command{
 					command = fmt.Sprintf("rename device-group %s service %s to %s\n", devtype, name, value)
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -529,7 +519,6 @@ var objectsCliCmd = &cobra.Command{
 					command = fmt.Sprintf("rename device-group %s service-group %s to %s\n", devtype, name, value)
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -551,7 +540,6 @@ var objectsCliCmd = &cobra.Command{
 					command += fmt.Sprintf("set device-group %s profiles custom-url-category %s list [ %s ]\n", devtype, name, strings.Join(members, " "))
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -570,7 +558,6 @@ var objectsCliCmd = &cobra.Command{
 					command = fmt.Sprintf("set device-group %s profiles custom-url-category %s list [ %s ]\n", devtype, name, strings.Join(members, " "))
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -598,7 +585,6 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
@@ -660,55 +646,11 @@ var objectsCliCmd = &cobra.Command{
 					}
 				}
 
-				// fmt.Printf("%s", command)
 				_, err = io.WriteString(txtfile, command)
 
 				if err != nil {
 					log.Printf("Failed to write to TXT file - %s", err)
 				}
-				// case "urladd":
-				// 	var cmdBody string
-
-				// 	urls := stringToSlice(value)
-
-				// 	for _, url := range urls {
-				// 		cmdBody += fmt.Sprintf("%s ", url)
-				// 	}
-
-				// 	switch devtype {
-				// 	case "vsys1":
-				// 		// command = fmt.Printf("set profiles custom-url-category type \"URL List\"\n")
-				// 		command = fmt.Sprintf("set profiles custom-url-category %s list [ %s ]\n", name, strings.TrimRight(cmdBody, " "))
-				// 	case "shared":
-				// 		// command = fmt.Printf("set shared profiles custom-url-category type \"URL List\"\n")
-				// 		command = fmt.Sprintf("set shared profiles custom-url-category %s list [ %s ]\n", name, strings.TrimRight(cmdBody, " "))
-				// 	default:
-				// 		// command = fmt.Sprintf("set device-group %s profiles custom-url-category type \"URL List\"\n", name)
-				// 		command = fmt.Sprintf("set device-group %s profiles custom-url-category %s list [ %s ]\n", devtype, name, strings.TrimRight(cmdBody, " "))
-				// 	}
-
-				// 	// fmt.Printf("%s", command)
-				// 	_, err = io.WriteString(txtfile, command)
-
-				// 	if err != nil {
-				// 		log.Printf("Failed to write to TXT file - %s", err)
-				// 	}
-				// case "urlremove":
-				// 	switch devtype {
-				// 	case "vsys1":
-				// 		command = fmt.Sprintf("delete profiles custom-url-category %s list %s\n", name, value)
-				// 	case "shared":
-				// 		command = fmt.Sprintf("delete shared profiles custom-url-category %s list %s\n", name, value)
-				// 	default:
-				// 		command = fmt.Sprintf("delete device-group %s profiles custom-url-category %s list %s\n", devtype, name, value)
-				// 	}
-
-				// 	// fmt.Printf("%s", command)
-				// 	_, err = io.WriteString(txtfile, command)
-
-				// 	if err != nil {
-				// 		log.Printf("Failed to write to TXT file - %s", err)
-				// 	}
 			}
 
 			txtfile.Sync()

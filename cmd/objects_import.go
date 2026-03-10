@@ -65,6 +65,7 @@ var objectsImportCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		// Context switch to determine if the device is a firewall or Panorama.
 		switch c := con.(type) {
 		case *pango.Firewall:
 			lines, err := easycsv.Open(f)
@@ -79,7 +80,9 @@ var objectsImportCmd = &cobra.Command{
 			timeoutCount := 0
 			timeoutData := []string{}
 
-			for i, line := range lines {
+			// Iterate over each line of the CSV file, and based on the type of object, generate the appropriate API call
+			// to execute.
+			for _, line := range lines {
 				var vsys string
 				llen := len(line)
 
@@ -103,12 +106,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := addr.Entry{
 								Name:        name,
@@ -124,7 +127,7 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
@@ -137,12 +140,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := addr.Entry{
 								Name:        name,
@@ -158,7 +161,7 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
@@ -171,12 +174,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := addr.Entry{
 								Name:        name,
@@ -192,7 +195,7 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
@@ -205,12 +208,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := srvc.Entry{
 								Name:            name,
@@ -226,7 +229,7 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
@@ -239,12 +242,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := srvcgrp.Entry{
 								Name:     name,
@@ -258,7 +261,7 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+									log.Printf("failed to create/update %s: %s", name, err)
 								}
 							}
 						}
@@ -271,12 +274,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							groupLen := len(stringToSlice(value))
 
@@ -293,9 +296,9 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+									log.Printf("failed to create/update %s: %s", name, err)
 									if groupLen > 40 {
-										log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+										log.Printf("address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", name)
 									}
 								}
 							}
@@ -309,12 +312,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := addrgrp.Entry{
 								Name:         name,
@@ -329,20 +332,20 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
 					}
 				case "remove-address":
 					if len(value) <= 0 {
-						log.Printf("Line %d - you must specify a value to remove from group: %s", i+1, name)
+						log.Printf("you must specify a value to remove from group: %s", name)
 					}
 
 					remove := stringToSlice(value)
 					cur, err := c.Objects.AddressGroup.Get(vsys, name)
 					if err != nil {
-						log.Printf("Line %d - could not retrieve object: %s", i+1, err)
+						log.Printf("could not retrieve object: %s", err)
 					}
 
 					newaddrs := cur.StaticAddresses
@@ -367,18 +370,18 @@ var objectsImportCmd = &cobra.Command{
 							timeoutCount++
 							timeoutData = append(timeoutData, name)
 						} else {
-							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+							log.Printf("failed to update %s: %s", name, err)
 						}
 					}
 				case "remove-service":
 					if len(value) <= 0 {
-						log.Printf("Line %d - you must specify a value to remove from group: %s", i+1, name)
+						log.Printf("you must specify a value to remove from group: %s", name)
 					}
 
 					remove := stringToSlice(value)
 					cur, err := c.Objects.ServiceGroup.Get(vsys, name)
 					if err != nil {
-						log.Printf("Line %d - could not retrieve object: %s", i+1, err)
+						log.Printf("could not retrieve object: %s", err)
 					}
 
 					newsrvcs := cur.Services
@@ -403,7 +406,7 @@ var objectsImportCmd = &cobra.Command{
 							timeoutCount++
 							timeoutData = append(timeoutData, name)
 						} else {
-							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+							log.Printf("failed to update %s: %s", name, err)
 						}
 					}
 				case "rename-address":
@@ -418,7 +421,7 @@ var objectsImportCmd = &cobra.Command{
 							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+							log.Printf("failed to rename object %s: %s", name, formatkey)
 						}
 					}
 				case "rename-addressgroup":
@@ -433,7 +436,7 @@ var objectsImportCmd = &cobra.Command{
 							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+							log.Printf("failed to rename object %s: %s", name, formatkey)
 						}
 					}
 				case "rename-service":
@@ -448,7 +451,7 @@ var objectsImportCmd = &cobra.Command{
 							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+							log.Printf("failed to rename object %s: %s", name, formatkey)
 						}
 					}
 				case "rename-servicegroup":
@@ -463,12 +466,12 @@ var objectsImportCmd = &cobra.Command{
 							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+							log.Printf("failed to rename object %s: %s", name, formatkey)
 						}
 					}
 				case "urlcreate":
 					if len(name) > 31 {
-						log.Printf("Line %d - failed to create %s: name is over the max 31 characters", i+1, name)
+						log.Printf("failed to create %s: name is over the max 31 characters", name)
 					} else {
 						e := url.Entry{
 							Name:        name,
@@ -483,7 +486,7 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
+								log.Printf("failed to create URL category %s: %s", name, err)
 							}
 						}
 					}
@@ -501,14 +504,9 @@ var objectsImportCmd = &cobra.Command{
 							timeoutCount++
 							timeoutData = append(timeoutData, name)
 						} else {
-							log.Printf("Line %d - failed to update URL category %s: %s", i+1, name, err)
+							log.Printf("failed to update URL category %s: %s", name, err)
 						}
 					}
-
-					// err = c.Objects.CustomUrlCategory.SetSite(vsys, name, value)
-					// if err != nil {
-					// 	log.Printf("Line %d - failed to add %s to %s: %s", i+1, value, name, err)
-					// }
 				case "urlremove":
 					urls := urlStringToSlice(value)
 
@@ -519,24 +517,24 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to remove %s from %s: %s", i+1, value, name, err)
+								log.Printf("failed to remove %s from %s: %s", value, name, err)
 							}
 						}
 					}
 				case "tag":
 					if value == "delete" {
-						err = c.Objects.Tags.Delete(v, name)
+						err = c.Objects.Tags.Delete(vsys, name)
 						if err != nil {
 							if strings.Contains(err.Error(), "Client.Timeout") {
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := tags.Entry{}
 							if value == "None" || value == "none" || value == "color0" || value == "" {
@@ -552,13 +550,13 @@ var objectsImportCmd = &cobra.Command{
 								}
 							}
 
-							err = c.Objects.Tags.Set(v, e)
+							err = c.Objects.Tags.Set(vsys, e)
 							if err != nil {
 								if strings.Contains(err.Error(), "Client.Timeout") {
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
@@ -570,11 +568,7 @@ var objectsImportCmd = &cobra.Command{
 
 			if timeoutCount > 0 {
 				log.Printf("There were %d API timeout errors during import. Please verify the following objects have been imported, modified:\n\n", timeoutCount)
-                fmt.Printf("%s\n", sliceToString(timeoutData))
-				// for _, data := range timeoutData {
-				// 	info := strings.Split(data, ":")
-				// 	fmt.Printf("Line %s: Host/URL %s\n", info[0], info[1])
-				// }
+				fmt.Printf("%s\n", sliceToString(timeoutData))
 			}
 		case *pango.Panorama:
 			lines, err := easycsv.Open(f)
@@ -589,7 +583,9 @@ var objectsImportCmd = &cobra.Command{
 			timeoutCount := 0
 			timeoutData := []string{}
 
-			for i, line := range lines {
+			// Iterate over each line of the CSV file, and based on the type of object, generate the appropriate API call
+			// to execute.
+			for _, line := range lines {
 				var dgroup string
 				llen := len(line)
 
@@ -613,12 +609,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := addr.Entry{
 								Name:        name,
@@ -634,7 +630,7 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
@@ -647,12 +643,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := addr.Entry{
 								Name:        name,
@@ -668,7 +664,7 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
@@ -681,12 +677,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := addr.Entry{
 								Name:        name,
@@ -702,7 +698,7 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
@@ -715,12 +711,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := srvc.Entry{
 								Name:            name,
@@ -736,7 +732,7 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
@@ -749,12 +745,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := srvcgrp.Entry{
 								Name:     name,
@@ -768,7 +764,7 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+									log.Printf("failed to create/update %s: %s", name, err)
 								}
 							}
 						}
@@ -781,12 +777,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							groupLen := len(stringToSlice(value))
 
@@ -803,9 +799,9 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create/update %s: %s", i+1, name, err)
+									log.Printf("failed to create/update %s: %s", name, err)
 									if groupLen > 40 {
-										log.Printf("Line %d - address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", i+1, name)
+										log.Printf("address group %s is over 40 members, try to add/create/breakup the group with a smaller number of members (20-30)", name)
 									}
 								}
 							}
@@ -819,12 +815,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := addrgrp.Entry{
 								Name:         name,
@@ -839,20 +835,20 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
 					}
 				case "remove-address":
 					if len(value) <= 0 {
-						log.Printf("Line %d - you must specify a value to remove from group: %s", i+1, name)
+						log.Printf("you must specify a value to remove from group: %s", name)
 					}
 
 					remove := stringToSlice(value)
 					cur, err := c.Objects.AddressGroup.Get(dgroup, name)
 					if err != nil {
-						log.Printf("Line %d - could not retrieve object: %s", i+1, err)
+						log.Printf("could not retrieve object: %s", err)
 					}
 
 					newaddrs := cur.StaticAddresses
@@ -877,18 +873,18 @@ var objectsImportCmd = &cobra.Command{
 							timeoutCount++
 							timeoutData = append(timeoutData, name)
 						} else {
-							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+							log.Printf("failed to update %s: %s", name, err)
 						}
 					}
 				case "remove-service":
 					if len(value) <= 0 {
-						log.Printf("Line %d - you must specify a value to remove from group: %s", i+1, name)
+						log.Printf("you must specify a value to remove from group: %s", name)
 					}
 
 					remove := stringToSlice(value)
 					cur, err := c.Objects.ServiceGroup.Get(dgroup, name)
 					if err != nil {
-						log.Printf("Line %d - could not retrieve object: %s", i+1, err)
+						log.Printf("could not retrieve object: %s", err)
 					}
 
 					newsrvcs := cur.Services
@@ -913,7 +909,7 @@ var objectsImportCmd = &cobra.Command{
 							timeoutCount++
 							timeoutData = append(timeoutData, name)
 						} else {
-							log.Printf("Line %d - failed to update %s: %s", i+1, name, err)
+							log.Printf("failed to update %s: %s", name, err)
 						}
 					}
 				case "rename-address":
@@ -934,7 +930,7 @@ var objectsImportCmd = &cobra.Command{
 							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+							log.Printf("failed to rename object %s: %s", name, formatkey)
 						}
 					}
 				case "rename-addressgroup":
@@ -955,7 +951,7 @@ var objectsImportCmd = &cobra.Command{
 							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+							log.Printf("failed to rename object %s: %s", name, formatkey)
 						}
 					}
 				case "rename-service":
@@ -976,7 +972,7 @@ var objectsImportCmd = &cobra.Command{
 							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+							log.Printf("failed to rename object %s: %s", name, formatkey)
 						}
 					}
 				case "rename-servicegroup":
@@ -997,12 +993,12 @@ var objectsImportCmd = &cobra.Command{
 							timeoutData = append(timeoutData, name)
 						} else {
 							formatkey := keyrexp.ReplaceAllString(err.Error(), "key=********")
-							log.Printf("Line %d - failed to rename object %s: %s", i+1, name, formatkey)
+							log.Printf("failed to rename object %s: %s", name, formatkey)
 						}
 					}
 				case "urlcreate":
 					if len(name) > 31 {
-						log.Printf("Line %d - failed to create %s: name is over the max 31 characters", i+1, name)
+						log.Printf("failed to create %s: name is over the max 31 characters", name)
 					} else {
 						e := url.Entry{
 							Name:        name,
@@ -1017,7 +1013,7 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to create URL category %s: %s", i+1, name, err)
+								log.Printf("failed to create URL category %s: %s", name, err)
 							}
 						}
 					}
@@ -1035,14 +1031,9 @@ var objectsImportCmd = &cobra.Command{
 							timeoutCount++
 							timeoutData = append(timeoutData, name)
 						} else {
-							log.Printf("Line %d - failed to update URL category %s: %s", i+1, name, err)
+							log.Printf("failed to update URL category %s: %s", name, err)
 						}
 					}
-
-					// err = c.Objects.CustomUrlCategory.SetSite(dgroup, name, value)
-					// if err != nil {
-					// 	log.Printf("Line %d - failed to add %s to %s: %s", i+1, value, name, err)
-					// }
 				case "urlremove":
 					urls := urlStringToSlice(value)
 
@@ -1053,7 +1044,7 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to remove %s from %s: %s", i+1, value, name, err)
+								log.Printf("failed to remove %s from %s: %s", value, name, err)
 							}
 						}
 					}
@@ -1065,12 +1056,12 @@ var objectsImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, name)
 							} else {
-								log.Printf("Line %d - failed to delete %s: %s", i+1, name, err)
+								log.Printf("failed to delete %s: %s", name, err)
 							}
 						}
 					} else {
 						if len(name) > 63 {
-							log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, name)
+							log.Printf("failed to create %s: name is over the max 63 characters", name)
 						} else {
 							e := tags.Entry{}
 							if value == "None" || value == "none" || value == "color0" || value == "" {
@@ -1092,7 +1083,7 @@ var objectsImportCmd = &cobra.Command{
 									timeoutCount++
 									timeoutData = append(timeoutData, name)
 								} else {
-									log.Printf("Line %d - failed to create %s: %s", i+1, name, err)
+									log.Printf("failed to create %s: %s", name, err)
 								}
 							}
 						}
@@ -1104,11 +1095,7 @@ var objectsImportCmd = &cobra.Command{
 
 			if timeoutCount > 0 {
 				log.Printf("There were %d API timeout errors during import. Please verify the following objects have been imported, modified:\n\n", timeoutCount)
-                fmt.Printf("%s\n", sliceToString(timeoutData))
-				// for _, data := range timeoutData {
-				// 	info := strings.Split(data, ":")
-				// 	fmt.Printf("Line %s: Host/URL %s\n", info[0], info[1])
-				// }
+				fmt.Printf("%s\n", sliceToString(timeoutData))
 			}
 		}
 	},
@@ -1124,7 +1111,7 @@ func init() {
 	// objectsImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when exporting from Panorama")
 	// objectsImportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when exporting from a firewall")
 	objectsImportCmd.MarkFlagRequired("user")
-	// objectsImportCmd.MarkFlagRequired("pass")
 	objectsImportCmd.MarkFlagRequired("device")
 	objectsImportCmd.MarkFlagRequired("file")
+	// objectsImportCmd.MarkFlagRequired("pass")
 }

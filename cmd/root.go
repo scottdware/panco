@@ -31,10 +31,12 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Here we are declaring all CLI or global variables that are used throughout the program.
 var cfgFile, srcrule, mvwhere, targetrule, pass, txt, onlyrules string
 var action, dg, user, device, f, t, p, query, l, v, source, ostype, config string
 var load, multiple, xlate, hit bool
 
+// tag2color maps a tag color display name to it's value that is used within the configuration.
 var tag2color = map[string]string{
 	"None":           "color0",
 	"Red":            "color1",
@@ -80,6 +82,7 @@ var tag2color = map[string]string{
 	"Chestnut":       "color42",
 }
 
+// color2tag maps a tag value's name that is used in the configuration to it's display name.
 var color2tag = map[string]string{
 	"color0":  "None",
 	"color1":  "Red",
@@ -185,6 +188,7 @@ func initConfig() {
 	}
 }
 
+// sliceToString takes a slice and returns a string object that is comma separated.
 func sliceToString(slice []string) string {
 	var str string
 
@@ -195,10 +199,11 @@ func sliceToString(slice []string) string {
 	return strings.TrimRight(str, ", ")
 }
 
+// stringToSlice takes a comma, semicolon or newline string and returns a slice object.
 func stringToSlice(str string) []string {
 	var slice []string
 
-	list := strings.FieldsFunc(str, func(r rune) bool { return strings.ContainsRune(",;\r\n ", r) })
+	list := strings.FieldsFunc(str, func(r rune) bool { return strings.ContainsRune(",;\r\n", r) })
 	for _, item := range list {
 		slice = append(slice, strings.TrimSpace(item))
 	}
@@ -206,6 +211,7 @@ func stringToSlice(str string) []string {
 	return slice
 }
 
+// urlStringToSlice takes a comma, semicolon or newline string and returns a slice object.
 func urlStringToSlice(str string) []string {
 	var slice []string
 
@@ -217,6 +223,7 @@ func urlStringToSlice(str string) []string {
 	return slice
 }
 
+// userSliceToString takes a slice of user groups and returns a string object that is semicolon separated.
 func userSliceToString(slice []string) string {
 	var str string
 
@@ -227,6 +234,7 @@ func userSliceToString(slice []string) string {
 	return strings.TrimRight(str, "; ")
 }
 
+// userStringToSlice takes a semicolon or newline string and returns a slice object.
 func userStringToSlice(str string) []string {
 	var slice []string
 
@@ -238,6 +246,8 @@ func userStringToSlice(str string) []string {
 	return slice
 }
 
+// duplicateObjects is a function that takes an map of objects and finds any duplicates and returns the original map
+// as well as the updated map without any duplicates.
 func duplicateObjects(objects map[string]string) (map[string]string, map[string]string) {
 	unique := map[string]string{}
 	dups := map[string]string{}
@@ -260,6 +270,7 @@ func duplicateObjects(objects map[string]string) (map[string]string, map[string]
 	return result, dups
 }
 
+// formatDesc formats a description field to remove any commas or newlines.
 func formatDesc(str string) string {
 	s := strings.ReplaceAll(str, ",", "")
 	s = strings.ReplaceAll(s, "\n", " ")
@@ -267,6 +278,7 @@ func formatDesc(str string) string {
 	return s
 }
 
+// txtToSlice takes a text file and returns all lines in a string slice.
 func txtToSlice(file string) ([]string, error) {
 	var lines []string
 	f, err := os.Open(file)

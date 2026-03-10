@@ -63,11 +63,13 @@ var policyImportCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		// Context switch to determine if the device is a firewall or Panorama.
 		switch c := con.(type) {
 		case *pango.Firewall:
 			timeoutCount := 0
 			timeoutData := []string{}
 
+			// Security rules
 			if t == "security" {
 				rules, err := easycsv.Open(f)
 				if err != nil {
@@ -78,7 +80,7 @@ var policyImportCmd = &cobra.Command{
 				rc := len(rules)
 				log.Printf("Importing/modifying %d Security rules", rc)
 
-				for i, rule := range rules {
+				for _, rule := range rules {
 					boolopt := map[string]bool{
 						"TRUE":  true,
 						"true":  true,
@@ -86,21 +88,8 @@ var policyImportCmd = &cobra.Command{
 						"false": false,
 					}
 
-					v := rule[0]
-
-					// ruletype := rule[1]
-					// apps := rule[12]
-
-					// if len(ruletype) <= 0 {
-					// 	ruletype = "universal"
-					// }
-
-					// if len(apps) <= 0 {
-					// 	apps = "any"
-					// }
-
 					if len(strings.TrimSpace(rule[2])) > 63 {
-						log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, strings.TrimSpace(rule[0]))
+						log.Printf("failed to create %s: name is over the max 63 characters", strings.TrimSpace(rule[0]))
 					} else {
 						e := security.Entry{
 							Name:                            strings.TrimSpace(rule[0]),
@@ -142,7 +131,7 @@ var policyImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, strings.TrimSpace(rule[0]))
 							} else {
-								log.Printf("Line %d - failed to create Security rule: %s", i+1, err)
+								log.Printf("failed to create Security rule: %s", err)
 							}
 						}
 					}
@@ -151,6 +140,7 @@ var policyImportCmd = &cobra.Command{
 				}
 			}
 
+			// NAT rules
 			if t == "nat" {
 				rules, err := easycsv.Open(f)
 				if err != nil {
@@ -161,7 +151,7 @@ var policyImportCmd = &cobra.Command{
 				rc := len(rules)
 				log.Printf("Importing/modifying %d NAT rules", rc)
 
-				for i, rule := range rules {
+				for _, rule := range rules {
 					boolopt := map[string]bool{
 						"TRUE":  true,
 						"true":  true,
@@ -172,7 +162,7 @@ var policyImportCmd = &cobra.Command{
 					datport, _ := strconv.Atoi(rule[23])
 
 					if rule[2] != "ipv4" {
-						log.Printf("Line %d - only NAT type 'ipv4' is supported", i+1)
+						log.Printf("only NAT type 'ipv4' is supported")
 					}
 
 					ruletype := rule[1]
@@ -182,7 +172,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					if len(strings.TrimSpace(rule[0])) > 63 {
-						log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, strings.TrimSpace(rule[0]))
+						log.Printf("failed to create %s: name is over the max 63 characters", strings.TrimSpace(rule[0]))
 					} else {
 						e := nat.Entry{
 							Name:                           strings.TrimSpace(rule[0]),
@@ -220,7 +210,7 @@ var policyImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, strings.TrimSpace(rule[0]))
 							} else {
-								log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
+								log.Printf("failed to create NAT rule: %s", err)
 							}
 						}
 					}
@@ -229,6 +219,7 @@ var policyImportCmd = &cobra.Command{
 				}
 			}
 
+			// Policy-Based Forwarding rules
 			if t == "pbf" {
 				rules, err := easycsv.Open(f)
 				if err != nil {
@@ -239,7 +230,7 @@ var policyImportCmd = &cobra.Command{
 				rc := len(rules)
 				log.Printf("Importing/modifying %d Policy-Based Forwarding rules", rc)
 
-				for i, rule := range rules {
+				for _, rule := range rules {
 					boolopt := map[string]bool{
 						"TRUE":  true,
 						"true":  true,
@@ -248,7 +239,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					if len(strings.TrimSpace(rule[0])) > 63 {
-						log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, strings.TrimSpace(rule[0]))
+						log.Printf("failed to create %s: name is over the max 63 characters", strings.TrimSpace(rule[0]))
 					} else {
 						e := pbf.Entry{
 							Name:                               strings.TrimSpace(rule[0]),
@@ -286,7 +277,7 @@ var policyImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, strings.TrimSpace(rule[0]))
 							} else {
-								log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
+								log.Printf("failed to create Policy-Based Forwarding rule: %s", err)
 							}
 						}
 					}
@@ -295,6 +286,7 @@ var policyImportCmd = &cobra.Command{
 				}
 			}
 
+			// Decryption rules
 			if t == "decrypt" {
 				rules, err := easycsv.Open(f)
 				if err != nil {
@@ -305,7 +297,7 @@ var policyImportCmd = &cobra.Command{
 				rc := len(rules)
 				log.Printf("Importing/modifying %d Decryption rules", rc)
 
-				for i, rule := range rules {
+				for _, rule := range rules {
 					boolopt := map[string]bool{
 						"TRUE":  true,
 						"true":  true,
@@ -314,7 +306,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					if len(strings.TrimSpace(rule[0])) > 63 {
-						log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, strings.TrimSpace(rule[0]))
+						log.Printf("failed to create %s: name is over the max 63 characters", strings.TrimSpace(rule[0]))
 					} else {
 						e := decryption.Entry{
 							Name:                       strings.TrimSpace(rule[0]),
@@ -351,7 +343,7 @@ var policyImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, strings.TrimSpace(rule[0]))
 							} else {
-								log.Printf("Line %d - failed to create Decryption rule: %s", i+1, err)
+								log.Printf("failed to create Decryption rule: %s", err)
 							}
 						}
 					}
@@ -363,23 +355,14 @@ var policyImportCmd = &cobra.Command{
 			if timeoutCount > 0 {
 				log.Printf("There were %d API timeout errors during import. Please verify the following rules have been imported, modified:\n\n", timeoutCount)
 				for _, data := range timeoutData {
-					// info := strings.Split(data, ":")
 					fmt.Printf("Rule \"%s\"\n", data)
 				}
 			}
 		case *pango.Panorama:
-			// switch l {
-			// case "pre":
-			// 	l = util.PreRulebase
-			// case "post":
-			// 	l = util.PostRulebase
-			// default:
-			// 	l = util.PreRulebase
-			// }
-
 			timeoutCount := 0
 			timeoutData := []string{}
 
+			// Security rules
 			if t == "security" {
 				rules, err := easycsv.Open(f)
 				if err != nil {
@@ -390,7 +373,7 @@ var policyImportCmd = &cobra.Command{
 				rc := len(rules)
 				log.Printf("Importing/modifying %d Security rules", rc)
 
-				for i, rule := range rules {
+				for _, rule := range rules {
 					boolopt := map[string]bool{
 						"TRUE":  true,
 						"true":  true,
@@ -422,7 +405,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					if len(strings.TrimSpace(rule[2])) > 63 {
-						log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, strings.TrimSpace(rule[2]))
+						log.Printf("failed to create %s: name is over the max 63 characters", strings.TrimSpace(rule[2]))
 					} else {
 						e := security.Entry{
 							Name:                            strings.TrimSpace(rule[2]),
@@ -464,7 +447,7 @@ var policyImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, strings.TrimSpace(rule[2]))
 							} else {
-								log.Printf("Line %d - failed to create security rule: %s", i+1, err)
+								log.Printf("failed to create security rule: %s", err)
 							}
 						}
 					}
@@ -473,11 +456,8 @@ var policyImportCmd = &cobra.Command{
 				}
 			}
 
+			// NAT rules
 			if t == "nat" {
-				// #DeviceGroup,Location,Name,Type,Description,Tags,SourceZones,DestinationZone,ToInterface,Service,SourceAddresses,DestinationAddresses,
-				// SatType,SatAddressType,SatTranslatedAddresses,SatInterface,SatIpAddress,SatFallbackType,SatFallbackTranslatedAddresses,SatFallbackInterface,
-				// SatFallbackIpType,SatFallbackIpAddress,SatStaticTranslatedAddress,SatStaticBiDirectional,DatType,DatAddress,DatPort,DatDynamicDistribution,Disabled
-				// 29 columns (0-28)
 				rules, err := easycsv.Open(f)
 				if err != nil {
 					log.Printf("CSV file error - %s", err)
@@ -487,7 +467,7 @@ var policyImportCmd = &cobra.Command{
 				rc := len(rules)
 				log.Printf("Importing/modifying %d NAT rules", rc)
 
-				for i, rule := range rules {
+				for _, rule := range rules {
 					boolopt := map[string]bool{
 						"TRUE":  true,
 						"true":  true,
@@ -510,7 +490,7 @@ var policyImportCmd = &cobra.Command{
 					datport, _ := strconv.Atoi(rule[26])
 
 					if rule[3] != "ipv4" {
-						log.Printf("Line %d - only NAT type 'ipv4' is supported", i+1)
+						log.Printf("only NAT type 'ipv4' is supported")
 					}
 
 					ruletype := rule[3]
@@ -520,7 +500,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					if len(strings.TrimSpace(rule[2])) > 63 {
-						log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, strings.TrimSpace(rule[2]))
+						log.Printf("failed to create %s: name is over the max 63 characters", strings.TrimSpace(rule[2]))
 					} else {
 						e := nat.Entry{
 							Name:                           strings.TrimSpace(rule[2]),
@@ -558,7 +538,7 @@ var policyImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, strings.TrimSpace(rule[2]))
 							} else {
-								log.Printf("Line %d - failed to create NAT rule: %s", i+1, err)
+								log.Printf("failed to create NAT rule: %s", err)
 							}
 						}
 					}
@@ -567,6 +547,7 @@ var policyImportCmd = &cobra.Command{
 				}
 			}
 
+			// Policy-Based Forwarding rules
 			if t == "pbf" {
 				rules, err := easycsv.Open(f)
 				if err != nil {
@@ -577,7 +558,7 @@ var policyImportCmd = &cobra.Command{
 				rc := len(rules)
 				log.Printf("Importing/modifying %d Policy-Based Forwarding rules", rc)
 
-				for i, rule := range rules {
+				for _, rule := range rules {
 					boolopt := map[string]bool{
 						"TRUE":  true,
 						"true":  true,
@@ -598,7 +579,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					if len(strings.TrimSpace(rule[2])) > 63 {
-						log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, strings.TrimSpace(rule[2]))
+						log.Printf("failed to create %s: name is over the max 63 characters", strings.TrimSpace(rule[2]))
 					} else {
 						e := pbf.Entry{
 							Name:                               strings.TrimSpace(rule[2]),
@@ -636,7 +617,7 @@ var policyImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, strings.TrimSpace(rule[2]))
 							} else {
-								log.Printf("Line %d - failed to create Policy-Based Forwarding rule: %s", i+1, err)
+								log.Printf("failed to create Policy-Based Forwarding rule: %s", err)
 							}
 						}
 					}
@@ -645,11 +626,8 @@ var policyImportCmd = &cobra.Command{
 				}
 			}
 
+			// Decryption rules
 			if t == "decrypt" {
-				// #DeviceGroup,Location,Name,Description,SourceZones,SourceAddresses,NegateSource,SourceUsers,DestinationZones,DestinationAddresses,
-				// NegateDestination,Tags,Disabled,Services,UrlCategories,Action,DecryptionType,SslCertificate,DecryptionProfile,NegateTarget,
-				// ForwardingProfile,GroupTag,SourceHips,DestinationHips,LogSuccessfulTlsHandshakes,LogFailedTlsHandshakes,LogSetting,SslCertificates
-				// 28 columns (0-27)
 				rules, err := easycsv.Open(f)
 				if err != nil {
 					log.Printf("CSV file error - %s", err)
@@ -659,7 +637,7 @@ var policyImportCmd = &cobra.Command{
 				rc := len(rules)
 				log.Printf("Importing/modifying %d Policy-Based Forwarding rules", rc)
 
-				for i, rule := range rules {
+				for _, rule := range rules {
 					boolopt := map[string]bool{
 						"TRUE":  true,
 						"true":  true,
@@ -680,7 +658,7 @@ var policyImportCmd = &cobra.Command{
 					}
 
 					if len(strings.TrimSpace(rule[0])) > 63 {
-						log.Printf("Line %d - failed to create %s: name is over the max 63 characters", i+1, strings.TrimSpace(rule[2]))
+						log.Printf("failed to create %s: name is over the max 63 characters", strings.TrimSpace(rule[2]))
 					} else {
 						e := decryption.Entry{
 							Name:                       strings.TrimSpace(rule[2]),
@@ -717,7 +695,7 @@ var policyImportCmd = &cobra.Command{
 								timeoutCount++
 								timeoutData = append(timeoutData, strings.TrimSpace(rule[2]))
 							} else {
-								log.Printf("Line %d - failed to create Decryption rule: %s", i+1, err)
+								log.Printf("failed to create Decryption rule: %s", err)
 							}
 						}
 					}
@@ -729,7 +707,6 @@ var policyImportCmd = &cobra.Command{
 			if timeoutCount > 0 {
 				log.Printf("There were %d API timeout errors during import. Please verify the following rules have been imported, modified:\n\n", timeoutCount)
 				for _, data := range timeoutData {
-					// info := strings.Split(data, ":")
 					fmt.Printf("Rule \"%s\"\n", data)
 				}
 			}
@@ -744,14 +721,14 @@ func init() {
 	policyImportCmd.Flags().StringVarP(&p, "delay", "p", "100", "Delay (in milliseconds) to pause between each API call")
 	policyImportCmd.Flags().StringVarP(&device, "device", "d", "", "Device to connect to")
 	policyImportCmd.Flags().StringVarP(&f, "file", "f", "", "Name of the CSV file to export to")
-	// policyImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when importing to Panorama")
-	// policyImportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when importing to a firewall")
+	policyImportCmd.Flags().StringVarP(&v, "vsys", "v", "vsys1", "Vsys name when importing to a firewall")
 	policyImportCmd.Flags().StringVarP(&t, "type", "t", "", "Type of policy to import - <security|nat|pbf|decrypt>")
+	// policyImportCmd.Flags().StringVarP(&dg, "devicegroup", "g", "shared", "Device Group name when importing to Panorama")
 	// policyImportCmd.Flags().StringVarP(&l, "location", "l", "pre", "Location of the rulebase - <pre|post>")
 	policyImportCmd.MarkFlagRequired("user")
-	// policyImportCmd.MarkFlagRequired("pass")
 	policyImportCmd.MarkFlagRequired("device")
 	policyImportCmd.MarkFlagRequired("file")
 	policyImportCmd.MarkFlagRequired("type")
+	// policyImportCmd.MarkFlagRequired("pass")
 	// policyImportCmd.MarkFlagRequired("location")
 }
