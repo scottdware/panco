@@ -7,6 +7,7 @@ Usage:
   panco objects import [flags]
 
 Flags:
+  -p, --delay string    Delay (in milliseconds) to pause between each API call (default "100")
   -d, --device string   Device to connect to
   -f, --file string     Name of the CSV file to import
   -h, --help            help for import
@@ -23,5 +24,5 @@ you will need to make sure your CSV file is structured accordingly. Please use t
 Once your CSV file is all set, you can execute the following command to apply the changes:
 
 ```
-panco objects import --file <name-of-CSV-file>
+panco objects import --device 10.1.1.1 --user admin --file <name-of-CSV-file>
 ```

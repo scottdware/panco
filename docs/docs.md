@@ -10,8 +10,6 @@ Available Commands:
   help        Help about any command
   objects     Commands to work with address, service and tag objects
   policy      Commands to work with security, NAT, Decryption and Policy-Based Forwarding policies
-  template    Generate CSV templates for object and policy importing
-  version     Version information for panco
 
 Flags:
   -h, --help   help for panco
@@ -32,4 +30,3 @@ Click on any one of the available commands to view the full documentation and us
 
 * [objects](objects.html)
 * [policy](policy.html)
-* [template](template.html)

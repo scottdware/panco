@@ -7,12 +7,13 @@ Usage:
   panco policy export [flags]
 
 Flags:
+  -p, --delay string         Delay (in milliseconds) to pause between each API call (default "100")
   -d, --device string        Device to connect to
   -g, --devicegroup string   Device Group name when exporting from Panorama (default "shared")
   -f, --file string          Name of the CSV file you'd like to export to (default "PaloAltoPolicy")
   -h, --help                 help for export
   -l, --location string      Location of the rulebase - <pre|post> (default "pre")
-  -r, --rules string         [OPTIONAL] Only export these specific rules - specify text file
+  -r, --rules string         [OPTIONAL] Only export these specific rules in referenced text file
   -t, --type string          Type of policy to export - <security|nat|pbf|decrypt|all>
   -u, --user string          User to connect to the device as
   -v, --vsys string          Vsys name when exporting from a firewall (default "vsys1")
@@ -81,5 +82,5 @@ SymmetricReturnAddresses,ActiveActiveDeviceBinding,NegateTarget,Uuid
 To export all policies, execute the following command:
 
 ```
-panco policy export --file <name-of-output-file> --type all
+panco policy export --device 10.1.1.1 --user admin --file <name-of-output-file> --type all
 ```

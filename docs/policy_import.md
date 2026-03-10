@@ -7,14 +7,13 @@ Usage:
   panco policy import [flags]
 
 Flags:
-  -d, --device string        Device to connect to
-  -g, --devicegroup string   Device Group name when importing to Panorama (default "shared")
-  -f, --file string          Name of the CSV file to export to
-  -h, --help                 help for import
-  -l, --location string      Location of the rulebase - <pre|post> (default "pre")
-  -t, --type string          Type of policy to import
-  -u, --user string          User to connect to the device as
-  -v, --vsys string          Vsys name when importing to a firewall (default "vsys1")
+  -p, --delay string    Delay (in milliseconds) to pause between each API call (default "100")
+  -d, --device string   Device to connect to
+  -f, --file string     Name of the CSV file to export to
+  -h, --help            help for import
+  -t, --type string     Type of policy to import - <security|nat|pbf|decrypt>
+  -u, --user string     User to connect to the device as
+  -v, --vsys string     Vsys name when importing to a firewall (default "vsys1")
 ```
 
 ## Overview
@@ -25,6 +24,7 @@ to them. You can create/modify the following types of policies at this time:
 * Security
 * NAT
 * Policy-Based Forwarding (PBF)
+* Decryption
 
 Please use the below link as a guide on how to structure your CSV file when importing rules:
 
