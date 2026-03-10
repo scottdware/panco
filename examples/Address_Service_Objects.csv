@@ -1,0 +1,17 @@
+#Name,Type,Value,Description,Tags,Device Group/Vsys
+H_10.1.1.1,ip-netmask,"10.1.1.1","","",vsys1
+N_10.1.1.0_24,ip-netmask,"10.1.1.0/24","","",vsys1
+H_8.8.4.4,ip-netmask,"8.8.4.4","","",vsys1
+H_8.8.8.8,ip-netmask,"8.8.8.8","","",vsys1
+Google DNS,static,"H_8.8.4.4, H_8.8.8.8","","",vsys1
+SSH,tcp,"22","","",vsys1
+Time,udp,"123","","",vsys1
+Web_Services,service,"service-http, service-https",,"",vsys1
+internet,tag,Red,"",,vsys1
+internal,tag,Lime,"",,vsys1
+cloud,tag,Azure Blue,"",,Offices
+H_10.1.1.1,rename-address,"Home_Router","","",vsys1
+Github_URLs,urlcreate,"github.com/, gh.io/","","",Offices
+Github_URLs,urladd,"raw.githubusercontent.com/","","",Offices
+Time,udp,"delete","","",vsys1
+Github_URLs,urlremove,"gh.io/","","",Offices

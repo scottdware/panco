@@ -17,19 +17,21 @@ Name,Type,Value,Description,Tags,Device Group/Vsys
 **_TIP_**: A good example is to first [export](https://panco.dev/objects_export.html) address, service or tag objects from the device.
 That way, you get a good idea of how the CSV file is laid out.
 
+Here is a sample CSV file which shows most of the below actions that can be performed
+[SAMPLE Object CSV](https://github.com/scottdware/panco/blob/master/examples/Address_Service_Objects.csv)
+
 > **_NOTE_**: Here are a few things to keep in mind when creating objects:
-> * For the name of the object, it cannot be longer than 32 characters, and must only include letters, numbers, spaces, hyphens, and underscores.
+> * For the name of the object, most of them cannot be longer than 32 characters (especially URL categories), and must only include letters, numbers, spaces, hyphens, and underscores.
 > * If you are tagging an object upon creation, please make sure that the tags exist prior to creating the objects.
 > * When creating service groups, you DO NOT need to specify a description, as they do not have that capability.
 > * When ran against a local firewall, the default value for `Vsys` is "vsys1" if you do not specify one. When ran against Panorama, the default value for `Device Group` is "shared."
 
 > **_WARNING_**: If an existing address or service object has the same name as one you are creating, it's value will be overwritten with what you specify.
-> Please refer to the [`duplicates`](https://panco.dev/objects_duplicates.html) command to help alleviate this.
 
 Once your CSV file is organized with any of the following options, you can execute the changes using the following command:
 
 ```
-panco objects import --file <name-of-CSV-file>
+panco objects import --device 10.1.1.1 --user admin --file <name-of-CSV-file>
 ```
 
 ## Creating or Modifying Address Objects
